@@ -13,6 +13,7 @@ addons:
     - libfreetype6-dev
     - libvorbis-dev
     - libflac-dev
+    - libxcursor-dev
   homebrew:
     packages:
      - cmake
@@ -52,16 +53,3 @@ script:
 - mkdir install/IdleRomanEmpire
 - cmake -DCMAKE_INSTALL_PREFIX=./install/IdleRomanEmpire -DSFML_DIR=./SFML/install/lib/cmake/SFML .
 - cmake --build . --config Release --target install
-before_deploy:
-  - zip IdleRomanEmpire-$TRAVIS_OS_NAME ./install/IdleRomanEmpire/ -r
-  - ls # To check the zip file is created correctly
-deploy:
-  release: IdleRomanEmpire
-  description: 'IdleRomanEmpire master branch release'
-  skip_cleanup: true
-  provider: releases
-  api_key:
-    secure: n5YYrvLk5Ft1l7lPmJtLHeS6CzP9Ug76cpuG57EzDFatUHa376mwi2US3eevImQ9I09KFtcFOFpqSphEvyvtIVhMsGkhm89kJn/inSmBOkmWWasN/m2chDTic0SnfoiwbYozIfqCJ5PIW+nRgwGY65np4GInnixcfaK5giaGBrI=
-  file: IdleRomanEmpire-$TRAVIS_OS_NAME.zip
-  on:
-    tags: true
