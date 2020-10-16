@@ -1,17 +1,18 @@
 cmake_minimum_required(VERSION 3.1)
 
-project(SFMLTest)
+project(IdleRomanEmpire)
 
-## If you want to link SFML statically
-#set(SFML_STATIC_LIBRARIES TRUE)
+set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build (Debug or Release)" FORCE)
+set(SFML_STATIC_LIBRARIES FALSE CACHE BOOL "Choose whether SFML is linked statically or not.")
+set(IDLEROMANEMPIRE_STATIC_STD_LIBS FALSE CACHE BOOL "Use statically linked standard/runtime libraries? This option must match the one used for SFML.")
 
-## In most cases better set in the CMake cache
-set(SFML_DIR "D:\\Projekty\\C++\\SFML-build")
+set(CMAKE_CXX_STANDARD 17)
 
 find_package(SFML 2.5 COMPONENTS graphics audio window system REQUIRED)
-add_executable(SFMLTest 
+
+add_executable(IdleRomanEmpire 
     # Headers
 
     # Sources
     src/app/main.cpp)
-target_link_libraries(SFMLTest sfml-graphics sfml-audio sfml-window sfml-system)
+target_link_libraries(IdleRomanEmpire sfml-graphics sfml-audio sfml-window sfml-system)
