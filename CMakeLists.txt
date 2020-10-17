@@ -14,7 +14,7 @@ if(IDLEROMANEMPIRE_STATIC_STD_LIBS)
 		# Change all MSVC compiler flags to /MT
 		foreach(flag CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE)
 			if(${flag} MATCHES "/MD")
-			string(REGEX REPLACE "/MD" "/MT" ${flag} "${${flag}}")
+			string(REGEX REPLACE "/MD" "/MTd" ${flag} "${${flag}}")
 			endif()
 		endforeach()
 	elseif(CMAKE_COMPILER_IS_GNUCXX)
