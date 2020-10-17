@@ -6,9 +6,31 @@ set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build (Debug or Re
 set(SFML_STATIC_LIBRARIES FALSE CACHE BOOL "Choose whether SFML is linked statically or not.")
 set(IDLEROMANEMPIRE_STATIC_STD_LIBS FALSE CACHE BOOL "Use statically linked standard/runtime libraries? This option must match the one used for SFML.")
 
+if(IDLEROMANEMPIRE_STATIC_STD_LIBS)
+	if(NOT SFML_STATIC_LIBRARIES)
+		message("\n-> If you check IDLEROMANEMPIRE_STATIC_STD_LIBS, you also need to check SFML_STATIC_LIBRARIES.")
+		message("-> It would lead to multiple runtime environments which result in undefined behavior.\n")
+	elseif(WIN32 AND MSVC)
+		# Change all MSVC compiler flags to /MT
+		foreach(flag CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE)
+			if(${flag} MATCHES "/MD")
+			string(REGEX REPLACE "/MD" "/MT" ${flag} "${${flag}}")
+			endif()
+		endforeach()
+	elseif(CMAKE_COMPILER_IS_GNUCXX)
+		# Note: Doesn't work for TDM compiler, since it's compiling the runtime libs statically by default
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static")
+	endif()
+endif()
+
 set(CMAKE_CXX_STANDARD 17)
 
 find_package(SFML 2.5 COMPONENTS graphics audio window system REQUIRED)
+
+if(NOT SFML_FOUND)
+	message("\n-> SFML libraries were not found. Set SFML_DIR to SFML's CMake Config path (generally located in \"lib/cmake/SFML\").")
+	message("-> Make sure the SFML libraries with the same configuration (Release/Debug, Static/Dynamic) exist.\n")
+endif()
 
 add_executable(IdleRomanEmpire 
     # Headers
