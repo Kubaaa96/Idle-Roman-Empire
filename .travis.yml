@@ -41,16 +41,8 @@ matrix:
     osx_image: xcode11.3
     compiler: clang
 
-  - name: "Visual Studio 16 2019 Dynamic"
+  - name: "Windows"
     os: windows
-    env:
-      - MSBUILD_PATH="C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin"
-      - VS160COMNTOOLS="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools"
-      - PATH=$MSBUILD_PATH:$PATH
-    install:
-      - choco install visualstudio2019buildtools --package-parameters "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64"
-      - choco install visualstudio2019-workload-nativedesktop
-
 
 install:
 - git clone https://github.com/SFML/SFML.git

@@ -16,3 +16,6 @@ add_executable(IdleRomanEmpire
     # Sources
     src/app/main.cpp)
 target_link_libraries(IdleRomanEmpire sfml-graphics sfml-audio sfml-window sfml-system)
+
+install(TARGETS IdleRomanEmpire
+		RUNTIME DESTINATION .)
