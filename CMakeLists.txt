@@ -2,6 +2,11 @@ cmake_minimum_required(VERSION 3.1)
 
 project(IdleRomanEmpire)
 
+add_subdirectory(libs/catch)
+# add_subdirectory(libs/fmt)
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules/") 
+
 set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build (Debug or Release)" FORCE)
 set(SFML_STATIC_LIBRARIES FALSE CACHE BOOL "Choose whether SFML is linked statically or not.")
 set(IDLEROMANEMPIRE_STATIC_STD_LIBS FALSE CACHE BOOL "Use statically linked standard/runtime libraries? This option must match the one used for SFML.")
@@ -20,7 +25,18 @@ add_executable(IdleRomanEmpire
 
     # Sources
     src/app/main.cpp)
+
+if (NOT DEFINED BUILD_TESTS)
+    set(BUILD_TESTS OFF CACHE BOOL "Build Idle Roman Empire Tests ?")
+endif()
+
+if (BUILD_TESTS)
+    add_subdirectory(tests)
+endif()
+
 target_link_libraries(IdleRomanEmpire sfml-graphics sfml-audio sfml-window sfml-system)
 
+
 install(TARGETS IdleRomanEmpire
-		RUNTIME DESTINATION .)
+        RUNTIME DESTINATION .)
+
