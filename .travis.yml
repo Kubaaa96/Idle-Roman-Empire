@@ -2,6 +2,9 @@ notifications:
   email: false
 language:
 - cpp
+branches:
+  only:
+  - master
 addons:
   apt:
     packages:
