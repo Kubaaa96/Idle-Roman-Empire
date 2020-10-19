@@ -66,7 +66,7 @@ int main()
     if (!ec) {
         std::cout << "Connected\n";
     } else {
-        std::cout << "Failed to connect to adress: \n"
+        std::cout << "Failed to connect to adress:  \n"
                   << ec.message() << "\n";
     }
 
