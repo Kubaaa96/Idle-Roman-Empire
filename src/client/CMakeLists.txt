@@ -6,5 +6,5 @@ add_executable(IREClient
     # Sources
     main.cpp
 )
-target_link_libraries(IdleRomanEmpire asio)
+target_link_libraries(IREClient asio)
 target_link_libraries(IREClient sfml-graphics sfml-audio sfml-window sfml-system)
