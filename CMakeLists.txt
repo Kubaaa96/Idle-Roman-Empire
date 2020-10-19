@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.1)
 project(IdleRomanEmpire)
 
 add_subdirectory(libs/catch)
+add_subdirectory(libs/asio)
 # add_subdirectory(libs/fmt)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules/") 
@@ -20,11 +21,13 @@ if(NOT SFML_FOUND)
 	message("-> Make sure the SFML libraries with the same configuration (Release/Debug, Static/Dynamic) exist.\n")
 endif()
 
+add_subdirectory(src/core)
+
 add_executable(IdleRomanEmpire 
     # Headers
 
     # Sources
-    src/app/main.cpp)
+    src/server/main.cpp)
 
 if (NOT DEFINED BUILD_TESTS)
     set(BUILD_TESTS OFF CACHE BOOL "Build Idle Roman Empire Tests ?")
@@ -34,7 +37,14 @@ if (BUILD_TESTS)
     add_subdirectory(tests)
 endif()
 
+target_link_libraries(IdleRomanEmpire IRECore)
 target_link_libraries(IdleRomanEmpire sfml-graphics sfml-audio sfml-window sfml-system)
+target_link_libraries(IdleRomanEmpire asio)
+
+if (NOT DEFINED IS_CORE_BUILD)
+    set(IS_CORE_BUILD OFF CACHE BOOL "First build without this, then ")
+endif()
+
 
 
 install(TARGETS IdleRomanEmpire
