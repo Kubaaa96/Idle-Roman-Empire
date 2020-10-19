@@ -37,15 +37,11 @@ if (BUILD_TESTS)
     add_subdirectory(tests)
 endif()
 
+add_subdirectory(src/client)
+
 target_link_libraries(IdleRomanEmpire IRECore)
 target_link_libraries(IdleRomanEmpire sfml-graphics sfml-audio sfml-window sfml-system)
 target_link_libraries(IdleRomanEmpire asio)
-
-if (NOT DEFINED IS_CORE_BUILD)
-    set(IS_CORE_BUILD OFF CACHE BOOL "First build without this, then ")
-endif()
-
-
 
 install(TARGETS IdleRomanEmpire
         RUNTIME DESTINATION .)
