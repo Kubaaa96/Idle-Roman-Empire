@@ -3,11 +3,11 @@ project(IRECore)
 add_library(IRECore
     # Hearders
     
-    IRECore.h
+    Engine.h
 
     # Sources
 
-    IRECore.cpp
+    Engine.cpp
 )
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
