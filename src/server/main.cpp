@@ -1,5 +1,3 @@
-#include "../core/IRECore.h"
-#include <SFML/Graphics.hpp>
 #include <iostream>
 
 #ifdef _WIN32
@@ -11,6 +9,7 @@
 #include <asio/ts/buffer.hpp>
 #include <asio/ts/internet.hpp>
 
+/*
 std::vector<char> vBuffer(20 * 1024);
 
 void grabSomeData(asio::ip::tcp::socket& socket)
@@ -26,27 +25,10 @@ void grabSomeData(asio::ip::tcp::socket& socket)
             }
         });
 }
-
+*/
 int main()
 {
-    // ire::InitCore(); // Test Core
-    /*sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-    sf::CircleShape shape(100.F);
-    shape.setFillColor(sf::Color::Green);
-
-    while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-
-        window.clear();
-        window.draw(shape);
-        window.display();
-    }
-    */
-
+    /*
     asio::error_code ec;
 
     asio::io_context ioContext;
@@ -88,6 +70,6 @@ int main()
         if (thrContext.joinable())
             thrContext.join();
     }
-
+    */
     return 0;
 }

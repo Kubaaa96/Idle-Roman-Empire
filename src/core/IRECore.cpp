@@ -5,7 +5,23 @@
 namespace ire {
 void InitCore()
 {
-    std::cout << "Test Init Core\n";
+    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+    sf::CircleShape shape(100.F);
+    shape.setFillColor(sf::Color::Green);
+
+    while (window.isOpen()) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        window.clear();
+        window.draw(shape);
+        window.display();
+    }
+    
+
 }
 
 unsigned int Factorial(unsigned int number)

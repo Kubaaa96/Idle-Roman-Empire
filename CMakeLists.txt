@@ -27,7 +27,7 @@ add_executable(IdleRomanEmpire
     # Headers
 
     # Sources
-    src/server/main.cpp)
+    src/client/main.cpp)
 
 if (NOT DEFINED BUILD_TESTS)
     set(BUILD_TESTS OFF CACHE BOOL "Build Idle Roman Empire Tests ?")
@@ -36,8 +36,6 @@ endif()
 if (BUILD_TESTS)
     add_subdirectory(tests)
 endif()
-
-add_subdirectory(src/client)
 
 target_link_libraries(IdleRomanEmpire IRECore)
 target_link_libraries(IdleRomanEmpire sfml-graphics sfml-audio sfml-window sfml-system)
