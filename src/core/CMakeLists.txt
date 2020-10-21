@@ -5,6 +5,8 @@ add_library(IRECore
     
     Engine.h
 
+    util/UpdatablePriorityQueue.h
+
     # Sources
 
     Engine.cpp
