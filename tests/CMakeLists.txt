@@ -3,11 +3,9 @@ project(IRETests)
 include(CTest)
 enable_testing()
 
-add_executable(IRETests 
-    # Headers
-        
-    # Sources
-    src/Catch_Common/tests.cpp)
+file(GLOB_RECURSE TEST_SOURCES "*.cpp")
+
+add_executable(IRETests ${TEST_SOURCES})
 
 target_link_libraries(IRETests IRECore)
 target_link_libraries(IRETests catch)

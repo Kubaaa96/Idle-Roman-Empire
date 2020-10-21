@@ -9,7 +9,7 @@
 #include <tuple>
 #include <cassert>
 
-namespace ire::core {
+namespace ire::core::util {
 
     // based on Scapegoat Tree
     template <typename T, typename CompT = std::less<>>
@@ -37,32 +37,32 @@ namespace ire::core {
             m_items.reserve(size);
         }
 
-        void push(const T& value)
+        ItemHandle push(const T& value)
         {
             const auto id = nextId();
 
             m_items.emplace_back(id, value);
-            std::push_heap(std::begin(m_itmes), std::end(m_items), comparator());
+            std::push_heap(std::begin(m_items), std::end(m_items), comparator());
 
             maybeOptimize();
 
             return id;
         }
 
-        void push(T&& value)
+        ItemHandle push(T&& value)
         {
             const auto id = nextId();
 
             m_items.emplace_back(id, std::move(value));
-            std::push_heap(std::begin(m_itmes), std::end(m_items), comparator());
+            std::push_heap(std::begin(m_items), std::end(m_items), comparator());
 
             maybeOptimize();
 
             return id;
         }
 
-        template <typename ArgsTs...>
-        void emplace(ArgsTs&&... args)
+        template <typename... ArgsTs>
+        ItemHandle emplace(ArgsTs&&... args)
         {
             const auto id = nextId();
 
@@ -71,7 +71,7 @@ namespace ire::core {
                 std::forward_as_tuple(id),
                 std::forward_as_tuple(std::forward<ArgsTs>(args)...)
             );
-            std::push_heap(std::begin(m_itmes), std::end(m_items), comparator());
+            std::push_heap(std::begin(m_items), std::end(m_items), comparator());
 
             maybeOptimize();
 
@@ -106,11 +106,24 @@ namespace ire::core {
             popImpl();
         }
 
-        [[nodiscard]] bool isEmpty() const
+        [[nodiscard]] bool isEmpty()
         {
             popWhileFiltered();
 
             return m_items.empty();
+        }
+
+        [[nodiscard]] bool isEmpty() const
+        {
+            for (const auto& [id, value] : m_items)
+            {
+                if (m_removedItems.count(id) == 0)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         void remove(ItemHandle id)
@@ -128,7 +141,7 @@ namespace ire::core {
 
         [[nodiscard]] auto comparator() const
         { 
-            return [cmp = static_cast<CompT&>(*this)](const Item& lhs, const Item& rhs) {
+            return [cmp = static_cast<const CompT&>(*this)](const Item& lhs, const Item& rhs) {
                 return cmp(lhs.second, rhs.second);
             };
         }
@@ -198,7 +211,7 @@ namespace ire::core {
             if (newLast != std::end(m_items))
             {
                 m_items.erase(newLast, std::end(m_items));
-                std::make_heap(std::bein(m_items), std::end(m_items), comparator());
+                std::make_heap(std::begin(m_items), std::end(m_items), comparator());
             }
 
             m_removedItems.clear();
