@@ -2,7 +2,7 @@
 
 int main()
 {
-    Game::instance().run();
+    ire::client::Game::instance().run();
 
     return 0;
 }

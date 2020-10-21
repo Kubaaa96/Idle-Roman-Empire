@@ -3,15 +3,17 @@
 
 #include <SFML/Graphics.hpp>
 
-namespace ireEngine {
-struct Engine {
-    Engine(sf::RenderWindow& window);
+namespace ire::core {
 
-    void run();
+    struct Engine {
+        Engine(sf::RenderWindow& window);
 
-private:
-    sf::RenderWindow& m_window;
-};
+        void run();
+
+    private:
+        sf::RenderWindow& m_window;
+    };
+
+}
 
 #endif // ENGINE_H
-}
