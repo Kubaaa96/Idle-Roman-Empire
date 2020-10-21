@@ -9,6 +9,11 @@ struct Game {
 
     void run();
 
+    sf::RenderWindow& getWindow();
+    const sf::RenderWindow& getWindow() const;
+    ireEngine::Engine& getEngine();
+    const ireEngine::Engine& getEngine() const;
+
 private:
     Game();
     const unsigned int m_windowWidth { 1024 };

@@ -1,7 +1,6 @@
 #include "Engine.h"
 
-namespace ireEngine
-{
+namespace ireEngine {
 Engine::Engine(sf::RenderWindow& window)
     : m_window(window)
 {
@@ -22,6 +21,7 @@ void Engine::run()
         m_window.clear();
         m_window.draw(shape);
         m_window.display();
+        //shape.setPosition(shape.getPosition().x + 1, shape.getPosition().y);
     }
 }
 }
