@@ -1,12 +1,8 @@
-#include <iostream>
-#include "../core/IRECore.h"
-#include <SFML/Graphics.hpp>
+#include "Game/Game.h"
 
 int main()
 {
-    std::cout << "Test Client Main\n";
-    
-    ire::InitCore(); // Test Core
+    Game::instance().run();
 
     return 0;
 }

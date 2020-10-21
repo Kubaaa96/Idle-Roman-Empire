@@ -26,8 +26,12 @@ add_subdirectory(src/core)
 add_executable(IdleRomanEmpire 
     # Headers
 
+    src/client/Game/Game.h
+
     # Sources
-    src/client/main.cpp)
+    src/client/main.cpp
+
+    src/client/Game/Game.cpp)
 
 if (NOT DEFINED BUILD_TESTS)
     set(BUILD_TESTS OFF CACHE BOOL "Build Idle Roman Empire Tests ?")
