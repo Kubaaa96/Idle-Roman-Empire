@@ -74,14 +74,14 @@ namespace ire::core {
     {
         while(!m_callbackQueue.isEmpty())
         {
-            auto& [handleRef, nextCallbackRef] = m_callbackQueue.top();
-            if (nextCallbackRef.callbackTime() > now)
+            auto& top = m_callbackQueue.top();
+            if (top.value.callbackTime() > now)
             {
                 break;
             }
 
-            TimedCallback nextCallback = std::move(nextCallbackRef);
-            TimedCallbackHandle handle = handleRef;
+            TimedCallback nextCallback = std::move(top.value);
+            TimedCallbackHandle handle = top.handle;
             auto& creator = nextCallback.creator();
             m_callbackQueue.pop();
 
