@@ -2,6 +2,8 @@
 #define ENGINE_H
 
 #include <SFML/Graphics.hpp>
+#include "widgets/Widget.h"
+#include <memory>
 
 namespace ire::core {
 
@@ -12,6 +14,7 @@ namespace ire::core {
 
     private:
         sf::RenderWindow& m_window;
+        std::unique_ptr<ire::core::widgets::Widget> widgetPtr;
     };
 
 }
