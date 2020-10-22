@@ -22,7 +22,7 @@ namespace ire::core {
             m_window.clear();
             m_window.draw(shape);
             m_window.display();
-            shape.setPosition(shape.getPosition().x + 1, shape.getPosition().y);
+            //shape.setPosition(shape.getPosition().x + 1, shape.getPosition().y);
         }
     }
 
