@@ -14,9 +14,9 @@ namespace ire::core {
 
     private:
         sf::RenderWindow& m_window;
-        std::unique_ptr<ire::core::widgets::Widget> widgetPtr;
+        //std::unique_ptr<ire::core::widgets::Widget> widgetPtr;
     };
 
 }
 
-#endif // ENGINE_H
+#endif // !ENGINE_H

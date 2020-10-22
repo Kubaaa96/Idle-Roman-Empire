@@ -2,7 +2,7 @@
 
 #include "core/widgets/Widget.h"
 #include <memory>
-
+/*
 TEST_CASE("[Widget]")
 {
 	std::unique_ptr<ire::core::widgets::Widget> widgetPtr = std::make_unique<ire::core::widgets::Widget>();
@@ -49,4 +49,4 @@ TEST_CASE("[Widget]")
 		widget2Ptr = std::move(widgetPtr);
 		REQUIRE(widget2Ptr->getOrigin() == sf::Vector2f(0, 10));
 	}
-}
+}*/
