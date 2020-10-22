@@ -1,7 +1,6 @@
 notifications:
   email: false
-language:
-- cpp
+language: cpp
 branches:
   only:
   - master
@@ -33,16 +32,6 @@ matrix:
     os: linux
     dist: bionic
     compiler: clang
-  - name: "macOS 10.14 GCC"
-
-    os: osx
-    osx_image: xcode11.3
-    compiler: gcc
-  - name: "macOS 10.14 Clang"
-
-    os: osx
-    osx_image: xcode11.3
-    compiler: clang
 
   - name: "Windows"
     os: windows
@@ -56,8 +45,8 @@ install:
 - cmake -DCMAKE_INSTALL_PREFIX=../install -DCMAKE_INSTALL_FRAMEWORK_PREFIX=../install -DSFML_BUILD_FRAMEWORKS=FALSE -DBUILD_SHARED_LIBS=TRUE ..
 - cmake --build . --config Release --target install
 - cd ../../
+
 script:
-- mkdir install/
-- mkdir install/IdleRomanEmpire
-- cmake -DCMAKE_INSTALL_PREFIX=./install/IdleRomanEmpire -DSFML_DIR=./SFML/install/lib/cmake/SFML .
-- cmake --build . --config Release --target install
+- mkdir build
+- cmake . -Bbuild -DBUILD_TESTS=TRUE -DCMAKE_INSTALL_PREFIX=./install/ire -DSFML_DIR=./SFML/install/lib/cmake/SFML
+- cmake --build ./build --config Release --target IRERunTests
