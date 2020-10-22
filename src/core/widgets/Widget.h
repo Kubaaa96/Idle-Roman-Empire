@@ -6,6 +6,7 @@
 
 namespace ire::core::widgets
 {
+    struct Container;
     // Base class for all Widgets and Layouts
     struct Widget
     {
@@ -16,24 +17,32 @@ namespace ire::core::widgets
         Widget& operator=(Widget&&) noexcept;
 
         void setWidgetName(const std::string& name);
-        std::string getWidgetName() const;
+        [[nodiscard]] std::string getWidgetName() const;
 
         virtual void setPosition(const sf::Vector2f& position);
         void setPosition(float x, float y);
-        sf::Vector2f getPosition() const;
+        [[nodiscard]] sf::Vector2f getPosition() const;
 
         virtual void setSize(const sf::Vector2f& size);
         void setSize(float x, float y);
         void setWidth(float width);
         void setHeigh(float height);
-        sf::Vector2f getSize() const;
+        [[nodiscard]] sf::Vector2f getSize() const;
 
         void setOrigin(sf::Vector2f origin);
         void setOrigin(float x, float y);
-        sf::Vector2f getOrigin() const;
+        [[nodiscard]] sf::Vector2f getOrigin() const;
+
+        virtual void draw(sf::RenderWindow& window) const = 0;
+
+        virtual std::unique_ptr<Widget> clone() const = 0;
+
+        virtual void setParent(Container* parent);
+        [[nodiscard]] Container* getParent() const;
 
         // Temp for testing 
         void drawRect(sf::RenderWindow& window);
+
 
     private:
         std::string m_type;
@@ -43,8 +52,9 @@ namespace ire::core::widgets
         sf::Vector2f m_size;
         sf::Vector2f m_origin;
 
-        std::unique_ptr<Widget> m_parent = nullptr;
+        Container* m_parent = nullptr;
 
+        bool m_containerWidget = false;
     };
 }
-#endif // WIDGET_H
+#endif // !WIDGET_H

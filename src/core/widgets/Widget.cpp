@@ -1,8 +1,10 @@
 #include "Widget.h"
+#include "Container.h"
 
 namespace ire::core::widgets
 {
 	Widget::Widget()
+		: m_parent(nullptr)
 	{
 	}
 
@@ -12,6 +14,7 @@ namespace ire::core::widgets
 		, m_position{ std::move(other.m_position) }
 		, m_size{ std::move(other.m_size) }
 		, m_origin{ std::move(other.m_origin) }
+		, m_parent{ nullptr }
 	{
 	}
 
@@ -96,6 +99,19 @@ namespace ire::core::widgets
 	sf::Vector2f Widget::getOrigin() const
 	{
 		return m_origin;
+	}
+
+	void Widget::setParent(Container* parent)
+	{
+		if (m_parent == parent)
+			return;
+		m_parent = parent;
+	}
+
+	Container* Widget::getParent() const
+	{
+		return m_parent;
+
 	}
 
 	void Widget::drawRect(sf::RenderWindow& window)
