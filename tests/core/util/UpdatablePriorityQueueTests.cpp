@@ -22,15 +22,15 @@ TEST_CASE("General invariants of the priority queue", "[updatable_priority_queue
 
     v.emplace(0);
 
-    REQUIRE(v.top() == 0);
+    REQUIRE(v.top().value == 0);
 
     id = v.emplace(-1);
 
-    REQUIRE(v.top() == -1);
+    REQUIRE(v.top().value == -1);
 
     v.remove(id);
 
-    REQUIRE(v.top() == 0);
+    REQUIRE(v.top().value == 0);
 
     v.pop();
 
@@ -51,7 +51,7 @@ TEST_CASE("General invariants of the priority queue", "[updatable_priority_queue
     for (int i = 0; i < 100; ++i)
     {
         REQUIRE(!v.isEmpty());
-        REQUIRE(v.top() == i);
+        REQUIRE(v.top().value == i);
         v.pop();
     }
 

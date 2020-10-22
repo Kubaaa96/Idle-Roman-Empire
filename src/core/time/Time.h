@@ -1,5 +1,5 @@
-#ifndef TIME_H
-#define TIME_H
+#ifndef IRE_CORE_TIME_H
+#define IRE_CORE_TIME_H
 
 #include "core/util/Meta.h"
 
@@ -309,4 +309,4 @@ namespace ire::core {
 
 }
 
-#endif // !TIME_H
+#endif // !IRE_CORE_TIME_H

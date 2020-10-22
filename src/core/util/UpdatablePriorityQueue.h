@@ -1,5 +1,5 @@
-#ifndef UPDATABLE_PRIOTITY_QUEUE_H
-#define UPDATABLE_PRIOTITY_QUEUE_H
+#ifndef IRE_CORE_UTIL_UPDATABLE_PRIOTITY_QUEUE_H
+#define IRE_CORE_UTIL_UPDATABLE_PRIOTITY_QUEUE_H
 
 #include <algorithm>
 #include <vector>
@@ -16,7 +16,18 @@ namespace ire::core::util {
     struct UpdatablePriorityQueue : private CompT
     {
         using ItemHandle = std::uint64_t;
-        using Item = std::pair<ItemHandle, T>;
+        struct Item
+        {
+            template <typename... ArgsTs>
+            Item(ItemHandle handle, ArgsTs&&... args) :
+                handle(handle),
+                value(std::forward<ArgsTs>(args)...)
+            {
+            }
+
+            ItemHandle handle;
+            T value;
+        };
 
         UpdatablePriorityQueue() :
             m_nextUnusedHandle(0),
@@ -67,9 +78,8 @@ namespace ire::core::util {
             const auto id = nextId();
 
             m_items.emplace_back(
-                std::piecewise_construct,
-                std::forward_as_tuple(id),
-                std::forward_as_tuple(std::forward<ArgsTs>(args)...)
+                id,
+                std::forward<ArgsTs>(args)...
             );
             std::push_heap(std::begin(m_items), std::end(m_items), comparator());
 
@@ -78,22 +88,22 @@ namespace ire::core::util {
             return id;
         }
 
-        [[nodiscard]] const T& top() const
+        [[nodiscard]] const Item& top() const
         {
             popWhileFiltered();
 
             assert(!m_items.empty());
 
-            return m_items.front().second;
+            return m_items.front();
         }
 
-        [[nodiscard]] T& top()
+        [[nodiscard]] Item& top()
         {
             popWhileFiltered();
 
             assert(!m_items.empty());
 
-            return m_items.front().second;
+            return m_items.front();
         }
 
         // pop should never do optimization, it doesn't make sense
@@ -142,7 +152,7 @@ namespace ire::core::util {
         [[nodiscard]] auto comparator() const
         { 
             return [cmp = static_cast<const CompT&>(*this)](const Item& lhs, const Item& rhs) {
-                return cmp(lhs.second, rhs.second);
+                return cmp(lhs.value, rhs.value);
             };
         }
 
@@ -183,7 +193,7 @@ namespace ire::core::util {
 
             while (!m_items.empty())
             {
-                const auto frontId = m_items.front().first;
+                const auto frontId = m_items.front().handle;
 
                 auto it = m_removedItems.find(frontId);
                 if (it == m_removedItems.end())
@@ -205,7 +215,7 @@ namespace ire::core::util {
 
             auto newLast = 
                 std::remove_if(std::begin(m_items), std::end(m_items), [this](const Item& item) {
-                    return m_removedItems.count(item.first) != 0;
+                    return m_removedItems.count(item.handle) != 0;
                 });
 
             if (newLast != std::end(m_items))
@@ -219,4 +229,4 @@ namespace ire::core::util {
     };
 }
 
-#endif // !UPDATABLE_PRIOTITY_QUEUE_H
+#endif // !IRE_CORE_UTIL_UPDATABLE_PRIOTITY_QUEUE_H
