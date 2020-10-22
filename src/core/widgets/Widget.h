@@ -10,11 +10,11 @@ namespace ire::core::widgets
     // Base class for all Widgets and Layouts
     struct Widget
     {
-        Widget();
-        Widget(Widget&&) noexcept;
-        virtual ~Widget();
+        Widget() = default;
+        virtual ~Widget() = 0;
 
-        Widget& operator=(Widget&&) noexcept;
+        Widget(Widget&&) = delete;
+        Widget& operator=(Widget&&) = delete;
 
         void setWidgetName(const std::string& name);
         [[nodiscard]] std::string getWidgetName() const;
@@ -39,6 +39,8 @@ namespace ire::core::widgets
 
         virtual void setParent(Container* parent);
         [[nodiscard]] Container* getParent() const;
+        
+        bool isContainer() const;
 
         // Temp for testing 
         void drawRect(sf::RenderWindow& window);

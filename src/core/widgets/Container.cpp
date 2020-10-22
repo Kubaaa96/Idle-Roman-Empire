@@ -2,31 +2,6 @@
 
 namespace ire::core::widgets
 {
-	Container::Container()
-	{
-		
-	}
-
-	Container::~Container()
-	{
-	}
-
-	Container::Container(Container&& other) noexcept
-		: Widget {std::move(other)}
-		, m_widgets { std::move(other.m_widgets)}
-	{
-	}
-
-	Container& Container::operator=(Container&& other) noexcept
-	{
-		if (this != &other)
-		{
-			Widget::operator=(std::move(other));
-			m_widgets = std::move(other.m_widgets);
-		}
-		return *this;
-	}
-
 	void widgets::Container::setSize(const sf::Vector2f& size)
 	{
 	}
@@ -38,22 +13,45 @@ namespace ire::core::widgets
 
 	void Container::add(const std::unique_ptr<Widget>& widgetPtr, const std::string& widgetName)
 	{
+		if (widgetPtr->getParent())
+		{
+			widgetPtr->getParent()->remove(widgetPtr);
+		}
+		widgetPtr->setParent(this);
+		m_widgets.push_back(widgetPtr);
+		widgetPtr->setWidgetName(widgetName);
 	}
 
 	bool Container::remove(const std::unique_ptr<Widget>& widgetPtr)
 	{
+		for (std::size_t i = 0; i < m_widgets.size(); ++i)
+		{
+			if (m_widgets[i] != widgetPtr)
+				continue;
+
+			widgetPtr->setParent(nullptr);
+			m_widgets.erase(m_widgets.begin() + i);
+			return true;
+		}
+
 		return false;
 	}
 
 	void Container::removeAllWidgets()
 	{
-	}
-
-	std::unique_ptr<Widget> Container::getWidgetAtPosition(sf::Vector2f pos) const
-	{
-		return std::unique_ptr<Widget>();
+		for (const auto& widget : m_widgets)
+			widget->setParent(nullptr);
+		
+		m_widgets.clear();
 	}
 
 	void Container::draw(sf::RenderWindow& window) const
 	{
+		// Check if widget is visible after adding that
+
+		for (const auto& widget : m_widgets)
+		{
+			widget->draw(window);
+		}
 	}
+}
