@@ -7,12 +7,16 @@
 
 namespace ire::core::widgets
 {
+    // Base container class for grouping widgets
     struct Container : Widget
     {
-        Container();
-        ~Container();
-        Container(Container&& other) noexcept;
-        Container& operator=(Container&& other) noexcept;
+        Container() = default;
+        ~Container() = default;
+        Container(Container& other) = delete;
+        Container(Container&& other) = delete;
+        
+        Container& operator=(Container& other) = delete;
+        Container& operator=(Container&& other) = delete;
 
         void setSize(const sf::Vector2f& size) override;
 
@@ -21,11 +25,10 @@ namespace ire::core::widgets
         // Widget Name Should not contain whitespaces
         virtual void add(const std::unique_ptr<Widget>& widgetPtr, const std::string& widgetName = "");
 
+
         [[nodiscard]] virtual bool remove(const std::unique_ptr<Widget>& widgetPtr);
 
         virtual void removeAllWidgets();
-
-        [[nodiscard]] virtual std::unique_ptr<Widget> getWidgetAtPosition(sf::Vector2f pos) const;
 
         void draw(sf::RenderWindow& window) const override;
 
@@ -35,16 +38,6 @@ namespace ire::core::widgets
         {
             std::sort(m_widgets.begin(), m_widgets.end(), std::forward<Function>(function));
         }
-
-
-        [[nodiscard]] std::unique_ptr<Widget> get(const std::string& widgetName) const;
-
-        template<typename T>
-        [[nodiscard]] std::unique_ptr<T> get(const std::string& widgetName) const
-        {
-            return std::dynamic_pointer_cast<T>(get(widgetName));
-        }
-
 
     protected:
         std::vector<std::unique_ptr<Widget>> m_widgets;

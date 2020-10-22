@@ -3,38 +3,6 @@
 
 namespace ire::core::widgets
 {
-	Widget::Widget()
-		: m_parent(nullptr)
-	{
-	}
-
-	Widget::Widget(Widget&& other) noexcept
-		: m_type{ std::move(other.m_type) }
-		, m_name{ std::move(other.m_name) }
-		, m_position{ std::move(other.m_position) }
-		, m_size{ std::move(other.m_size) }
-		, m_origin{ std::move(other.m_origin) }
-		, m_parent{ nullptr }
-	{
-	}
-
-	Widget::~Widget()
-	{
-	}
-
-	Widget& Widget::operator=(Widget&& other) noexcept
-	{
-		if (this != &other)
-		{
-			m_type = std::move(other.m_type);
-			m_name = std::move(other.m_name);
-			m_position = std::move(other.m_position);
-			m_size = std::move(other.m_size);
-			m_origin = std::move(other.m_origin);
-			m_parent = nullptr;
-		}
-		return *this;
-	}
 
 	void Widget::setWidgetName(const std::string& name)
 	{
@@ -112,6 +80,11 @@ namespace ire::core::widgets
 	{
 		return m_parent;
 
+	}
+
+	bool Widget::isContainer() const
+	{
+		return m_containerWidget;
 	}
 
 	void Widget::drawRect(sf::RenderWindow& window)
