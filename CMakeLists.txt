@@ -6,6 +6,11 @@ add_subdirectory(libs/catch)
 add_subdirectory(libs/asio)
 # add_subdirectory(libs/fmt)
 
+# For some reason the include_directories within catch is not enough.
+# This is a temporary workaround.
+include_directories(libs/catch/include)
+include_directories(src)
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules/") 
 
 set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build (Debug or Release)" FORCE)
