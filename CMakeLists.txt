@@ -23,15 +23,10 @@ endif()
 
 add_subdirectory(src/core)
 
-add_executable(IdleRomanEmpire 
-    # Headers
+file(GLOB_RECURSE CLIENT_HEADERS "src/client/*.h")
+file(GLOB_RECURSE CLIENT_SOURCES "src/client/*.cpp")
 
-    src/client/Game/Game.h
-
-    # Sources
-    src/client/main.cpp
-
-    src/client/Game/Game.cpp)
+add_executable(IdleRomanEmpire ${CLIENT_HEADERS} ${CLIENT_SOURCES})
 
 if (NOT DEFINED BUILD_TESTS)
     set(BUILD_TESTS OFF CACHE BOOL "Build Idle Roman Empire Tests ?")

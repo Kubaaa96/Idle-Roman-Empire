@@ -1,13 +1,9 @@
 project(IRECore)
 
-add_library(IRECore
-    # Hearders
-    
-    Engine.h
+file(GLOB_RECURSE CORE_HEADERS "*.h")
+file(GLOB_RECURSE CORE_SOURCES "*.cpp")
 
-    # Sources
-
-    Engine.cpp
+add_library(IRECore ${CORE_HEADERS} ${CORE_SOURCES}
 )
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
