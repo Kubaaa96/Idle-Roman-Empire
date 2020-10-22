@@ -1,5 +1,5 @@
-#ifndef META_H
-#define META_H
+#ifndef IRE_CORE_UTIL_META_H
+#define IRE_CORE_UTIL_META_H
 
 namespace ire::core::util {
 
@@ -9,7 +9,7 @@ namespace ire::core::util {
     template <typename AllowedCallerT>
     struct OnlyCallableBy
     {
-        friend struct AllowedCallerT;
+        friend AllowedCallerT;
 
         OnlyCallableBy(const OnlyCallableBy&) = delete;
         OnlyCallableBy(OnlyCallableBy&&) = delete;
@@ -28,4 +28,4 @@ namespace ire::core::util {
 
 }
 
-#endif // !META_H
+#endif // !IRE_CORE_UTIL_META_H
