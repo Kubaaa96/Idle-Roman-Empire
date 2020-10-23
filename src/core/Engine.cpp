@@ -21,6 +21,7 @@ namespace ire::core {
         {
             containerPtr->get(std::string("Button1"))->setPosition({ 500, 500 });
         }
+        containerPtr->remove("Button1");
     }
 
     void Engine::run()
