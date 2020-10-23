@@ -19,7 +19,7 @@ namespace ire::core {
         containerPtr->get(1)->setPosition({ 500, 100 });
         if (containerPtr->get(std::string("Button1")))
         {
-            containerPtr->get(std::string("Button1"))->setPosition({ 500, 500 });
+            containerPtr->get("Button1")->setPosition({ 500, 500 });
         }
         containerPtr->remove("Button1");
     }
