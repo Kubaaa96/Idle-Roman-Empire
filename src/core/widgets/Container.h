@@ -25,8 +25,11 @@ namespace ire::core::widgets
         [[nodiscard]] const std::vector<std::unique_ptr<Widget>>& getWidgets() const;
 
         // Widget Name Should not contain whitespaces
-        virtual void add( std::unique_ptr<Widget> widgetPtr);
+        virtual void add( std::unique_ptr<Widget> widgetPtr, const std::string& widgetName);
 
+        std::unique_ptr<Widget> &get(int index);
+        
+        std::unique_ptr<Widget>& get(std::string& name);
 
         void draw(sf::RenderWindow& window) const override;
 
