@@ -3,7 +3,9 @@
 
 namespace ire::core::widgets
 {
-
+	Widget::~Widget()
+	{
+	}
 	void Widget::setWidgetName(const std::string& name)
 	{
 		m_name = name;
