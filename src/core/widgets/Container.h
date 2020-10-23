@@ -27,9 +27,11 @@ namespace ire::core::widgets
         // Widget Name Should not contain whitespaces
         virtual void add( std::unique_ptr<Widget> widgetPtr, const std::string& widgetName);
 
+        bool remove(const std::string& widgetName);
+
         std::unique_ptr<Widget> &get(int index);
         
-        std::unique_ptr<Widget>& get(std::string& name);
+        std::unique_ptr<Widget>& get(const std::string& name);
 
         void draw(sf::RenderWindow& window) const override;
 
@@ -48,6 +50,7 @@ namespace ire::core::widgets
         {
             return nullptr;
         }
+        bool compareWithWidgetNameAt(std::size_t index, const std::string& name);
     };
 }
 #endif // !CONTAINER_H

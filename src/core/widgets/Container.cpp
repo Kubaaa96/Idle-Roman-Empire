@@ -23,9 +23,38 @@ namespace ire::core::widgets
 
 	void Container::add( std::unique_ptr<Widget> widgetPtr, const std::string& widgetName)
 	{
+		if (!m_widgets.empty())
+		{
+			for (std::size_t i = 0; i < m_widgets.size(); ++i)
+			{
+				if (compareWithWidgetNameAt(i, widgetName))
+				{
+					// TODO add some debug logger information later
+					return;
+				}
+			}
+		}
 		widgetPtr->setParent(this);
 		widgetPtr->setWidgetName(widgetName);
 		m_widgets.push_back(std::move(widgetPtr));
+	}
+
+	bool Container::remove(const std::string& widgetName)
+	{
+		if (!m_widgets.empty())
+		{
+			for (std::size_t i = 0; i < m_widgets.size(); ++i)
+			{
+				if (compareWithWidgetNameAt(i, widgetName))
+				{
+					
+					auto it = m_widgets.begin() + i;
+					m_widgets.erase(it);
+				}
+			}
+		}
+
+		return false;
 	}
 
 	std::unique_ptr<Widget> &Container::get(int index) 
@@ -33,13 +62,11 @@ namespace ire::core::widgets
 		return m_widgets.at(index);
 	}
 
-	std::unique_ptr<Widget>& Container::get(std::string& name)
+	std::unique_ptr<Widget>& Container::get(const std::string& name)
 	{
-		std::size_t indexOfWidget = 0;
-		bool isWidgetInVector = false;
 		for (std::size_t i = 0; i < m_widgets.size(); ++i)
 		{
-			if (m_widgets[i].get()->getWidgetName().compare(name) == 0)
+			if (compareWithWidgetNameAt(i, name))
 			{			
 				return m_widgets.at(i);
 			}
@@ -55,5 +82,9 @@ namespace ire::core::widgets
 		{
 			widget->draw(window);
 		}
+	}
+	bool Container::compareWithWidgetNameAt(std::size_t index, const std::string& name)
+	{
+		return m_widgets[index].get()->getWidgetName().compare(name) == 0;
 	}
 }
