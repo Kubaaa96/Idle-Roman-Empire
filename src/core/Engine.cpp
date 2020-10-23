@@ -4,11 +4,17 @@ namespace ire::core {
 
     Engine::Engine(sf::RenderWindow& window)
         : m_window(window)
-        //, widgetPtr(std::make_unique<ire::core::widgets::Widget>())
+        , containerPtr(std::make_unique<ire::core::widgets::Container>())
     {
-        /*widgetPtr->setPosition(100, 100);
-        widgetPtr->setSize(50, 50);
-        widgetPtr->setOrigin(0, 0);*/
+        std::unique_ptr<ire::core::widgets::Button> btn1Ptr = std::make_unique< ire::core::widgets::Button>();
+        std::unique_ptr<ire::core::widgets::Button> btn2Ptr = std::make_unique< ire::core::widgets::Button>();
+        containerPtr->add(std::move(btn1Ptr));
+        containerPtr->getWidgets()[0]->setSize({ 100, 100 });
+        containerPtr->getWidgets()[0]->setPosition({ 100, 100 });
+
+        containerPtr->add(std::move(btn2Ptr));
+        containerPtr->getWidgets()[1]->setSize({ 50, 50 });
+        containerPtr->getWidgets()[1]->setPosition({ 500, 100 });
     }
 
     void Engine::run()
@@ -25,9 +31,8 @@ namespace ire::core {
 
             m_window.clear();
             m_window.draw(shape);
-            //widgetPtr->drawRect(m_window);
+            containerPtr->draw(m_window);
             m_window.display();
-            //shape.setPosition(shape.getPosition().x + 1, shape.getPosition().y);
         }
     }
 

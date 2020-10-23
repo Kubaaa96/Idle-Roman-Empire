@@ -11,7 +11,7 @@ namespace ire::core::widgets
     struct Widget
     {
         Widget() = default;
-        virtual ~Widget() = 0;
+        virtual ~Widget();
 
         Widget(Widget&&) = delete;
         Widget& operator=(Widget&&) = delete;
@@ -46,7 +46,7 @@ namespace ire::core::widgets
         void drawRect(sf::RenderWindow& window);
 
 
-    private:
+    protected:
         std::string m_type;
         std::string m_name;
 

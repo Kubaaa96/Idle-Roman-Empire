@@ -10,7 +10,7 @@ namespace ire::core::widgets
     // Base container class for grouping widgets
     struct Container : Widget
     {
-        Container() = default;
+        Container();
         ~Container() = default;
         Container(Container& other) = delete;
         Container(Container&& other) = delete;
@@ -20,15 +20,13 @@ namespace ire::core::widgets
 
         void setSize(const sf::Vector2f& size) override;
 
+        virtual sf::Vector2f getInnerSize() const;
+
         [[nodiscard]] const std::vector<std::unique_ptr<Widget>>& getWidgets() const;
 
         // Widget Name Should not contain whitespaces
-        virtual void add(const std::unique_ptr<Widget>& widgetPtr, const std::string& widgetName = "");
+        virtual void add( std::unique_ptr<Widget> widgetPtr);
 
-
-        [[nodiscard]] virtual bool remove(const std::unique_ptr<Widget>& widgetPtr);
-
-        virtual void removeAllWidgets();
 
         void draw(sf::RenderWindow& window) const override;
 
