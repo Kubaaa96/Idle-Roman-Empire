@@ -16,3 +16,8 @@ ParseAndAddCatchTests(IRETests)
 add_dependencies(IRETests IdleRomanEmpire)
 
 target_link_libraries(IRETests sfml-graphics sfml-audio sfml-window sfml-system)
+
+add_custom_target(IRERunTests COMMAND $<TARGET_FILE:IRETests>)
+add_dependencies(IRERunTests IRETests)
+
+install(TARGETS IRETests RUNTIME DESTINATION .)

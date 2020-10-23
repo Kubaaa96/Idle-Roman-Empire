@@ -11,7 +11,7 @@ add_subdirectory(libs/asio)
 include_directories(libs/catch/include)
 include_directories(src)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules/") 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules/")
 
 set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build (Debug or Release)" FORCE)
 set(SFML_STATIC_LIBRARIES FALSE CACHE BOOL "Choose whether SFML is linked statically or not.")
@@ -45,6 +45,5 @@ target_link_libraries(IdleRomanEmpire IRECore)
 target_link_libraries(IdleRomanEmpire sfml-graphics sfml-audio sfml-window sfml-system)
 target_link_libraries(IdleRomanEmpire asio)
 
-install(TARGETS IdleRomanEmpire
-        RUNTIME DESTINATION .)
+install(TARGETS IdleRomanEmpire RUNTIME DESTINATION .)
 
