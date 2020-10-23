@@ -57,21 +57,21 @@ namespace ire::core::widgets
 		return false;
 	}
 
-	std::unique_ptr<Widget> &Container::get(int index) 
+	Widget* Container::get(int index) 
 	{
-		return m_widgets.at(index);
+		return m_widgets.at(index).get();
 	}
 
-	std::unique_ptr<Widget>& Container::get(const std::string& name)
+	Widget* Container::get(const std::string name)
 	{
 		for (std::size_t i = 0; i < m_widgets.size(); ++i)
 		{
 			if (compareWithWidgetNameAt(i, name))
 			{			
-				return m_widgets.at(i);
+				return m_widgets.at(i).get();
 			}
 		}
-		return std::unique_ptr<Widget>(nullptr);
+		return nullptr;
 	}
 
 	void Container::draw(sf::RenderWindow& window) const

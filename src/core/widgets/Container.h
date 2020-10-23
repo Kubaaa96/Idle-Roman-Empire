@@ -29,9 +29,9 @@ namespace ire::core::widgets
 
         bool remove(const std::string& widgetName);
 
-        std::unique_ptr<Widget> &get(int index);
+        Widget* get(int index);
         
-        std::unique_ptr<Widget>& get(const std::string& name);
+        Widget* get(const std::string name);
 
         void draw(sf::RenderWindow& window) const override;
 
