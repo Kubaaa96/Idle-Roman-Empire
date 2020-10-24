@@ -21,7 +21,7 @@ namespace ire::core::widgets
 	{
 		return std::unique_ptr<Widget>();
 	}
-	void Button::draw(sf::RenderWindow& window) const
+	void Button::draw(sf::RenderTarget& window) const
 	{
 		// temp for testing 
 		sf::RectangleShape rectWidget;

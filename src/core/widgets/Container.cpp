@@ -1,5 +1,7 @@
 #include "Container.h"
 
+#include <algorithm>
+
 namespace ire::core::widgets
 {
 	Container::Container()
@@ -50,6 +52,7 @@ namespace ire::core::widgets
 					
 					auto it = m_widgets.begin() + i;
 					m_widgets.erase(it);
+					return true;
 				}
 			}
 		}
@@ -69,12 +72,12 @@ namespace ire::core::widgets
 			if (compareWithWidgetNameAt(i, name))
 			{			
 				return m_widgets.at(i).get();
-			}
+			}		
 		}
 		return nullptr;
 	}
 
-	void Container::draw(sf::RenderWindow& window) const
+	void Container::draw(sf::RenderTarget& window) const
 	{
 		// Check if widget is visible after adding that
 
@@ -85,6 +88,6 @@ namespace ire::core::widgets
 	}
 	bool Container::compareWithWidgetNameAt(std::size_t index, const std::string& name)
 	{
-		return m_widgets[index].get()->getWidgetName().compare(name) == 0;
+		return m_widgets[index].get()->getWidgetName() == name;
 	}
 }
