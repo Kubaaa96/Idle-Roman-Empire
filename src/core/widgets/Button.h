@@ -15,7 +15,7 @@ namespace ire::core::widgets
 
         std::unique_ptr<Widget> clone() const override;
 
-        void draw(sf::RenderWindow& window) const override;
+        void draw(sf::RenderTarget& window) const override;
     };
 }
 

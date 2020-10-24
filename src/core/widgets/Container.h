@@ -27,14 +27,15 @@ namespace ire::core::widgets
         // Widget Name Should not contain whitespaces
         virtual void add( std::unique_ptr<Widget> widgetPtr, const std::string& widgetName);
 
-        bool remove(const std::string& widgetName);
+        [[nodiscard]] bool remove(const std::string& widgetName);
 
         Widget* get(int index);
+
+        Widget* get(int index) const;
         
         Widget* get(const std::string name);
 
-        void draw(sf::RenderWindow& window) const override;
-
+        void draw(sf::RenderTarget& window) const override;
 
         template<typename Function>
         void sortWidgets(Function&& function)

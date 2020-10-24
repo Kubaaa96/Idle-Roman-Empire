@@ -16,7 +16,7 @@ namespace ire::core::widgets
 	{
 		return std::unique_ptr<Widget>();
 	}
-	void ClickableWidget::draw(sf::RenderWindow& window) const
+	void ClickableWidget::draw(sf::RenderTarget& window) const
 	{
 	}
 }

@@ -33,7 +33,7 @@ namespace ire::core::widgets
         void setOrigin(float x, float y);
         [[nodiscard]] sf::Vector2f getOrigin() const;
 
-        virtual void draw(sf::RenderWindow& window) const = 0;
+        virtual void draw(sf::RenderTarget& window) const = 0;
 
         virtual std::unique_ptr<Widget> clone() const = 0;
 
