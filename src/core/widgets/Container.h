@@ -4,7 +4,7 @@
 #include "Widget.h"
 
 #include <vector>
-#include <iostream>
+#include <string>
 
 namespace ire::core::widgets
 {
@@ -39,7 +39,9 @@ namespace ire::core::widgets
 
         void draw(sf::RenderTarget& window) const override;
 
-        WidgetType getType() const override;
+        static WidgetType m_type;
+
+        const WidgetType  getType() const override;
 
     protected:
         std::vector<std::unique_ptr<Widget>> m_widgets;
@@ -50,7 +52,7 @@ namespace ire::core::widgets
             return nullptr;
         }
 
-        static WidgetType m_type;
+        
 
         bool compareWithWidgetNameAt(std::size_t index, const std::string& name);
         const bool compareWithWidgetNameAt(std::size_t index, const std::string& name) const;
