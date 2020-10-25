@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <memory>
+#include "WidgetType.h"
 
 namespace ire::core::widgets
 {
@@ -40,14 +41,13 @@ namespace ire::core::widgets
         virtual void setParent(Container* parent);
         [[nodiscard]] Container* getParent() const;
         
-        bool isContainer() const;
+        virtual WidgetType getType() const = 0;
 
         // Temp for testing 
         void drawRect(sf::RenderWindow& window);
 
 
     protected:
-        std::string m_type;
         std::string m_name;
 
         sf::Vector2f m_position;
@@ -56,7 +56,6 @@ namespace ire::core::widgets
 
         Container* m_parent = nullptr;
 
-        bool m_containerWidget = false;
     };
 }
 #endif // !WIDGET_H

@@ -4,6 +4,7 @@
 #include "Widget.h"
 
 #include <vector>
+#include <iostream>
 
 namespace ire::core::widgets
 {
@@ -31,17 +32,14 @@ namespace ire::core::widgets
 
         Widget* get(int index);
 
-        Widget* get(int index) const;
+        const Widget* get(int index) const;
         
         Widget* get(const std::string name);
+        const Widget* get(const std::string name) const;
 
         void draw(sf::RenderTarget& window) const override;
 
-        template<typename Function>
-        void sortWidgets(Function&& function)
-        {
-            std::sort(m_widgets.begin(), m_widgets.end(), std::forward<Function>(function));
-        }
+        WidgetType getType() const override;
 
     protected:
         std::vector<std::unique_ptr<Widget>> m_widgets;
@@ -51,7 +49,13 @@ namespace ire::core::widgets
         {
             return nullptr;
         }
+
+        static WidgetType m_type;
+
         bool compareWithWidgetNameAt(std::size_t index, const std::string& name);
+        const bool compareWithWidgetNameAt(std::size_t index, const std::string& name) const;
+        Widget* getWidgetAt(int i);
+        const Widget* getWidgetAt(int i) const;
     };
 }
 #endif // !CONTAINER_H

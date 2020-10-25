@@ -9,13 +9,21 @@ namespace ire::core::widgets
     {
         Button();
 
-        std::unique_ptr<Button> create(const std::string& text = "");
+        static std::unique_ptr<Button> create(const std::string& text = "");
 
         void setSize(const sf::Vector2f& size) override;
 
         std::unique_ptr<Widget> clone() const override;
 
         void draw(sf::RenderTarget& window) const override;
+
+        WidgetType getType() const override
+        {
+            return m_type;
+        }
+
+    private:
+        static WidgetType m_type;
     };
 }
 
