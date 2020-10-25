@@ -2,9 +2,11 @@
 
 namespace ire::core::widgets
 {
+
+	WidgetType Button::m_type = WidgetType::create<Button>("Button");
+
 	Button::Button()
 	{
-		m_type = "Button";
 	}
 
 	std::unique_ptr<Button> Button::create(const std::string& text)
@@ -13,14 +15,17 @@ namespace ire::core::widgets
 		// Setting up text on Button in future
 		return widget;
 	}
+
 	void Button::setSize(const sf::Vector2f& size)
 	{
 		Widget::setSize(size);
 	}
+
 	std::unique_ptr<Widget> Button::clone() const
 	{
 		return std::unique_ptr<Widget>();
 	}
+
 	void Button::draw(sf::RenderTarget& window) const
 	{
 		// temp for testing 

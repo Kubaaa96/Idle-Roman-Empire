@@ -1,10 +1,14 @@
 #include "ClickableWidget.h"
+#include "WidgetType.h"
 
 namespace ire::core::widgets
 {
+
+	WidgetType ClickableWidget::m_type = WidgetType::create<ClickableWidget>("ClickableWidget");
+
 	ClickableWidget::ClickableWidget()
 	{
-		m_type = "ClickableWidget";
+		
 	}
 	std::unique_ptr<ClickableWidget> ClickableWidget::create(sf::Vector2f size)
 	{

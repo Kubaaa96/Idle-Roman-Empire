@@ -4,9 +4,11 @@
 
 namespace ire::core::widgets
 {
+	WidgetType Container::m_type = WidgetType::create<Container>("Container");
+
 	Container::Container()
 	{
-		m_containerWidget = true;
+		
 	}
 	void widgets::Container::setSize(const sf::Vector2f& size)
 	{
@@ -32,6 +34,7 @@ namespace ire::core::widgets
 				if (compareWithWidgetNameAt(i, widgetName))
 				{
 					// TODO add some debug logger information later
+					std::cout << "Widget with name: " << widgetName << " already exist in this container. \n";
 					return;
 				}
 			}
@@ -43,26 +46,30 @@ namespace ire::core::widgets
 
 	bool Container::remove(const std::string& widgetName)
 	{
+		bool isRemoved = false;
 		if (!m_widgets.empty())
 		{
-			for (std::size_t i = 0; i < m_widgets.size(); ++i)
-			{
-				if (compareWithWidgetNameAt(i, widgetName))
+			
+			m_widgets.erase(std::find_if(m_widgets.begin(), m_widgets.end(),
+				[&widgetName, &isRemoved](std::unique_ptr<Widget>& ptr)->bool
 				{
-					
-					auto it = m_widgets.begin() + i;
-					m_widgets.erase(it);
-					return true;
-				}
-			}
+					bool isErase = ptr->getWidgetName() == widgetName;
+					if (isErase)
+						isRemoved = true;
+					return isErase;
+				}));	
 		}
-
-		return false;
+		return isRemoved;
 	}
 
 	Widget* Container::get(int index) 
 	{
-		return m_widgets.at(index).get();
+		return getWidgetAt(index);
+	}
+
+	const Widget* Container::get(int index) const
+	{
+		return getWidgetAt(index);
 	}
 
 	Widget* Container::get(const std::string name)
@@ -71,8 +78,20 @@ namespace ire::core::widgets
 		{
 			if (compareWithWidgetNameAt(i, name))
 			{			
-				return m_widgets.at(i).get();
+				return getWidgetAt(static_cast<int>(i));
 			}		
+		}
+		return nullptr;
+	}
+
+	const Widget* Container::get(const std::string name) const
+	{
+		for (std::size_t i = 0; i < m_widgets.size(); ++i)
+		{
+			if (compareWithWidgetNameAt(i, name))
+			{
+				return getWidgetAt(static_cast<int>(i));
+			}
 		}
 		return nullptr;
 	}
@@ -86,8 +105,24 @@ namespace ire::core::widgets
 			widget->draw(window);
 		}
 	}
+	WidgetType Container::getType() const
+	{
+		return m_type;
+	}
 	bool Container::compareWithWidgetNameAt(std::size_t index, const std::string& name)
 	{
 		return m_widgets[index].get()->getWidgetName() == name;
+	}
+	const bool Container::compareWithWidgetNameAt(std::size_t index, const std::string& name) const
+	{
+		return m_widgets[index].get()->getWidgetName() == name;
+	}
+	Widget* Container::getWidgetAt(int i)
+	{
+		return m_widgets.at(i).get();
+	}
+	const Widget* Container::getWidgetAt(int i) const
+	{
+		return m_widgets.at(i).get();
 	}
 }

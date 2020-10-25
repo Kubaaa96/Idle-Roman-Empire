@@ -84,11 +84,6 @@ namespace ire::core::widgets
 
 	}
 
-	bool Widget::isContainer() const
-	{
-		return m_containerWidget;
-	}
-
 	void Widget::drawRect(sf::RenderWindow& window)
 	{
 		sf::RectangleShape rectWidget;
