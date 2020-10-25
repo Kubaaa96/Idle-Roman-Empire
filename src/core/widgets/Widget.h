@@ -41,7 +41,7 @@ namespace ire::core::widgets
         virtual void setParent(Container* parent);
         [[nodiscard]] Container* getParent() const;
         
-        virtual WidgetType getType() const = 0;
+        virtual const WidgetType getType() const = 0;
 
         // Temp for testing 
         void drawRect(sf::RenderWindow& window);

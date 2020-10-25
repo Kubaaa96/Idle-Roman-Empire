@@ -1,6 +1,7 @@
 #include "Container.h"
 
 #include <algorithm>
+#include <iostream>
 
 namespace ire::core::widgets
 {
@@ -46,20 +47,12 @@ namespace ire::core::widgets
 
 	bool Container::remove(const std::string& widgetName)
 	{
-		bool isRemoved = false;
-		if (!m_widgets.empty())
-		{
-			
-			m_widgets.erase(std::find_if(m_widgets.begin(), m_widgets.end(),
-				[&widgetName, &isRemoved](std::unique_ptr<Widget>& ptr)->bool
-				{
-					bool isErase = ptr->getWidgetName() == widgetName;
-					if (isErase)
-						isRemoved = true;
-					return isErase;
-				}));	
-		}
-		return isRemoved;
+		auto it = std::find_if(m_widgets.begin(), m_widgets.end(), [&widgetName](auto& w) { return w->getWidgetName() == widgetName; });
+		if (it == m_widgets.end())
+			return false;
+
+		m_widgets.erase(it);
+		return true;
 	}
 
 	Widget* Container::get(int index) 
@@ -105,7 +98,7 @@ namespace ire::core::widgets
 			widget->draw(window);
 		}
 	}
-	WidgetType Container::getType() const
+	const WidgetType Container::getType() const
 	{
 		return m_type;
 	}

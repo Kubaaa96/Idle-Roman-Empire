@@ -17,13 +17,14 @@ namespace ire::core::widgets
 
         void draw(sf::RenderTarget& window) const override;
 
-        WidgetType getType() const override
+        static WidgetType m_type;
+        const WidgetType getType() const override
         {
             return m_type;
         }
 
     private:
-        static WidgetType m_type;
+        
     };
 }
 
