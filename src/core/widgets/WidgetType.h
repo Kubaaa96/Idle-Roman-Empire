@@ -6,7 +6,6 @@
 
 struct WidgetType
 {
-	WidgetType(uint64_t index, std::string_view name) : m_index(index), m_name(name) {};
 
 	template <typename T>
 	static WidgetType create(std::string_view name)
@@ -18,6 +17,8 @@ struct WidgetType
 private:
 	uint64_t m_index;
 	std::string_view m_name;
+
+	WidgetType(uint64_t index, std::string_view name) : m_index(index), m_name(name) {};
 
 	friend bool operator<(const WidgetType& lhs, const WidgetType& rhs);
 	friend bool operator==(const WidgetType& lhs, const WidgetType& rhs);

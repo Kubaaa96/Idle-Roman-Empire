@@ -21,6 +21,11 @@ namespace ire::core::widgets
 		return getSize();
 	}
 
+	sf::Vector2f Container::getChildWidgetOffset() const
+	{
+		return sf::Vector2f{0, 0};
+	}
+
 	const std::vector<std::unique_ptr<Widget>>& Container::getWidgets() const
 	{
 		return m_widgets;
@@ -34,7 +39,6 @@ namespace ire::core::widgets
 			{
 				if (compareWithWidgetNameAt(i, widgetName))
 				{
-					// TODO add some debug logger information later
 					std::cout << "Widget with name: " << widgetName << " already exist in this container. \n";
 					return;
 				}

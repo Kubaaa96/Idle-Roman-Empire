@@ -4,40 +4,34 @@ namespace ire::core {
 
     Engine::Engine(sf::RenderWindow& window)
         : m_window(window)
-        , containerPtr(std::make_unique<ire::core::widgets::Container>())
     {
-        std::unique_ptr<ire::core::widgets::Button> btn1Ptr = 
-            std::make_unique< ire::core::widgets::Button>();
-        std::unique_ptr<ire::core::widgets::Button> btn2Ptr = 
-            std::make_unique< ire::core::widgets::Button>();
-        std::unique_ptr<ire::core::widgets::Button> btn3Ptr =
+        group = ire::core::widgets::Group::create({ 200, 200 });
+        group->setPosition({ 100, 100 });
+        std::unique_ptr<ire::core::widgets::Button> btn1Ptr =
             ire::core::widgets::Button::create("test");
-        std::unique_ptr<ire::core::widgets::Button> btn4Ptr =
+        std::unique_ptr<ire::core::widgets::Button> btn2Ptr =
             ire::core::widgets::Button::create("test1");
 
-        containerPtr->add(std::move(btn1Ptr), "Button1");
-        containerPtr->add(std::move(btn4Ptr), "Button1");
-        containerPtr->getWidgets()[0]->setSize({ 100, 100 });
-        containerPtr->getWidgets()[0]->setPosition({ 100, 100 });
+        btn1Ptr->setSize({ 50, 50 });
+        btn1Ptr->setPosition({ 50, 0 }); // Adding 100 + 50 on x
+        group->add(std::move(btn1Ptr), "Button1");
+        btn2Ptr->setSize({ 50, 50 });
+        btn2Ptr->setPosition({ 0, 50 });
+        group->add(std::move(btn2Ptr), "Button2");
 
-        containerPtr->add(std::move(btn2Ptr), "Button2");
-        containerPtr->getWidgets()[1]->setSize({ 50, 50 });
-        containerPtr->get(1)->setPosition({ 500, 100 });
-        if (containerPtr->get(std::string("Button1")))
-        {
-            containerPtr->get("Button1")->setPosition({ 500, 500 });
-        }
-        printf(containerPtr->remove("Button1") ? "True" : "False");
+ 
+        //group->get("Button1")->setPosition({ 500, 500 });
+        //printf(group->remove("Button1") ? "True" : "False");
 
-        containerPtr->add(std::move(btn3Ptr), "Button3");
-        containerPtr->get("Button3")->setPosition({ 700, 700 });
-        containerPtr->get("Button3")->setSize({ 70, 140 });
+
     }
 
     void Engine::run()
     {
         sf::CircleShape shape(100.F);
         shape.setFillColor(sf::Color::Green);
+
+        group->init();
 
         while (m_window.isOpen()) {
             sf::Event event;
@@ -48,7 +42,7 @@ namespace ire::core {
 
             m_window.clear();
             m_window.draw(shape);
-            containerPtr->draw(m_window);
+            group->draw(m_window);
             m_window.display();
         }
     }
