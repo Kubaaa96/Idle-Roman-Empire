@@ -23,9 +23,10 @@ namespace ire::core::widgets
 
         virtual sf::Vector2f getInnerSize() const;
 
+        virtual sf::Vector2f getChildWidgetOffset() const;
+
         [[nodiscard]] const std::vector<std::unique_ptr<Widget>>& getWidgets() const;
 
-        // Widget Name Should not contain whitespaces
         virtual void add( std::unique_ptr<Widget> widgetPtr, const std::string& widgetName);
 
         [[nodiscard]] bool remove(const std::string& widgetName);
@@ -41,20 +42,18 @@ namespace ire::core::widgets
 
         static WidgetType m_type;
 
-        const WidgetType  getType() const override;
+        const WidgetType getType() const override;
 
     protected:
         std::vector<std::unique_ptr<Widget>> m_widgets;
 
     private:
-        std::unique_ptr<Widget> clone() const override
+        virtual std::unique_ptr<Widget> clone() const override
         {
             return nullptr;
         }
 
-        
-
-        bool compareWithWidgetNameAt(std::size_t index, const std::string& name);
+        bool compareWithWidgetNameAt(std::size_t index, const std::string& name) ;
         const bool compareWithWidgetNameAt(std::size_t index, const std::string& name) const;
         Widget* getWidgetAt(int i);
         const Widget* getWidgetAt(int i) const;

@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "widgets/Button.h"
 #include "widgets/Container.h"
+#include "widgets/Group.h"
 #include <memory>
 
 namespace ire::core {
@@ -15,8 +16,7 @@ namespace ire::core {
 
     private:
         sf::RenderWindow& m_window;
-        std::unique_ptr<ire::core::widgets::Button> buttonPtr;
-        std::unique_ptr<ire::core::widgets::Container> containerPtr;
+        std::unique_ptr<ire::core::widgets::Group> group;
     };
 
 }

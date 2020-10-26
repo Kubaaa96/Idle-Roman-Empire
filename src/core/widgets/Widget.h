@@ -27,7 +27,7 @@ namespace ire::core::widgets
         virtual void setSize(const sf::Vector2f& size);
         void setSize(float x, float y);
         void setWidth(float width);
-        void setHeigh(float height);
+        void setHeight(float height);
         [[nodiscard]] sf::Vector2f getSize() const;
 
         void setOrigin(sf::Vector2f origin);

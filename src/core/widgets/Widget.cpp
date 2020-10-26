@@ -46,7 +46,7 @@ namespace ire::core::widgets
 		setSize({ std::move(width), m_size.y });
 	}
 
-	void Widget::setHeigh(float height)
+	void Widget::setHeight(float height)
 	{
 		setSize({ m_size.x, std::move(height) });
 	}
@@ -89,7 +89,7 @@ namespace ire::core::widgets
 		sf::RectangleShape rectWidget;
 		rectWidget.setPosition(m_position);
 		rectWidget.setSize(m_size);
-		rectWidget.setOrigin(m_origin);
+		//rectWidget.setOrigin(m_origin);
 		rectWidget.setFillColor(sf::Color::Red);
 		window.draw(rectWidget);
 	}
