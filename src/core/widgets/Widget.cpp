@@ -89,7 +89,7 @@ namespace ire::core::widgets
 		sf::RectangleShape rectWidget;
 		rectWidget.setPosition(m_position);
 		rectWidget.setSize(m_size);
-		//rectWidget.setOrigin(m_origin);
+		rectWidget.setOrigin(m_origin);
 		rectWidget.setFillColor(sf::Color::Red);
 		window.draw(rectWidget);
 	}

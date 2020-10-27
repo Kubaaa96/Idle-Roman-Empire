@@ -41,8 +41,7 @@ namespace ire::core::widgets
 	{
 		for (auto& widget : m_widgets) 
 		{
-			widget->setPosition(getPosition().x + widget->getPosition().x,
-				getPosition().y + widget->getPosition().y);
+			widget->setPosition(getPosition() + widget->getPosition());
 		}
 	}
 
