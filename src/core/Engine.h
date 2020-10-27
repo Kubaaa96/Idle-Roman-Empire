@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "widgets/Button.h"
+#include "widgets/Label.h"
 #include "widgets/HorizontalLayout.h"
 #include "widgets/VerticalLayout.h"
 #include <memory>
