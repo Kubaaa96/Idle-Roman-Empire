@@ -21,7 +21,7 @@ namespace ire::core::widgets
          void setMargins(const Margins& margins);
          const Margins& getMargins() const;
 
-         void setSpaces(const float& spaces);
+         void setSpaces(float spaces);
          const float getSpaces();
 
 
@@ -29,7 +29,7 @@ namespace ire::core::widgets
         virtual void updateWidgets() = 0;
 
         // SpaceBetweenWidgets
-        float m_spaces{ 0 };
+        float m_spaces{1};
 
         Margins m_margins;
     };

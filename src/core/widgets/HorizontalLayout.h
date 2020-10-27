@@ -17,7 +17,6 @@ namespace ire::core::widgets
             return m_type;
         }
 
-
     protected:
         void updateWidgets() override;
     };

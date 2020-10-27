@@ -18,7 +18,7 @@ namespace ire::core::widgets
     void BoxLayout::add(std::unique_ptr<Widget> widgetPtr, const std::string& widgetName)
     {
         insert(m_widgets.size(), std::move(widgetPtr), widgetName);
-        updateWidgets();
+        //updateWidgets();
     }
     void BoxLayout::insert(std::size_t index, std::unique_ptr<Widget>& widgetPtr, const std::string& widgetName)
     {
@@ -52,7 +52,7 @@ namespace ire::core::widgets
         return m_margins;
     }
 
-    void BoxLayout::setSpaces(const float& spaces)
+    void BoxLayout::setSpaces(float spaces)
     {
         m_spaces = spaces;
     }
