@@ -20,7 +20,7 @@ namespace ire::core::widgets
         insert(m_widgets.size(), std::move(widgetPtr), widgetName);
         //updateWidgets();
     }
-    void BoxLayout::insert(std::size_t index, std::unique_ptr<Widget>& widgetPtr, const std::string& widgetName)
+    void BoxLayout::insert(std::size_t index, std::unique_ptr<Widget> widgetPtr, const std::string& widgetName)
     {
         if (index < m_widgets.size())
         {
