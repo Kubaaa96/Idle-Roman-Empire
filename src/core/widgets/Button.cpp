@@ -3,7 +3,7 @@
 namespace ire::core::widgets
 {
 
-	WidgetType Button::m_type = WidgetType::create<Button>("Button");
+	WidgetType const Button::m_type = WidgetType::create<Button>("Button");
 
 	Button::Button()
 	{

@@ -20,7 +20,7 @@ namespace ire::core::widgets
 		void draw(sf::RenderTarget& target) const override;
 
 		void init();
-		static WidgetType m_type;
+		static const WidgetType m_type;
 		const WidgetType getType() const override
 		{
 			return m_type;

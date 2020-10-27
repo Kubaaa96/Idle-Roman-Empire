@@ -2,6 +2,7 @@
 #define BOXLAYOUT_H
 
 #include "Group.h"
+#include "Margins.h"
 
 namespace ire::core::widgets
 {
@@ -17,19 +18,20 @@ namespace ire::core::widgets
         
          [[nodiscard]] bool remove(const std::string& widgetName) override;
 
+         void setMargins(const Margins& margins);
+         const Margins& getMargins() const;
+
+         void setSpaces(const float& spaces);
+         const float getSpaces();
+
+
     protected:
         virtual void updateWidgets() = 0;
 
         // SpaceBetweenWidgets
         float m_spaces{ 0 };
-        // LeftMargin
-        float m_LeftMargin{ 0 };
-        // RightMargin
-        float m_RightMargin{ 0 };
-        // TopMargin
-        float m_TopMargin{ 0 };
-        // BottomMargin
-        float m_BottomMargin{ 0 };
+
+        Margins m_margins;
     };
 }
 #endif // !BOXLAYOUT_H

@@ -27,7 +27,7 @@ namespace ire::core::widgets
 
         [[nodiscard]] const std::vector<std::unique_ptr<Widget>>& getWidgets() const;
 
-        virtual void add(const std::unique_ptr<Widget> widgetPtr, const std::string& widgetName);
+        virtual void add(std::unique_ptr<Widget> widgetPtr, const std::string& widgetName);
 
         [[nodiscard]] virtual bool remove(const std::string& widgetName);
 
@@ -40,7 +40,7 @@ namespace ire::core::widgets
 
         void draw(sf::RenderTarget& window) const override;
 
-        static WidgetType m_type;
+        static const WidgetType m_type;
 
         const WidgetType getType() const override;
 

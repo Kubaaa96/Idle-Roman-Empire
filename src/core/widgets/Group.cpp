@@ -3,7 +3,7 @@
 namespace ire::core::widgets
 {
 
-	WidgetType Group::m_type = WidgetType::create<Group>("Group");
+	WidgetType const Group::m_type = WidgetType::create<Group>("Group");
 	Group::Group(const sf::Vector2f& size)
 	{
 		setSize(size);

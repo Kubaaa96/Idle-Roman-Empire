@@ -5,7 +5,7 @@
 
 namespace ire::core::widgets
 {
-	WidgetType Container::m_type = WidgetType::create<Container>("Container");
+	WidgetType const Container::m_type = WidgetType::create<Container>("Container");
 
 	Container::Container()
 	{
@@ -31,7 +31,7 @@ namespace ire::core::widgets
 		return m_widgets;
 	}
 
-	void Container::add( std::unique_ptr<Widget> widgetPtr, const std::string& widgetName)
+	void Container::add(std::unique_ptr<Widget> widgetPtr, const std::string& widgetName)
 	{
 		if (!m_widgets.empty())
 		{
