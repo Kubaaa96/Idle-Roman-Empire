@@ -10,11 +10,11 @@ namespace ire::core::widgets
     {
         BoxLayout(const sf::Vector2f& size);
         
-        void setSize(const sf::Vector2f& size);
+        void setSize(const sf::Vector2f& size) override;
 
          void add( std::unique_ptr<Widget> widgetPtr, const std::string& widgetName) override;
 
-         virtual void insert(std::size_t index, std::unique_ptr<Widget>& widgetPtr, const std::string& widgetName);
+         virtual void insert(std::size_t index, std::unique_ptr<Widget> widgetPtr, const std::string& widgetName);
         
          [[nodiscard]] bool remove(const std::string& widgetName) override;
 

@@ -16,20 +16,19 @@ namespace ire::core {
             ire::core::widgets::Button::create("test1");
         std::unique_ptr<ire::core::widgets::Label> label7Ptr =
             ire::core::widgets::Label::create("test");
-        std::unique_ptr<ire::core::widgets::Button> btn8Ptr =
-            ire::core::widgets::Button::create("test1");
-
+        std::unique_ptr<ire::core::widgets::EditBox> editBox8Ptr =
+            ire::core::widgets::EditBox::create("test1");
 
         verticalLayout->add(std::move(btn5Ptr), "Button5");
         verticalLayout->add(std::move(btn6Ptr), "Button6");
         verticalLayout->add(std::move(label7Ptr), "Label1");
-        verticalLayout->add(std::move(btn8Ptr), "Button8");
+        verticalLayout->add(std::move(editBox8Ptr), "EditBox1");
 
         horizontalLayout = ire::core::widgets::HorizontalLayout::create({ 500,400 });
         horizontalLayout->setPosition({ 100, 100 });
         horizontalLayout->setSpaces(10);
-        std::unique_ptr<ire::core::widgets::Button> btn1Ptr =
-            ire::core::widgets::Button::create("test");
+        std::unique_ptr<ire::core::widgets::EditBox> editBox1Ptr =
+            ire::core::widgets::EditBox::create("test");
         std::unique_ptr<ire::core::widgets::Button> btn2Ptr =
             ire::core::widgets::Button::create("test1");
         std::unique_ptr<ire::core::widgets::Label> label3Ptr =
@@ -37,21 +36,16 @@ namespace ire::core {
         std::unique_ptr<ire::core::widgets::Button> btn4Ptr =
             ire::core::widgets::Button::create("test1");
 
-        horizontalLayout->add(std::move(btn1Ptr), "Button1");
+        horizontalLayout->add(std::move(editBox1Ptr), "EditBox2");
         horizontalLayout->add(std::move(btn2Ptr), "Button2");
         horizontalLayout->add(std::move(verticalLayout), "VerticalLayout");
-        horizontalLayout->add(std::move(label3Ptr), "Label3");
+        horizontalLayout->add(std::move(label3Ptr), "Label2");
         horizontalLayout->add(std::move(btn4Ptr), "Button4");
-
-
 
     }
 
     void Engine::run()
     {
-        sf::CircleShape shape(100.F);
-        shape.setFillColor(sf::Color::Green);
-
         while (m_window.isOpen()) {
             sf::Event event;
             while (m_window.pollEvent(event)) {
@@ -60,7 +54,6 @@ namespace ire::core {
             }
 
             m_window.clear();
-            m_window.draw(shape);
             horizontalLayout->draw(m_window);
             //verticalLayout->draw(m_window);
             m_window.display();
