@@ -1,11 +1,11 @@
 #include "Engine.h"
+#include <iostream>
 
 namespace ire::core {
 
     Engine::Engine(sf::RenderWindow& window)
         : m_window(window)
     {
-        //group = ire::core::widgets::Group::create({ 500, 400 });
         horizontalLayout = ire::core::widgets::HorizontalLayout::create({ 500,400 });
         horizontalLayout->setPosition({ 100, 100 });
         std::unique_ptr<ire::core::widgets::Button> btn1Ptr =
@@ -17,20 +17,17 @@ namespace ire::core {
         std::unique_ptr<ire::core::widgets::Button> btn4Ptr =
             ire::core::widgets::Button::create("test1");
 
-        //btn1Ptr->setSize({ 50, 50 });
-        //btn1Ptr->setPosition({ 50, 0 }); // Adding 100 + 50 on x
         horizontalLayout->add(std::move(btn1Ptr), "Button1");
-        //btn2Ptr->setSize({ 50, 50 });
-        //btn2Ptr->setPosition({ 0, 50 });
+
         horizontalLayout->add(std::move(btn2Ptr), "Button2");
         horizontalLayout->add(std::move(btn3Ptr), "Button3");
         horizontalLayout->add(std::move(btn4Ptr), "Button4");
-
- 
-        //group->get("Button1")->setPosition({ 500, 500 });
-        //printf(group->remove("Button1") ? "True" : "False");
-
-
+        horizontalLayout->setSpaces(10);
+        horizontalLayout->setMargins({ 5, 5, 10, 10 });
+        if (!horizontalLayout->remove("Button3"))
+        {
+            std::cout << "Cannot remove object named: Button3";
+        }
     }
 
     void Engine::run()

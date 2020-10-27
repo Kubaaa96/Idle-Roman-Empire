@@ -11,7 +11,7 @@ namespace ire::core::widgets
 
         static std::unique_ptr<HorizontalLayout> create(const sf::Vector2f& size);
 
-        static WidgetType m_type;
+        static const WidgetType m_type;
         const WidgetType getType() const override
         {
             return m_type;

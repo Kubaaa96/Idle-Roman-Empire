@@ -3,7 +3,7 @@
 
 namespace ire::core::widgets
 {
-	WidgetType HorizontalLayout::m_type = WidgetType::create<HorizontalLayout>("Horizontal Layout");
+	WidgetType const HorizontalLayout::m_type = WidgetType::create<HorizontalLayout>("Horizontal Layout");
 
 	HorizontalLayout::HorizontalLayout(const sf::Vector2f& size)
 		: BoxLayout{size}
@@ -16,40 +16,20 @@ namespace ire::core::widgets
 	}
 	void HorizontalLayout::updateWidgets()
 	{
-		// Actual Postion of layout? 
-		// Get size of Layout
-		// m_widgets size
-		auto position = getPosition();
-		auto size = getSize();
-		auto sizeOfVector = m_widgets.size();
-		m_spaces = 5;
 		// # Calculate size of widget
-		//	Margin Right
-		//	Margin Bottom
+		const auto size = getSize();
+		const auto sizeOfVector = m_widgets.size();
+		const auto width = (size.x / sizeOfVector) - ((m_margins.getLeftMargin() + m_margins.getRightMargin() + (m_spaces * (sizeOfVector - 1))) / sizeOfVector);
+		const auto height = size.y - m_margins.getTopMargin() - m_margins.getBottomMargin();
 
-		// ## Width
-		// (LayoutWidth / WidgetCount) -
-		// (LeftMargin + RightMargin + (Spacing * (WidgetCount - 1)) / 4)
-
-		auto width = (size.x / sizeOfVector) - ((m_LeftMargin + m_RightMargin + (m_spaces * (sizeOfVector - 1))) / sizeOfVector);
-
-		// ## Height 
-		// LayoutHeight - TopMargin - Bottom Margin
-		auto height = size.y - m_TopMargin - m_BottomMargin;
-
+		auto position = getPosition();
 		// # Calculate position of widget
-		//  Index of current setup widget
-		//	Margin Top
-		//	Margin Left
-		// LeftMargin + (WidthOfWidget * Index) + (Spacing * Widget)
 		for (std::size_t i = 0; i < sizeOfVector; ++i)
 		{
-			auto positionOfNextWidgetX = m_LeftMargin + (width * i) + (m_spaces * i);
-			auto positionOfNextWidgetY = m_TopMargin;
+			const auto positionOfNextWidgetX = m_margins.getLeftMargin() + (width * i) + (m_spaces * i);
+			const auto positionOfNextWidgetY = m_margins.getTopMargin();
 			m_widgets[i].get()->setPosition(position + sf::Vector2f{positionOfNextWidgetX, positionOfNextWidgetY});
 			m_widgets[i].get()->setSize(width, height);
 		}
-
-
 	}
 }

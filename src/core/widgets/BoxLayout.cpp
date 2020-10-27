@@ -30,6 +30,7 @@ namespace ire::core::widgets
         {
             Group::add(std::move(widgetPtr), widgetName);
         }
+        updateWidgets();
     }
     bool BoxLayout::remove(const std::string& widgetName)
     {
@@ -39,6 +40,26 @@ namespace ire::core::widgets
             return true;
         }
         return false;
+    }
+
+    void BoxLayout::setMargins(const Margins& margins)
+    {
+        m_margins = margins;
+    }
+
+    const Margins& BoxLayout::getMargins() const
+    {
+        return m_margins;
+    }
+
+    void BoxLayout::setSpaces(const float& spaces)
+    {
+        m_spaces = spaces;
+    }
+
+    const float BoxLayout::getSpaces()
+    {
+        return m_spaces;
     }
     
 }
