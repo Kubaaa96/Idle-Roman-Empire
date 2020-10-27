@@ -14,15 +14,15 @@ namespace ire::core {
             ire::core::widgets::Button::create("test");
         std::unique_ptr<ire::core::widgets::Button> btn6Ptr =
             ire::core::widgets::Button::create("test1");
-        std::unique_ptr<ire::core::widgets::Button> btn7Ptr =
-            ire::core::widgets::Button::create("test");
+        std::unique_ptr<ire::core::widgets::Label> label7Ptr =
+            ire::core::widgets::Label::create("test");
         std::unique_ptr<ire::core::widgets::Button> btn8Ptr =
             ire::core::widgets::Button::create("test1");
 
 
         verticalLayout->add(std::move(btn5Ptr), "Button5");
         verticalLayout->add(std::move(btn6Ptr), "Button6");
-        verticalLayout->add(std::move(btn7Ptr), "Button7");
+        verticalLayout->add(std::move(label7Ptr), "Label1");
         verticalLayout->add(std::move(btn8Ptr), "Button8");
 
         horizontalLayout = ire::core::widgets::HorizontalLayout::create({ 500,400 });
@@ -32,15 +32,15 @@ namespace ire::core {
             ire::core::widgets::Button::create("test");
         std::unique_ptr<ire::core::widgets::Button> btn2Ptr =
             ire::core::widgets::Button::create("test1");
-        std::unique_ptr<ire::core::widgets::Button> btn3Ptr =
-            ire::core::widgets::Button::create("test");
+        std::unique_ptr<ire::core::widgets::Label> label3Ptr =
+            ire::core::widgets::Label::create("test");
         std::unique_ptr<ire::core::widgets::Button> btn4Ptr =
             ire::core::widgets::Button::create("test1");
 
         horizontalLayout->add(std::move(btn1Ptr), "Button1");
         horizontalLayout->add(std::move(btn2Ptr), "Button2");
         horizontalLayout->add(std::move(verticalLayout), "VerticalLayout");
-        //horizontalLayout->add(std::move(btn3Ptr), "Button3");
+        horizontalLayout->add(std::move(label3Ptr), "Label3");
         horizontalLayout->add(std::move(btn4Ptr), "Button4");
 
 
