@@ -3,9 +3,8 @@
 
 #include <SFML/Graphics.hpp>
 #include "widgets/Button.h"
-#include "widgets/Container.h"
-#include "widgets/Group.h"
 #include "widgets/HorizontalLayout.h"
+#include "widgets/VerticalLayout.h"
 #include <memory>
 
 namespace ire::core {
@@ -19,6 +18,7 @@ namespace ire::core {
         sf::RenderWindow& m_window;
         std::unique_ptr<ire::core::widgets::Group> group;
         std::unique_ptr<ire::core::widgets::HorizontalLayout> horizontalLayout;
+        std::unique_ptr<ire::core::widgets::VerticalLayout> verticalLayout;
     };
 
 }
