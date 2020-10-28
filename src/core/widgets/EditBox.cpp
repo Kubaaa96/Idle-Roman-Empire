@@ -6,6 +6,7 @@ namespace ire::core::widgets
 
 	EditBox::EditBox()
 	{
+		m_rectangleShape.setFillColor(sf::Color::Cyan);
 	}
 
 	std::unique_ptr<EditBox> EditBox::create(const std::string& text)
@@ -14,16 +15,19 @@ namespace ire::core::widgets
 		// Setting up text on Button in future
 		return widget;
 	}
-	void EditBox::setSize(const sf::Vector2f& size)
+
+	void EditBox::draw(sf::RenderTarget& target)
 	{
-		Widget::setSize(size);
+		target.draw(m_rectangleShape);
 	}
-	void EditBox::draw(sf::RenderTarget& window) const
+
+	void EditBox::updateWidget()
 	{
-		sf::RectangleShape rectWidget;
-		rectWidget.setPosition(m_position);
-		rectWidget.setSize(m_size);
-		rectWidget.setFillColor(sf::Color::Cyan);
-		window.draw(rectWidget);
+		const auto size = getSize();
+		m_rectangleShape.setSize(m_size);
+
+		const auto position = getPosition();
+		m_rectangleShape.setPosition(m_position);
+
 	}
 }

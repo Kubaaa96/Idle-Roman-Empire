@@ -7,23 +7,28 @@ namespace ire::core::widgets
 
 	Label::Label()
 	{
+		m_rectangleShape.setFillColor(sf::Color::Green);
 	}
+
 	std::unique_ptr<Label> Label::create(const std::string& text)
 	{
 		auto widget = std::make_unique<Label>();
 
 		return widget;
 	}
-	void Label::setSize(const sf::Vector2f& size)
+
+	void Label::draw(sf::RenderTarget& target)
 	{
-		Widget::setSize(size);
+		target.draw(m_rectangleShape);
 	}
-	void Label::draw(sf::RenderTarget& target) const
+
+	void Label::updateWidget()
 	{
-		sf::RectangleShape rectWidget;
-		rectWidget.setPosition(m_position);
-		rectWidget.setSize(m_size);
-		rectWidget.setFillColor(sf::Color::Green);
-		target.draw(rectWidget);
+		const auto size = getSize();
+		m_rectangleShape.setSize(m_size);
+
+		const auto position = getPosition();
+		m_rectangleShape.setPosition(m_position);
+
 	}
 }

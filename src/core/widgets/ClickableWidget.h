@@ -9,12 +9,13 @@ namespace ire::core::widgets
     struct ClickableWidget : Widget
     {
         ClickableWidget();
-        std::unique_ptr<ClickableWidget> create(sf::Vector2f size);
 
-        std::unique_ptr<Widget> clone() const override;
+        void setSize(const sf::Vector2f& size) override;
+        void setPosition(const sf::Vector2f& position) override;
 
+        void draw(sf::RenderTarget& target)override;
 
-        void draw(sf::RenderTarget& window) const override;
+        virtual void updateWidget() = 0;
 
         static const WidgetType m_type;
 

@@ -11,11 +11,9 @@ namespace ire::core::widgets
 
         static std::unique_ptr<Button> create(const std::string& text = "");
 
-        void setSize(const sf::Vector2f& size) override;
+        void draw(sf::RenderTarget& target)override;
 
-        std::unique_ptr<Widget> clone() const override;
-
-        void draw(sf::RenderTarget& window) const override;
+        void updateWidget() override;
 
         static const WidgetType m_type;
         const WidgetType getType() const override
@@ -24,7 +22,7 @@ namespace ire::core::widgets
         }
 
     private:
-        
+        sf::RectangleShape m_rectangleShape;
     };
 }
 

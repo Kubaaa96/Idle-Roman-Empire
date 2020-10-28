@@ -9,18 +9,17 @@ namespace ire::core::widgets
 	{
 	}
 
-	std::unique_ptr<ClickableWidget> ClickableWidget::create(sf::Vector2f size)
+	void ClickableWidget::setSize(const sf::Vector2f& size)
 	{
-		auto widget = std::make_unique<ClickableWidget>();
-		widget->setSize(size.x, size.y);
-		return widget;
+		Widget::setSize(size);
+		updateWidget();
 	}
-
-	std::unique_ptr<Widget> ClickableWidget::clone() const
+	void ClickableWidget::setPosition(const sf::Vector2f& position)
 	{
-		return std::unique_ptr<Widget>();
+		Widget::setPosition(position);
+		updateWidget();
 	}
-	void ClickableWidget::draw(sf::RenderTarget& window) const
+	void ClickableWidget::draw(sf::RenderTarget& target)
 	{
 	}
 }

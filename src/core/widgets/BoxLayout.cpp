@@ -15,10 +15,14 @@ namespace ire::core::widgets
 
         updateWidgets();
     }
+    void BoxLayout::setPosition(const sf::Vector2f& position)
+    {
+        Container::setPosition(position);
+        updateWidgets();
+    }
     void BoxLayout::add(std::unique_ptr<Widget> widgetPtr, const std::string& widgetName)
     {
         insert(m_widgets.size(), std::move(widgetPtr), widgetName);
-        //updateWidgets();
     }
     void BoxLayout::insert(std::size_t index, std::unique_ptr<Widget> widgetPtr, const std::string& widgetName)
     {

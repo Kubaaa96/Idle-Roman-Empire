@@ -12,15 +12,17 @@ namespace ire::core::widgets
 
         static std::unique_ptr<Label> create(const std::string& text = "");
 
-        void setSize(const sf::Vector2f& size) override;
+        void draw(sf::RenderTarget& target) override;
 
-        void draw(sf::RenderTarget& target) const override;
+        void updateWidget() override;
 
         static const WidgetType m_type;
         const WidgetType getType() const override
         {
             return m_type;
         }
+    private:
+        sf::RectangleShape m_rectangleShape;
     };
 }
 #endif // !LABEL_H

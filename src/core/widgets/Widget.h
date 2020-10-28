@@ -34,18 +34,12 @@ namespace ire::core::widgets
         void setOrigin(float x, float y);
         [[nodiscard]] sf::Vector2f getOrigin() const;
 
-        virtual void draw(sf::RenderTarget& window) const = 0;
-
-        virtual std::unique_ptr<Widget> clone() const = 0;
+        virtual void draw(sf::RenderTarget& target) = 0;
 
         virtual void setParent(Container* parent);
         [[nodiscard]] Container* getParent() const;
         
         virtual const WidgetType getType() const = 0;
-
-        // Temp for testing 
-        void drawRect(sf::RenderWindow& window);
-
 
     protected:
         std::string m_name;
