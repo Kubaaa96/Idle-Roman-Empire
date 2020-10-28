@@ -79,7 +79,7 @@ namespace ire::core::detail {
         template <typename PathT>
         EagerResource(PathT&& rpath) :
             BaseType(std::forward<PathT>(rpath)),
-            m_resource(ResourceLoader::load(path()))
+            m_resource(ResourceLoader::load(BaseType::path()))
         {
         }
 
@@ -128,7 +128,7 @@ namespace ire::core::detail {
         [[nodiscard]] const T& get() const override
         {
             std::call_once(m_flag, [&res = m_resource, this]() {
-                res = ResourceLoader::load(path());
+                res = ResourceLoader::load(BaseType::path());
             });
 
             if constexpr (std::is_same_v<T, ResourceStorageType>)
