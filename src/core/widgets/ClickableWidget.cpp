@@ -3,6 +3,8 @@
 
 namespace ire::core::widgets
 {
+	WidgetType const ClickableWidget::m_type = WidgetType::create<ClickableWidget>("ClickableWidget");
+
 	ClickableWidget::ClickableWidget()
 	{
 	}
