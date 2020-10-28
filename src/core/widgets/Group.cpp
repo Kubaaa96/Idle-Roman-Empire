@@ -29,7 +29,7 @@ namespace ire::core::widgets
 		return sf::Vector2f();
 	}
 
-	void Group::draw(sf::RenderTarget& target) const
+	void Group::draw(sf::RenderTarget& target)
 	{
 		for (auto& widget : m_widgets)
 		{
@@ -44,10 +44,4 @@ namespace ire::core::widgets
 			widget->setPosition(getPosition() + widget->getPosition());
 		}
 	}
-
-	std::unique_ptr<Widget> Group::clone() const
-	{
-		return std::unique_ptr<Widget>();
-	}
-
 }

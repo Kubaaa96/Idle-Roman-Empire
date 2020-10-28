@@ -7,6 +7,7 @@ namespace ire::core::widgets
 
 	Button::Button()
 	{
+		m_rectangleShape.setFillColor(sf::Color::Red);
 	}
 
 	std::unique_ptr<Button> Button::create(const std::string& text)
@@ -16,23 +17,17 @@ namespace ire::core::widgets
 		return widget;
 	}
 
-	void Button::setSize(const sf::Vector2f& size)
+	void Button::draw(sf::RenderTarget& target)
 	{
-		Widget::setSize(size);
+		target.draw(m_rectangleShape);
 	}
-
-	std::unique_ptr<Widget> Button::clone() const
+	void Button::updateWidget()
 	{
-		return std::unique_ptr<Widget>();
-	}
+		const auto size = getSize();
+		m_rectangleShape.setSize(m_size);
 
-	void Button::draw(sf::RenderTarget& window) const
-	{
-		// temp for testing 
-		sf::RectangleShape rectWidget;
-		rectWidget.setPosition(m_position);
-		rectWidget.setSize(m_size);
-		rectWidget.setFillColor(sf::Color::Red);
-		window.draw(rectWidget);
+		const auto position = getPosition();
+		m_rectangleShape.setPosition(m_position);
+		
 	}
 }

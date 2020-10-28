@@ -93,13 +93,13 @@ namespace ire::core::widgets
 		return nullptr;
 	}
 
-	void Container::draw(sf::RenderTarget& window) const
+	void Container::draw(sf::RenderTarget& target)
 	{
 		// Check if widget is visible after adding that
 
 		for (const auto& widget : m_widgets)
 		{
-			widget->draw(window);
+			widget->draw(target);
 		}
 	}
 	const WidgetType Container::getType() const

@@ -17,7 +17,7 @@ namespace ire::core::widgets
 
 		sf::Vector2f getChildWidgetOffset() const override;
 
-		void draw(sf::RenderTarget& target) const override;
+		void draw(sf::RenderTarget& target) override;
 
 		void init();
 		static const WidgetType m_type;
@@ -27,7 +27,6 @@ namespace ire::core::widgets
 		}
 
 	protected:
-		virtual std::unique_ptr<Widget> clone() const override;
 	};
 }
 #endif // !GROUP_H

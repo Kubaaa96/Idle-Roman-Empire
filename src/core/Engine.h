@@ -5,6 +5,7 @@
 #include "widgets/Button.h"
 #include "widgets/Label.h"
 #include "widgets/EditBox.h"
+#include "widgets/Panel.h"
 #include "widgets/HorizontalLayout.h"
 #include "widgets/VerticalLayout.h"
 #include <memory>
@@ -19,6 +20,7 @@ namespace ire::core {
     private:
         sf::RenderWindow& m_window;
         std::unique_ptr<ire::core::widgets::Group> group;
+        std::unique_ptr<ire::core::widgets::Panel> panel;
         std::unique_ptr<ire::core::widgets::HorizontalLayout> horizontalLayout;
         std::unique_ptr<ire::core::widgets::VerticalLayout> verticalLayout;
     };

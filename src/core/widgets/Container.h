@@ -38,7 +38,7 @@ namespace ire::core::widgets
         Widget* get(const std::string name);
         const Widget* get(const std::string name) const;
 
-        void draw(sf::RenderTarget& window) const override;
+        void draw(sf::RenderTarget& target)override;
 
         static const WidgetType m_type;
 
@@ -48,10 +48,6 @@ namespace ire::core::widgets
         std::vector<std::unique_ptr<Widget>> m_widgets;
 
     private:
-        virtual std::unique_ptr<Widget> clone() const override
-        {
-            return nullptr;
-        }
 
         bool compareWithWidgetNameAt(std::size_t index, const std::string& name) ;
         const bool compareWithWidgetNameAt(std::size_t index, const std::string& name) const;

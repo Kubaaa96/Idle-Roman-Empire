@@ -25,7 +25,7 @@ namespace ire::core {
         verticalLayout->add(std::move(editBox8Ptr), "EditBox1");
 
         horizontalLayout = ire::core::widgets::HorizontalLayout::create({ 500,400 });
-        horizontalLayout->setPosition({ 100, 100 });
+        //horizontalLayout->setPosition({ 100, 100 });
         horizontalLayout->setSpaces(10);
         std::unique_ptr<ire::core::widgets::EditBox> editBox1Ptr =
             ire::core::widgets::EditBox::create("test");
@@ -42,6 +42,13 @@ namespace ire::core {
         horizontalLayout->add(std::move(label3Ptr), "Label2");
         horizontalLayout->add(std::move(btn4Ptr), "Button4");
 
+        horizontalLayout->setMargins({ 10, 10, 10, 10 });
+
+        panel = ire::core::widgets::Panel::create({ 700, 400 }, std::move(horizontalLayout), std::string("HorizontalLayout"));
+        panel->setPosition({200, 200});
+        panel->setOpacity(200);
+        panel->setOutlineColor(sf::Color::Magenta);
+        panel->setOutlineThickness(7);
     }
 
     void Engine::run()
@@ -54,8 +61,8 @@ namespace ire::core {
             }
 
             m_window.clear();
-            horizontalLayout->draw(m_window);
-            //verticalLayout->draw(m_window);
+            panel->draw(m_window);
+            //horizontalLayout->draw(m_window);
             m_window.display();
         }
     }
