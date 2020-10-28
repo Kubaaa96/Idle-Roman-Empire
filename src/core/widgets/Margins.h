@@ -20,10 +20,10 @@
         
             Margins(float leftMargin, float rightMargin, float topMargin, float bottomMargin);
 
-            float m_Left{ 0 };
-            float m_Right{ 0 };
-            float m_Top{ 0 };
-            float m_Bottom{ 0 };
+            float m_left{ 0 };
+            float m_right{ 0 };
+            float m_top{ 0 };
+            float m_bottom{ 0 };
         };
 
         bool operator<(const Margins& lhs, const Margins& rhs);
