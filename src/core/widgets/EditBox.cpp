@@ -2,7 +2,7 @@
 
 namespace ire::core::widgets
 {
-	WidgetType const EditBox::m_type = WidgetType::create<EditBox>("Edit Box");
+	WidgetType const EditBox::m_type = WidgetType::create<EditBox>("EditBox");
 
 	EditBox::EditBox()
 	{
