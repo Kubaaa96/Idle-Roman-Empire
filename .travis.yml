@@ -1,9 +1,12 @@
 notifications:
   email: false
+
 language: cpp
+
 branches:
   only:
-  - master
+    - master
+
 addons:
   apt:
     packages:
@@ -16,25 +19,25 @@ addons:
     - libvorbis-dev
     - libflac-dev
     - libxcursor-dev
-  homebrew:
-    packages:
-     - cmake
     update: true
+
 matrix:
   include:
+    - name: "Ubuntu Focal 20.04 GCC"
+      os: linux
+      dist: focal
+      compiler: gcc
 
-  - name: "Ubuntu Bionic 18.04 GCC"
-    os: linux
-    dist: bionic
-    compiler: gcc
+    - name: "Ubuntu Focal 20.04 Clang"
+      os: linux
+      dist: focal
+      compiler: clang
 
-  - name: "Ubuntu Bionic 18.04 Clang"
-    os: linux
-    dist: bionic
-    compiler: clang
+    - name: "Windows"
+      os: windows
 
-  - name: "Windows"
-    os: windows
+before_install:
+  - eval "${MATRIX_EVAL}"
 
 install:
 - git clone https://github.com/SFML/SFML.git

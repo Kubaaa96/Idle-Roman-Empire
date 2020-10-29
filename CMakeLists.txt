@@ -18,6 +18,7 @@ set(SFML_STATIC_LIBRARIES FALSE CACHE BOOL "Choose whether SFML is linked static
 set(IDLEROMANEMPIRE_STATIC_STD_LIBS FALSE CACHE BOOL "Use statically linked standard/runtime libraries? This option must match the one used for SFML.")
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED 17)
 
 find_package(SFML 2.5 COMPONENTS graphics audio window system REQUIRED)
 
@@ -40,6 +41,9 @@ endif()
 if (BUILD_TESTS)
     add_subdirectory(tests)
 endif()
+
+find_package(Threads REQUIRED)
+target_link_libraries(IdleRomanEmpire Threads::Threads)
 
 target_link_libraries(IdleRomanEmpire IRECore)
 target_link_libraries(IdleRomanEmpire sfml-graphics sfml-audio sfml-window sfml-system)
