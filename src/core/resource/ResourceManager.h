@@ -26,6 +26,7 @@ namespace ire::core {
         struct AnyResourceManager
         {
             [[nodiscard]] virtual const void* get(const ResourcePath&) = 0;
+            virtual ~AnyResourceManager() = default;
         };
 
         template <typename T>
@@ -124,7 +125,7 @@ namespace ire::core {
             {
                 it = m_specificResourceManagers.emplace_hint(
                     it,
-                    idx, 
+                    idx,
                     std::make_unique<detail::SpecificResourceManager<T>>()
                 );
             }
