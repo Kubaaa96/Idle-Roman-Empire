@@ -31,6 +31,8 @@ namespace ire::core::widgets
 
         [[nodiscard]] virtual bool remove(const std::string& widgetName);
 
+        void removeAllWidgets();
+
         Widget* get(int index);
 
         const Widget* get(int index) const;

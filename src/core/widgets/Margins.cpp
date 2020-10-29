@@ -7,10 +7,10 @@ namespace ire::core::widgets
 	}
 
 	Margins::Margins(float leftMargin, float rightMargin, float topMargin, float bottomMargin)
-		: m_left(leftMargin)
-		, m_right(rightMargin)
-		, m_top(topMargin)
-		, m_bottom(bottomMargin)
+		: m_left{ leftMargin }
+		, m_right{ rightMargin }
+		, m_top{ topMargin }
+		, m_bottom{ bottomMargin }
 	{
 	}
 	bool operator<(const Margins& lhs, const Margins& rhs)

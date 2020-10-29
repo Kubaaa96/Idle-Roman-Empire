@@ -11,6 +11,10 @@ namespace ire::core::widgets
 
 		static std::unique_ptr<Group> create(const sf::Vector2f& size);
 
+		void add(std::unique_ptr<Widget> widgetPtr, const std::string& widgetName) override;
+
+		void setPosition(const sf::Vector2f& position) override;
+
 		void setSize(const sf::Vector2f& size) override;
 
 		sf::Vector2f getInnerSize() const override;
@@ -19,7 +23,7 @@ namespace ire::core::widgets
 
 		void draw(sf::RenderTarget& target) override;
 
-		void init();
+		void updateWidgets();
 		static const WidgetType m_type;
 		const WidgetType getType() const override
 		{

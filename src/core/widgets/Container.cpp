@@ -59,6 +59,16 @@ namespace ire::core::widgets
 		return true;
 	}
 
+	void Container::removeAllWidgets()
+	{
+		for (const auto& widget : m_widgets)
+		{
+			widget->setParent(nullptr);
+		}
+
+		m_widgets.clear();
+	}
+
 	Widget* Container::get(int index) 
 	{
 		return getWidgetAt(index);

@@ -14,6 +14,18 @@ namespace ire::core::widgets
 		return std::make_unique<Group>(size);
 	}
 
+	void Group::add(std::unique_ptr<Widget> widgetPtr, const std::string& widgetName)
+	{
+		Container::add(std::move(widgetPtr), widgetName);
+		updateWidgets();
+	}
+
+	void Group::setPosition(const sf::Vector2f& position)
+	{
+		Container::setPosition(position);
+		updateWidgets();
+	}
+
 	void Group::setSize(const sf::Vector2f& size)
 	{
 		Container::setSize(size);
@@ -37,11 +49,13 @@ namespace ire::core::widgets
 		}
 	}
 
-	void Group::init()
+	void Group::updateWidgets()
 	{
+		const auto position = getPosition();
 		for (auto& widget : m_widgets) 
 		{
-			widget->setPosition(getPosition() + widget->getPosition());
+			const auto widgetPosition = widget->getPosition();
+			widget->setPosition(position + widgetPosition);
 		}
 	}
 }

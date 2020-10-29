@@ -49,6 +49,7 @@ namespace ire::core::widgets
     void BoxLayout::setMargins(const Margins& margins)
     {
         m_margins = margins;
+        updateWidgets();
     }
 
     const Margins& BoxLayout::getMargins() const
@@ -64,6 +65,7 @@ namespace ire::core::widgets
     const float BoxLayout::getSpaces()
     {
         return m_spaces;
+        updateWidgets();
     }
     
 }

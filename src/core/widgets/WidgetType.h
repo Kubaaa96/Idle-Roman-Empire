@@ -6,6 +6,8 @@
 
 struct WidgetType
 {
+	const uint64_t getIndex() const;
+	const std::string_view getName() const;
 
 	template <typename T>
 	static WidgetType create(std::string_view name)
