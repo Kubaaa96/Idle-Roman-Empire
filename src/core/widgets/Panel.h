@@ -10,28 +10,35 @@ namespace ire::core::widgets
 
     struct Panel : Widget
     {
-        Panel(const sf::Vector2f& size, std::unique_ptr<BoxLayout> mainPanelLayout, std::string& layoutName);
+        Panel(const sf::Vector2f& size, std::unique_ptr<BoxLayout> mainPanelLayout, const std::string& layoutName);
         static std::unique_ptr<Panel> create(const sf::Vector2f size, 
-            std::unique_ptr<BoxLayout> mainPanelLayout, std::string& layoutName);
+            std::unique_ptr<BoxLayout> mainPanelLayout, const std::string& layoutName);
         void setSize(const sf::Vector2f& size) override;
         void setPosition(const sf::Vector2f& position)override;
 
+        [[nodiscard]] const std::unique_ptr<BoxLayout>& getLayout() const;
+
         void draw(sf::RenderTarget& target) override;
 
-        void setBackground(const sf::Color backgroundColor);
+        void setBackgroundColor(const sf::Color backgroundColor);
+        [[nodiscard]] const sf::Color getBackgroundColor() const;
+
         void setOpacity(std::uint8_t alpha);
+        [[nodiscard]] const std::uint8_t getOpacity() const;
+
         void setOutlineColor(const sf::Color outlineColor);
+        [[nodiscard]] const sf::Color getOutlineColor() const;
+
         void setOutlineThickness(float thickness);
+        [[nodiscard]] const float getOutlineThickness() const;
 
         static const WidgetType m_type;
-        const WidgetType getType() const override
+        [[nodiscard]] const WidgetType getType() const override
         {
             return m_type;
         }
 
     protected:
-        sf::Color m_Outline;
-        sf::Color m_Background;
         std::unique_ptr<BoxLayout> m_panelLayout;
     private:
         void updateLayout();
