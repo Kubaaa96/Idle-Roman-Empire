@@ -123,6 +123,21 @@ TEST_CASE("[VerticalLayout]")
 			REQUIRE(layout->get("Button4")->getSize() == sf::Vector2f({ 492, 96 }));
 
 		}
+		SECTION("Layout Stretch without margins and spacing")
+		{
+			layout->setSpaces(0);
+			layout->setSize({ 500, 1000 });
+			auto button1 = ire::core::widgets::Button::create();
+			layout->add(std::move(button1), "Button1");
+			auto button2 = ire::core::widgets::Button::create();
+			layout->add(std::move(button2), "Button2");
+			auto button3 = ire::core::widgets::Button::create();
+			layout->add(std::move(button3), "Button3");
+			layout->setLayoutStretch({ 1,2,1 });
+			REQUIRE(layout->get("Button1")->getSize().y == 250);
+			REQUIRE(layout->get("Button2")->getSize().y == 500);
+			REQUIRE(layout->get("Button3")->getSize().y == 250);
+		}
 	}
 	SECTION("Spaces")
 	{

@@ -10,12 +10,12 @@ namespace ire::core::widgets
     {
         ClickableWidget();
 
-        void setSize(const sf::Vector2f& size) override;
-        void setPosition(const sf::Vector2f& position) override;
+        void setSize(const sf::Vector2f& size, bool updateWidget = true) override;
+        void setPosition(const sf::Vector2f& position, bool updateWidget = true) override;
 
         void draw(sf::RenderTarget& target)override;
 
-        virtual void updateWidget() = 0;
+        virtual void updateCurrentWidget() = 0;
 
         static const WidgetType m_type;
 

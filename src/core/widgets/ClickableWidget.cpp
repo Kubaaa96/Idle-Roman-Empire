@@ -9,15 +9,17 @@ namespace ire::core::widgets
 	{
 	}
 
-	void ClickableWidget::setSize(const sf::Vector2f& size)
+	void ClickableWidget::setSize(const sf::Vector2f& size, bool updateWidget)
 	{
 		Widget::setSize(size);
-		updateWidget();
+		if(updateWidget)
+			updateCurrentWidget();
 	}
-	void ClickableWidget::setPosition(const sf::Vector2f& position)
+	void ClickableWidget::setPosition(const sf::Vector2f& position, bool updateWidget)
 	{
 		Widget::setPosition(position);
-		updateWidget();
+		if (updateWidget)
+			updateCurrentWidget();
 	}
 	void ClickableWidget::draw(sf::RenderTarget& target)
 	{

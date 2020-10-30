@@ -13,8 +13,8 @@ namespace ire::core::widgets
         Panel(const sf::Vector2f& size, std::unique_ptr<BoxLayout> mainPanelLayout, const std::string& layoutName);
         static std::unique_ptr<Panel> create(const sf::Vector2f size, 
             std::unique_ptr<BoxLayout> mainPanelLayout, const std::string& layoutName);
-        void setSize(const sf::Vector2f& size) override;
-        void setPosition(const sf::Vector2f& position)override;
+        void setSize(const sf::Vector2f& size, bool updateWidget = true) override;
+        void setPosition(const sf::Vector2f& position, bool updateWidget = true)override;
 
         [[nodiscard]] const std::unique_ptr<BoxLayout>& getLayout() const;
 

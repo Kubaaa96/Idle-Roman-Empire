@@ -1,6 +1,10 @@
 #include "BoxLayout.h"
 
 #include <iostream>
+#include <numeric>
+#include <initializer_list>
+#include <algorithm>
+
 
 namespace ire::core::widgets
 {
@@ -9,16 +13,17 @@ namespace ire::core::widgets
     {
 
     }
-    void BoxLayout::setSize(const sf::Vector2f& size)
+    void BoxLayout::setSize(const sf::Vector2f& size, bool updateWidget)
     {
         Container::setSize(size);
-
-        updateWidgets();
+        if(updateWidget)
+            updateWidgets();
     }
-    void BoxLayout::setPosition(const sf::Vector2f& position)
+    void BoxLayout::setPosition(const sf::Vector2f& position, bool updateWidget)
     {
         Container::setPosition(position);
-        updateWidgets();
+        if(updateWidget)
+            updateWidgets();
     }
     void BoxLayout::add(std::unique_ptr<Widget> widgetPtr, const std::string& widgetName)
     {
@@ -67,5 +72,38 @@ namespace ire::core::widgets
         return m_spaces;
         updateWidgets();
     }
-    
+
+    void BoxLayout::setLayoutStretch(std::initializer_list<int> list)
+    {
+        // Check if number of items in initializer_list is the same as m_widgets.size()
+        if (list.size() != m_widgets.size())
+        {
+            std::cout << "Size of list and widget vector is different. Need to be the same\n";
+            return;
+        }
+        m_layoutStretch = list;
+        m_sumOfLayoutStretches = std::accumulate(m_layoutStretch.begin(), m_layoutStretch.end(), 0);
+
+        updateWidgets();
+    }
+
+    const std::vector<int> BoxLayout::getLayoutStretch() const
+    {
+        return m_layoutStretch;
+    }
+
+    bool BoxLayout::isLayoutStretchValid()
+    {
+        if (!m_layoutStretch.empty())
+        {
+            if (!std::equal(m_layoutStretch.begin() + 1, m_layoutStretch.end(), m_layoutStretch.begin()))
+            {
+                if (m_layoutStretch.size() == m_widgets.size())
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

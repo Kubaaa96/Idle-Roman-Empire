@@ -20,13 +20,14 @@ namespace ire::core::widgets
 		updateWidgets();
 	}
 
-	void Group::setPosition(const sf::Vector2f& position)
+	void Group::setPosition(const sf::Vector2f& position, bool updateWidget)
 	{
 		Container::setPosition(position);
-		updateWidgets();
+		if(updateWidget)
+			updateWidgets();
 	}
 
-	void Group::setSize(const sf::Vector2f& size)
+	void Group::setSize(const sf::Vector2f& size, bool updateWidget)
 	{
 		Container::setSize(size);
 	}

@@ -16,7 +16,7 @@ namespace ire::core::widgets
 		return m_name;
 	}
 
-	void Widget::setPosition(const sf::Vector2f& position)
+	void Widget::setPosition(const sf::Vector2f& position, bool updateWidget)
 	{
 		m_position = position;
 	}
@@ -26,12 +26,22 @@ namespace ire::core::widgets
 		setPosition({ x, y });
 	}
 
-	sf::Vector2f Widget::getPosition() const
+	const sf::Vector2f Widget::getPosition() const
 	{
 		return m_position;
 	}
 
-	void Widget::setSize(const sf::Vector2f& size)
+	const sf::Vector2f Widget::getLocalPosition() const
+	{
+		if (m_parent)
+		{
+			return m_localPosition;
+		}
+		std::cout << "Current Widget is not in any Layout so dont have Local Position \n";
+		return sf::Vector2f();
+	}
+
+	void Widget::setSize(const sf::Vector2f& size, bool updateWidget)
 	{
 		m_size = size;
 	}
@@ -41,12 +51,12 @@ namespace ire::core::widgets
 		setSize({ x ,y });
 	}
 
-	void Widget::setWidth(float width)
+	void Widget::setWidth(float width, bool updateWidget)
 	{
 		setSize({ std::move(width), m_size.y });
 	}
 
-	void Widget::setHeight(float height)
+	void Widget::setHeight(float height, bool updateWidget)
 	{
 		setSize({ m_size.x, std::move(height) });
 	}
@@ -82,5 +92,9 @@ namespace ire::core::widgets
 	{
 		return m_parent;
 
+	}
+	void Widget::setLocalPosition(const sf::Vector2f& localPosition)
+	{
+		m_localPosition = localPosition;
 	}
 }

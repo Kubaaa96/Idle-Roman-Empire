@@ -13,9 +13,9 @@ namespace ire::core::widgets
 
 		void add(std::unique_ptr<Widget> widgetPtr, const std::string& widgetName) override;
 
-		void setPosition(const sf::Vector2f& position) override;
+		void setPosition(const sf::Vector2f& position, bool updateWidget = true) override;
 
-		void setSize(const sf::Vector2f& size) override;
+		void setSize(const sf::Vector2f& size, bool updateWidget = true) override;
 
 		sf::Vector2f getInnerSize() const override;
 

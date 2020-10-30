@@ -20,15 +20,17 @@ namespace ire::core::widgets
 		return std::make_unique<Panel>(size,  std::move(mainPanelLayout), layoutName);
 	}
 
-	void Panel::setSize(const sf::Vector2f& size)
+	void Panel::setSize(const sf::Vector2f& size, bool updateWidget)
 	{
 		Widget::setSize(size);
-		updateLayout();
+		if(updateWidget)
+			updateLayout();
 	}
-	void Panel::setPosition(const sf::Vector2f& position)
+	void Panel::setPosition(const sf::Vector2f& position, bool updateWidget)
 	{
 		Widget::setPosition(position);
-		updateLayout();
+		if(updateWidget)
+			updateLayout();
 	}
 	const std::unique_ptr<BoxLayout>& Panel::getLayout() const
 	{
