@@ -44,12 +44,13 @@ install:
 - cd SFML
 - mkdir install
 - mkdir build
-- cd build
-- cmake -DCMAKE_INSTALL_PREFIX=../install -DCMAKE_INSTALL_FRAMEWORK_PREFIX=../install -DSFML_BUILD_FRAMEWORKS=FALSE -DBUILD_SHARED_LIBS=TRUE ..
-- cmake --build . --config Release --target install
-- cd ../../
+- cmake . -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=./install -DCMAKE_INSTALL_FRAMEWORK_PREFIX=./install -DSFML_BUILD_FRAMEWORKS=FALSE -DBUILD_SHARED_LIBS=TRUE
+- cmake --build ./build --config Release --target install
+- cd ..
 
 script:
 - mkdir build
-- cmake . -Bbuild -DBUILD_TESTS=TRUE -DCMAKE_INSTALL_PREFIX=./install/ire -DSFML_DIR=./SFML/install/lib/cmake/SFML
+- mkdir install
+- cmake . -Bbuild -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=TRUE -DCMAKE_INSTALL_PREFIX=./install -DSFML_DIR=./SFML/install/lib/cmake/SFML
+- cmake --build ./build --config Release --target install
 - cmake --build ./build --config Release --target IRERunTests
