@@ -118,8 +118,8 @@ TEST_CASE("[HorizontalLayout]")
 			auto button1 = ire::core::widgets::Button::create();
 			layout->add(std::move(button1), "Button1");
 
-			REQUIRE(areAlmostEqual<sf::Vector2f>(layout->get("Button1")->getPosition(), sf::Vector2f({ 54, 55 })));
-			REQUIRE(areAlmostEqual<sf::Vector2f>(layout->get("Button1")->getSize(), sf::Vector2f({ 492, 390 })));
+			REQUIRE(areAlmostEqual<sf::Vector2f>(layout->get("Button1")->getPosition(), sf::Vector2f({ 54, 54 })));
+			REQUIRE(areAlmostEqual<sf::Vector2f>(layout->get("Button1")->getSize(), sf::Vector2f({ 492, 392 })));
 
 			auto button2 = ire::core::widgets::Button::create();
 			layout->add(std::move(button2), "Button2");
