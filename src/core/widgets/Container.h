@@ -19,7 +19,7 @@ namespace ire::core::widgets
         Container& operator=(Container& other) = delete;
         Container& operator=(Container&& other) = delete;
 
-        void setSize(const sf::Vector2f& size, bool updateWidget = true) override;
+        void setSize(const sf::Vector2f& size) override;
 
         virtual sf::Vector2f getInnerSize() const;
 

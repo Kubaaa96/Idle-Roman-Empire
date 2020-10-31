@@ -11,7 +11,7 @@ namespace ire::core::widgets
 	{
 		
 	}
-	void widgets::Container::setSize(const sf::Vector2f& size, bool updateWidget)
+	void widgets::Container::setSize(const sf::Vector2f& size)
 	{
 		Widget::setSize(size);
 	}

@@ -1,7 +1,5 @@
 #include "Panel.h"
 
-#include <iostream>
-
 namespace ire::core::widgets
 {
 	WidgetType const Panel::m_type = WidgetType::create<Panel>("Panel");
@@ -20,17 +18,15 @@ namespace ire::core::widgets
 		return std::make_unique<Panel>(size,  std::move(mainPanelLayout), layoutName);
 	}
 
-	void Panel::setSize(const sf::Vector2f& size, bool updateWidget)
+	void Panel::setSize(const sf::Vector2f& size)
 	{
 		Widget::setSize(size);
-		if(updateWidget)
-			updateLayout();
+		updateLayout();
 	}
-	void Panel::setPosition(const sf::Vector2f& position, bool updateWidget)
+	void Panel::setPosition(const sf::Vector2f& position)
 	{
 		Widget::setPosition(position);
-		if(updateWidget)
-			updateLayout();
+		updateLayout();
 	}
 	const std::unique_ptr<BoxLayout>& Panel::getLayout() const
 	{

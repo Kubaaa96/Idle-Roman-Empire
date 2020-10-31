@@ -39,7 +39,7 @@ namespace ire::core::widgets
 
 			if (isStretchValid)
 			{
-				float proportion = static_cast<float>(m_layoutStretch[i]) / static_cast<float>(m_sumOfLayoutStretches);
+				float proportion = m_layoutStretch[i] / m_sumOfLayoutStretches;
 				heightPerOneWidget = proportion * size.y;
 				height = heightPerOneWidget - ((m_margins.m_top + m_margins.m_bottom + totalHeightOfSpaces) / sizeOfVector);
 				if (i == 0)

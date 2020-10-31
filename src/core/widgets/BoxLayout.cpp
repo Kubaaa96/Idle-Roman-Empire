@@ -1,9 +1,8 @@
 #include "BoxLayout.h"
 
-#include <iostream>
 #include <numeric>
-#include <initializer_list>
 #include <algorithm>
+#include <functional>
 
 
 namespace ire::core::widgets
@@ -13,17 +12,15 @@ namespace ire::core::widgets
     {
 
     }
-    void BoxLayout::setSize(const sf::Vector2f& size, bool updateWidget)
+    void BoxLayout::setSize(const sf::Vector2f& size)
     {
         Container::setSize(size);
-        if(updateWidget)
-            updateWidgets();
+        updateWidgets();
     }
-    void BoxLayout::setPosition(const sf::Vector2f& position, bool updateWidget)
+    void BoxLayout::setPosition(const sf::Vector2f& position)
     {
         Container::setPosition(position);
-        if(updateWidget)
-            updateWidgets();
+        updateWidgets();
     }
     void BoxLayout::add(std::unique_ptr<Widget> widgetPtr, const std::string& widgetName)
     {
@@ -69,40 +66,37 @@ namespace ire::core::widgets
 
     const float BoxLayout::getSpaces()
     {
-        return m_spaces;
         updateWidgets();
+        return m_spaces;
     }
 
-    void BoxLayout::setLayoutStretch(std::initializer_list<int> list)
+    void BoxLayout::setLayoutStretch(std::vector<float> relativeSizes)
     {
         // Check if number of items in initializer_list is the same as m_widgets.size()
-        if (list.size() != m_widgets.size())
+        if (relativeSizes.size() != m_widgets.size())
         {
-            std::cout << "Size of list and widget vector is different. Need to be the same\n";
+            throw ("Size of list and widget vector is different. Need to be the same");
             return;
         }
-        m_layoutStretch = list;
-        m_sumOfLayoutStretches = std::accumulate(m_layoutStretch.begin(), m_layoutStretch.end(), 0);
+        m_layoutStretch = relativeSizes;
+        m_sumOfLayoutStretches = std::accumulate(m_layoutStretch.begin(), m_layoutStretch.end(), 0.f);
 
         updateWidgets();
     }
 
-    const std::vector<int> BoxLayout::getLayoutStretch() const
+    const std::vector<float>& BoxLayout::getLayoutStretch() const
     {
         return m_layoutStretch;
     }
 
     bool BoxLayout::isLayoutStretchValid()
     {
-        if (!m_layoutStretch.empty())
+        if (!m_layoutStretch.empty()
+            && !std::all_of(m_layoutStretch.begin() + 1, m_layoutStretch.end(), std::bind(std::equal_to<float>(),
+                std::placeholders::_1, m_layoutStretch.front()))
+            && m_layoutStretch.size() == m_widgets.size())
         {
-            if (!std::equal(m_layoutStretch.begin() + 1, m_layoutStretch.end(), m_layoutStretch.begin()))
-            {
-                if (m_layoutStretch.size() == m_widgets.size())
-                {
-                    return true;
-                }
-            }
+            return true;
         }
         return false;
     }

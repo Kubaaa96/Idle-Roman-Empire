@@ -1,5 +1,4 @@
 #include "HorizontalLayout.h"
-#include <iostream>
 
 namespace ire::core::widgets
 {
@@ -39,7 +38,7 @@ namespace ire::core::widgets
 			float positionOfNextWidgetX{ 0 };
 			if (isStretchValid)
 			{
-				float proportion = static_cast<float>(m_layoutStretch[i]) / static_cast<float>(m_sumOfLayoutStretches);
+				float proportion = m_layoutStretch[i] / m_sumOfLayoutStretches;
 				widthPerOneWidget = proportion * size.x;
 				width = widthPerOneWidget - (m_margins.m_left + m_margins.m_right + totalWidthOfSpaces) / sizeOfVector;
 				if (i == 0)

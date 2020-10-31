@@ -1,5 +1,4 @@
 #include "Group.h"
-#include <iostream>
 namespace ire::core::widgets
 {
 
@@ -20,14 +19,13 @@ namespace ire::core::widgets
 		updateWidgets();
 	}
 
-	void Group::setPosition(const sf::Vector2f& position, bool updateWidget)
+	void Group::setPosition(const sf::Vector2f& position)
 	{
 		Container::setPosition(position);
-		if(updateWidget)
-			updateWidgets();
+		updateWidgets();
 	}
 
-	void Group::setSize(const sf::Vector2f& size, bool updateWidget)
+	void Group::setSize(const sf::Vector2f& size)
 	{
 		Container::setSize(size);
 	}

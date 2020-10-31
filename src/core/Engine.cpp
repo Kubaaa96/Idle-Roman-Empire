@@ -20,7 +20,7 @@ namespace ire::core {
         verticalLayout->add(std::move(label7Ptr), "Label1");
         verticalLayout->add(std::move(editBox8Ptr), "EditBox1");
 
-        verticalLayout->setLayoutStretch({ 1, 3, 6, 2 });
+        verticalLayout->setLayoutStretch({ 1, 3, 6, 2});
 
         horizontalLayout = ire::core::widgets::HorizontalLayout::create({ 500,400 });
         horizontalLayout->setSpaces(10);
@@ -39,7 +39,8 @@ namespace ire::core {
         horizontalLayout->setLayoutStretch({ 3, 6, 12, 2, 1 });
 
         panel = ire::core::widgets::Panel::create({ 700, 400 }, std::move(horizontalLayout), "HorizontalLayout");
-        panel->setPosition({200, 200});
+        //panel->setPosition({200, 200});
+        panel->setLocalPosition({ 200,200 });
         panel->setOpacity(200);
         panel->setOutlineColor(sf::Color::Magenta);
         panel->setOutlineThickness(7);

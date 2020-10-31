@@ -22,7 +22,7 @@ namespace ire::core::widgets
 		target.draw(m_rectangleShape);
 	}
 
-	void Label::updateCurrentWidget()
+	void Label::updateWidget()
 	{
 		const auto size = getSize();
 		m_rectangleShape.setSize(m_size);

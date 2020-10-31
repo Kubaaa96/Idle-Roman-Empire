@@ -10,8 +10,8 @@ namespace ire::core::widgets
     {
         BoxLayout(const sf::Vector2f& size);
         
-        void setSize(const sf::Vector2f& size, bool updateWidget = true) override;
-        void setPosition(const sf::Vector2f& position, bool updateWidget = true) override;
+        void setSize(const sf::Vector2f& size) override;
+        void setPosition(const sf::Vector2f& position) override;
 
         void add( std::unique_ptr<Widget> widgetPtr, const std::string& widgetName) override;
 
@@ -25,14 +25,14 @@ namespace ire::core::widgets
         void setSpaces(float spaces);
         const float getSpaces();
 
-        void setLayoutStretch(std::initializer_list<int> list);
-        const std::vector<int> getLayoutStretch() const;
+        void setLayoutStretch(std::vector<float> relativeSizes);
+        const std::vector<float>& getLayoutStretch() const;
 
     protected:
         virtual void updateWidgets() = 0;
         bool isLayoutStretchValid();
-        std::vector<int> m_layoutStretch;
-        int m_sumOfLayoutStretches{ 0 };
+        std::vector<float> m_layoutStretch;
+        float m_sumOfLayoutStretches{ 0 };
 
         // SpaceBetweenWidgets
         float m_spaces{1};

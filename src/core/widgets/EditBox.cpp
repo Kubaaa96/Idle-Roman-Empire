@@ -21,7 +21,7 @@ namespace ire::core::widgets
 		target.draw(m_rectangleShape);
 	}
 
-	void EditBox::updateCurrentWidget()
+	void EditBox::updateWidget()
 	{
 		const auto size = getSize();
 		m_rectangleShape.setSize(m_size);
