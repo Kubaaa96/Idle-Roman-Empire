@@ -30,7 +30,7 @@ TEST_CASE("General testing of TimedCallbackScheduler", "[timed_callback_schedule
 
         void scheduleInitialCallback(TimePoint now, std::uint64_t payload)
         {
-            scheduleCallback(now + TimeDuration::seconds(1), { payload });
+            scheduleCallback(now, { payload });
         }
 
         std::vector<std::pair<TimedCallbackHandle, TimedCallback>> handledCallbacks;
@@ -42,7 +42,7 @@ TEST_CASE("General testing of TimedCallbackScheduler", "[timed_callback_schedule
 
     TimePoint startTime = TimePoint::now();
 
-    customer.scheduleInitialCallback(startTime, 123);
+    customer.scheduleInitialCallback(startTime + TimeDuration::seconds(1), 123);
 
     REQUIRE(customer.handledCallbacks.empty());
 
@@ -58,7 +58,6 @@ TEST_CASE("General testing of TimedCallbackScheduler", "[timed_callback_schedule
 
     REQUIRE(customer.handledCallbacks.size() == 1);
     REQUIRE(customer.handledCallbacks[0].second.payload().data == 123);
-    return;
 
     scheduler.update(startTime + TimeDuration::seconds(4));
 
@@ -91,7 +90,8 @@ TEST_CASE("General testing of TimedCallbackScheduler", "[timed_callback_schedule
     REQUIRE(customer.handledCallbacks[8].second.payload().data == 4327);
 
     scheduler.update(startTime + TimeDuration::seconds(100));
-    REQUIRE(customer.handledCallbacks.size() == 11);
+    REQUIRE(customer.handledCallbacks.size() == 12);
     REQUIRE(customer.handledCallbacks[9].second.payload().data == 4328);
     REQUIRE(customer.handledCallbacks[10].second.payload().data == 4329);
+    REQUIRE(customer.handledCallbacks[11].second.payload().data == 4330);
 }
