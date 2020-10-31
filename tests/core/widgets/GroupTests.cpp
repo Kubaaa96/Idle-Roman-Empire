@@ -2,6 +2,7 @@
 
 #include "core/widgets/Group.h"
 #include "core/widgets/Button.h"
+#include "../Testsutils.h"
 
 TEST_CASE("[Group]")
 {
@@ -23,15 +24,15 @@ TEST_CASE("[Group]")
 	{		
 		auto childWidget = ire::core::widgets::Button::create();
 		childWidget->setPosition({ 100,100 });
-		REQUIRE(childWidget->getPosition() == sf::Vector2f({ 100, 100 }));
+		REQUIRE(areAlmostEqual<sf::Vector2f>(childWidget->getPosition(), sf::Vector2f({ 100, 100 })));
 		group->add(std::move(childWidget), "ChildWidget");
 		group->setPosition({ 0,0 });
-		REQUIRE(group->getWidgets()[0]->getPosition() == sf::Vector2f({ 100, 100 }));
+		REQUIRE(areAlmostEqual<sf::Vector2f>(group->getWidgets()[0]->getPosition(), sf::Vector2f({ 100, 100 })));
 		group->setPosition({100, 200});
-		REQUIRE(group->get("ChildWidget")->getPosition() == sf::Vector2f({ 200, 300 }));
+		REQUIRE(areAlmostEqual<sf::Vector2f>(group->get("ChildWidget")->getPosition(), sf::Vector2f({ 200, 300 })));
 
 		auto childWidget1 = ire::core::widgets::Button::create();
 		group->add(std::move(childWidget1), "ChildWidget1");
-		REQUIRE(group->getWidgets()[1]->getPosition() == sf::Vector2f({ 100,200 }));
+		REQUIRE(areAlmostEqual<sf::Vector2f>(group->getWidgets()[1]->getPosition(), sf::Vector2f({ 100,200 })));
 	}
 }

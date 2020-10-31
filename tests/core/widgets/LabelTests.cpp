@@ -1,5 +1,6 @@
 #include <catch2/catch.hpp>
 #include "core/widgets/Label.h"
+#include "../Testsutils.h"
 
 TEST_CASE("[Label]")
 {
@@ -19,8 +20,8 @@ TEST_CASE("[Label]")
 		label->setPosition({ 40, 50 });
 		label->setSize({ 100, 200 });
 
-		REQUIRE(label->getPosition() == sf::Vector2f({ 40, 50 }));
-		REQUIRE(label->getSize() == sf::Vector2f({ 100, 200 }));
+		REQUIRE(areAlmostEqual<sf::Vector2f>(label->getPosition(), sf::Vector2f({ 40, 50 })));
+		REQUIRE(areAlmostEqual<sf::Vector2f>(label->getSize(), sf::Vector2f({ 100, 200 })));
 	}
 
 }

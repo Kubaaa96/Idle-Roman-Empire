@@ -40,7 +40,7 @@ namespace ire::core {
 
         panel = ire::core::widgets::Panel::create({ 700, 400 }, std::move(horizontalLayout), "HorizontalLayout");
         //panel->setPosition({200, 200});
-        panel->setLocalPosition({ 200,200 });
+        panel->setPosition({ 200,200 });
         panel->setOpacity(200);
         panel->setOutlineColor(sf::Color::Magenta);
         panel->setOutlineThickness(7);
