@@ -3,7 +3,6 @@
 
 #include "Widget.h"
 
-
 namespace ire::core::widgets
 {    
     struct ClickableWidget : Widget

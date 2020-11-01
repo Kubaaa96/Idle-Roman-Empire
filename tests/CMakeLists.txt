@@ -4,8 +4,9 @@ include(CTest)
 enable_testing()
 
 file(GLOB_RECURSE TEST_SOURCES "*.cpp")
+file(GLOB_RECURSE TEST_HEADERS "*.h")
 
-add_executable(IRETests ${TEST_SOURCES})
+add_executable(IRETests ${TEST_SOURCES} ${TEST_HEADERS})
 
 target_link_libraries(IRETests IRECore)
 target_link_libraries(IRETests catch)

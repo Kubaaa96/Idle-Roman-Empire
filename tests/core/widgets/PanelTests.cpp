@@ -3,7 +3,7 @@
 #include "core/widgets/Panel.h"
 #include "core/widgets/VerticalLayout.h"
 #include "core/widgets/Button.h"
-
+#include "../TestsUtils.h"
 TEST_CASE("[Panel]")
 {
 	
@@ -34,15 +34,15 @@ TEST_CASE("[Panel]")
 	SECTION("Position and Size")
 	{
 		panel->setPosition({ 25, 50 });
-		REQUIRE(panel->getPosition() == sf::Vector2f({ 25, 50 }));
-		REQUIRE(panel->getLayout()->getPosition() == sf::Vector2f({ 25, 50 }));
+		REQUIRE(areAlmostEqual(panel->getPosition(), sf::Vector2f({ 25, 50 })));
+		REQUIRE(areAlmostEqual(panel->getLayout()->getPosition(), sf::Vector2f({ 25, 50 })));
 
-		REQUIRE(panel->getSize() == sf::Vector2f({ 300, 300 }));
-		REQUIRE(panel->getLayout()->getSize() == sf::Vector2f({ 300, 300 }));
+		REQUIRE(areAlmostEqual(panel->getSize(), sf::Vector2f({ 300, 300 })));
+		REQUIRE(areAlmostEqual(panel->getLayout()->getSize(), sf::Vector2f({ 300, 300 })));
 
 		panel->setSize({ 250, 500 });
-		REQUIRE(panel->getSize() == sf::Vector2f({ 250, 500 }));
-		REQUIRE(panel->getLayout()->getSize() == sf::Vector2f({ 250, 500 }));
+		REQUIRE(areAlmostEqual(panel->getSize(), sf::Vector2f({ 250, 500 })));
+		REQUIRE(areAlmostEqual(panel->getLayout()->getSize(), sf::Vector2f({ 250, 500 })));
 
 	}
 }

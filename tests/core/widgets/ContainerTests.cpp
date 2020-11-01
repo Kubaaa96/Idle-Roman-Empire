@@ -37,10 +37,6 @@ TEST_CASE("[Container]")
 		REQUIRE(container->getWidgets()[2]->getWidgetName() == "w3");
 	}
 
-	SECTION("Get")
-	{
-		REQUIRE(container->get("w0") == nullptr);
-	}
 	SECTION("Remove")
 	{
 		SECTION("Remove one widget")

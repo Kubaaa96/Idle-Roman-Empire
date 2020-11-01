@@ -1,6 +1,7 @@
 #include <catch2/catch.hpp>
 
 #include "core/widgets/Button.h"
+#include "../TestsUtils.h"
 
 TEST_CASE("[Button]")
 {
@@ -20,8 +21,7 @@ TEST_CASE("[Button]")
 		button->setPosition({ 40, 50 });
 		button->setSize({ 100, 200 });
 
-		REQUIRE(button->getPosition() == sf::Vector2f({ 40, 50 }));
-		REQUIRE(button->getSize() == sf::Vector2f({ 100, 200 }));
+		REQUIRE(areAlmostEqual(button->getPosition(), sf::Vector2f({ 40, 50 })));
+		REQUIRE(areAlmostEqual(button->getSize(), sf::Vector2f({ 100, 200 })));
 	}
-
 }

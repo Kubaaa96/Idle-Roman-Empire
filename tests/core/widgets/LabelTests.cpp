@@ -1,6 +1,6 @@
 #include <catch2/catch.hpp>
 #include "core/widgets/Label.h"
-
+#include "../TestsUtils.h"
 TEST_CASE("[Label]")
 {
 	auto label = ire::core::widgets::Label::create();
@@ -19,8 +19,8 @@ TEST_CASE("[Label]")
 		label->setPosition({ 40, 50 });
 		label->setSize({ 100, 200 });
 
-		REQUIRE(label->getPosition() == sf::Vector2f({ 40, 50 }));
-		REQUIRE(label->getSize() == sf::Vector2f({ 100, 200 }));
+		REQUIRE(areAlmostEqual(label->getPosition(), sf::Vector2f({ 40, 50 })));
+		REQUIRE(areAlmostEqual(label->getSize(), sf::Vector2f({ 100, 200 })));
 	}
 
 }

@@ -1,5 +1,6 @@
 #include <catch2/catch.hpp>
 #include <core/widgets/EditBox.h>
+#include "../TestsUtils.h"
 
 TEST_CASE("[EditBox]")
 {
@@ -19,8 +20,8 @@ TEST_CASE("[EditBox]")
 		editBox->setPosition({ 40, 50 });
 		editBox->setSize({ 100, 200 });
 
-		REQUIRE(editBox->getPosition() == sf::Vector2f({ 40, 50 }));
-		REQUIRE(editBox->getSize() == sf::Vector2f({ 100, 200 }));
+		REQUIRE(areAlmostEqual(editBox->getPosition(), sf::Vector2f({ 40, 50 })));
+		REQUIRE(areAlmostEqual(editBox->getSize(), sf::Vector2f({ 100, 200 })));
 	}
 
 }
