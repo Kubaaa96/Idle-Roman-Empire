@@ -3,7 +3,7 @@
 
 #include "ClickableWidget.h"
 
-namespace ire::core::widgets
+namespace ire::core::gui
 {
 
     struct Label : ClickableWidget

@@ -6,7 +6,7 @@
 
 TEST_CASE("[EditBox]")
 {
-	auto editBox = ire::core::widgets::EditBox::create();
+	auto editBox = ire::core::gui::EditBox::create();
 
 	SECTION("WidgetType")
 	{

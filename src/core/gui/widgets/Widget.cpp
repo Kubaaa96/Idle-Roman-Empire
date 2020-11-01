@@ -1,7 +1,7 @@
 #include "Widget.h"
 #include "Container.h"
 
-namespace ire::core::widgets
+namespace ire::core::gui
 {
 	Widget::~Widget()
 	{

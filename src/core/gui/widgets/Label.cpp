@@ -1,6 +1,6 @@
 #include "Label.h"
 
-namespace ire::core::widgets
+namespace ire::core::gui
 {
 	WidgetType const Label::m_type = WidgetType::create<Label>("Label");
 

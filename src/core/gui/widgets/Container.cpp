@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <iostream>
 
-namespace ire::core::widgets
+namespace ire::core::gui
 {
 	WidgetType const Container::m_type = WidgetType::create<Container>("Container");
 
@@ -11,7 +11,7 @@ namespace ire::core::widgets
 	{
 		
 	}
-	void widgets::Container::setSize(const sf::Vector2f& size)
+	void gui::Container::setSize(const sf::Vector2f& size)
 	{
 		Widget::setSize(size);
 	}

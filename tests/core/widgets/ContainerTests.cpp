@@ -6,12 +6,12 @@
 
 TEST_CASE("[Container]")
 {
-	std::unique_ptr<ire::core::widgets::Container> container =
-		ire::core::widgets::VerticalLayout::create({ 100, 100 });
+	std::unique_ptr<ire::core::gui::Container> container =
+		ire::core::gui::VerticalLayout::create({ 100, 100 });
 
-	auto widget1 = ire::core::widgets::Button::create();
-	auto widget2 = ire::core::widgets::Button::create();
-	auto widget3 = ire::core::widgets::Button::create();
+	auto widget1 = ire::core::gui::Button::create();
+	auto widget2 = ire::core::gui::Button::create();
+	auto widget3 = ire::core::gui::Button::create();
 
 	container->add(std::move(widget1), "Widget1");
 	container->add(std::move(widget2), "Widget2");
@@ -21,9 +21,9 @@ TEST_CASE("[Container]")
 	{
 		container->removeAllWidgets();
 
-		auto w1 = ire::core::widgets::Button::create();
-		auto w2 = ire::core::widgets::Button::create();
-		auto w3 = ire::core::widgets::Button::create();
+		auto w1 = ire::core::gui::Button::create();
+		auto w2 = ire::core::gui::Button::create();
+		auto w3 = ire::core::gui::Button::create();
 
 		REQUIRE(container->getWidgets().empty());
 

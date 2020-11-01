@@ -4,7 +4,7 @@
 
 #include <memory>
 
-namespace ire::core::widgets
+namespace ire::core::gui
 {
     struct Margins
     {

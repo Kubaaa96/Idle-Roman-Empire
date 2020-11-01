@@ -1,6 +1,6 @@
 #include "EditBox.h"
 
-namespace ire::core::widgets
+namespace ire::core::gui
 {
 	WidgetType const EditBox::m_type = WidgetType::create<EditBox>("EditBox");
 

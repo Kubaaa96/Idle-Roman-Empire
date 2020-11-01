@@ -6,7 +6,7 @@
 
 TEST_CASE("[Button]")
 {
-	auto button = ire::core::widgets::Button::create();
+	auto button = ire::core::gui::Button::create();
 
 	SECTION("WidgetType")
 	{

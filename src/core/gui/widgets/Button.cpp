@@ -1,6 +1,6 @@
 #include "Button.h"
 
-namespace ire::core::widgets
+namespace ire::core::gui
 {
 
 	WidgetType const Button::m_type = WidgetType::create<Button>("Button");

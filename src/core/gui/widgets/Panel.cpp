@@ -1,6 +1,6 @@
 #include "Panel.h"
 
-namespace ire::core::widgets
+namespace ire::core::gui
 {
 	WidgetType const Panel::m_type = WidgetType::create<Panel>("Panel");
 	Panel::Panel(const sf::Vector2f& size, std::unique_ptr<BoxLayout> mainPanelLayout, const std::string& layoutName)

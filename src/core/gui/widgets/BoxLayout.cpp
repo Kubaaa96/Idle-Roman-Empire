@@ -5,7 +5,7 @@
 #include <functional>
 
 
-namespace ire::core::widgets
+namespace ire::core::gui
 {
     BoxLayout::BoxLayout(const sf::Vector2f& size)
         : Group{size}

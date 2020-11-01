@@ -5,7 +5,7 @@
 #include "Widget.h"
 #include "BoxLayout.h"
 
-namespace ire::core::widgets
+namespace ire::core::gui
 {
 
     struct Panel : Widget

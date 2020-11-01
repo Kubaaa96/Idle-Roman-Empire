@@ -7,7 +7,7 @@
 
 TEST_CASE("[HorizontalLayout]")
 {
-	auto layout = ire::core::widgets::HorizontalLayout::create({ 100,100 });
+	auto layout = ire::core::gui::HorizontalLayout::create({ 100,100 });
 	layout->setSize({ 500, 400 });
 	layout->setPosition({ 50, 50 });
 	SECTION("WidgetType")
@@ -19,24 +19,24 @@ TEST_CASE("[HorizontalLayout]")
 		SECTION("Without Spaces and margins")
 		{
 			layout->setSpaces(0);
-			auto button1 = ire::core::widgets::Button::create();
+			auto button1 = ire::core::gui::Button::create();
 			layout->add(std::move(button1), "Button1");
 
 			REQUIRE(areAlmostEqual(layout->get("Button1")->getPosition(), sf::Vector2f({ 50, 50 })));
 			REQUIRE(areAlmostEqual(layout->get("Button1")->getSize(), sf::Vector2f({ 500,400 })));
 
-			auto button2 = ire::core::widgets::Button::create();
+			auto button2 = ire::core::gui::Button::create();
 			layout->add(std::move(button2), "Button2");
 
 			REQUIRE(areAlmostEqual(layout->get("Button2")->getPosition(), sf::Vector2f({ 300, 50 })));
 			REQUIRE(areAlmostEqual(layout->get("Button2")->getSize(), sf::Vector2f({ 250, 400 })));
 
-			auto button3 = ire::core::widgets::Button::create();
+			auto button3 = ire::core::gui::Button::create();
 			layout->add(std::move(button3), "Button3");
-			auto button4 = ire::core::widgets::Button::create();
+			auto button4 = ire::core::gui::Button::create();
 			layout->add(std::move(button4), "Button4");
 
-			auto button5 = ire::core::widgets::Button::create();
+			auto button5 = ire::core::gui::Button::create();
 			layout->add(std::move(button5), "Button5");
 
 			REQUIRE(areAlmostEqual(layout->get("Button3")->getPosition(), sf::Vector2f({ 250, 50 })));
@@ -51,23 +51,23 @@ TEST_CASE("[HorizontalLayout]")
 		SECTION("With Spacing without margins")
 		{
 			layout->setSpaces(5);
-			auto button1 = ire::core::widgets::Button::create();
+			auto button1 = ire::core::gui::Button::create();
 			layout->add(std::move(button1), "Button1");
 
 			REQUIRE(areAlmostEqual(layout->get("Button1")->getPosition(), sf::Vector2f({ 50, 50 })));
 			REQUIRE(areAlmostEqual(layout->get("Button1")->getSize(), sf::Vector2f({ 500, 400 })));
 
-			auto button2 = ire::core::widgets::Button::create();
+			auto button2 = ire::core::gui::Button::create();
 			layout->add(std::move(button2), "Button2");
 
 			REQUIRE(areAlmostEqual(layout->get("Button2")->getPosition(), sf::Vector2f({ 302.5, 50 })));
 			REQUIRE(areAlmostEqual(layout->get("Button2")->getSize(), sf::Vector2f({ 247.5,400 })));
 
-			auto button3 = ire::core::widgets::Button::create();
+			auto button3 = ire::core::gui::Button::create();
 			layout->add(std::move(button3), "Button3");
-			auto button4 = ire::core::widgets::Button::create();
+			auto button4 = ire::core::gui::Button::create();
 			layout->add(std::move(button4), "Button4");
-			auto button5 = ire::core::widgets::Button::create();
+			auto button5 = ire::core::gui::Button::create();
 			layout->add(std::move(button5), "Button5");
 
 			REQUIRE(areAlmostEqual(layout->get("Button3")->getPosition(), sf::Vector2f({ 252, 50 })));
@@ -83,23 +83,23 @@ TEST_CASE("[HorizontalLayout]")
 		{
 			layout->setMargins({ 5, 5, 4, 4 });
 			layout->setSpaces(0);
-			auto button1 = ire::core::widgets::Button::create();
+			auto button1 = ire::core::gui::Button::create();
 			layout->add(std::move(button1), "Button1");
 
 			REQUIRE(areAlmostEqual(layout->get("Button1")->getPosition(), sf::Vector2f({ 55, 54 })));
 			REQUIRE(areAlmostEqual(layout->get("Button1")->getSize(), sf::Vector2f({ 490, 392 })));
 
-			auto button2 = ire::core::widgets::Button::create();
+			auto button2 = ire::core::gui::Button::create();
 			layout->add(std::move(button2), "Button2");
 
 			REQUIRE(areAlmostEqual(layout->get("Button2")->getPosition(), sf::Vector2f({ 300, 54 })));
 			REQUIRE(areAlmostEqual(layout->get("Button2")->getSize(), sf::Vector2f({ 245, 392 })));
 
-			auto button3 = ire::core::widgets::Button::create();
+			auto button3 = ire::core::gui::Button::create();
 			layout->add(std::move(button3), "Button3");
-			auto button4 = ire::core::widgets::Button::create();
+			auto button4 = ire::core::gui::Button::create();
 			layout->add(std::move(button4), "Button4");
-			auto button5 = ire::core::widgets::Button::create();
+			auto button5 = ire::core::gui::Button::create();
 			layout->add(std::move(button5), "Button5");
 
 			REQUIRE(areAlmostEqual(layout->get("Button3")->getPosition(), sf::Vector2f({ 251, 54 })));
@@ -116,23 +116,23 @@ TEST_CASE("[HorizontalLayout]")
 		{
 			layout->setMargins({ 4, 4, 4, 4 });
 			layout->setSpaces(3);
-			auto button1 = ire::core::widgets::Button::create();
+			auto button1 = ire::core::gui::Button::create();
 			layout->add(std::move(button1), "Button1");
 
 			REQUIRE(areAlmostEqual(layout->get("Button1")->getPosition(), sf::Vector2f({ 54, 54 })));
 			REQUIRE(areAlmostEqual(layout->get("Button1")->getSize(), sf::Vector2f({ 492, 392 })));
 
-			auto button2 = ire::core::widgets::Button::create();
+			auto button2 = ire::core::gui::Button::create();
 			layout->add(std::move(button2), "Button2");
 
 			REQUIRE(areAlmostEqual(layout->get("Button2")->getPosition(), sf::Vector2f({ 301.5, 54 })));
 			REQUIRE(areAlmostEqual(layout->get("Button2")->getSize(), sf::Vector2f({ 244.5, 392 })));
 
-			auto button3 = ire::core::widgets::Button::create();
+			auto button3 = ire::core::gui::Button::create();
 			layout->add(std::move(button3), "Button3");
-			auto button4 = ire::core::widgets::Button::create();
+			auto button4 = ire::core::gui::Button::create();
 			layout->add(std::move(button4), "Button4");
-			auto button5 = ire::core::widgets::Button::create();
+			auto button5 = ire::core::gui::Button::create();
 			layout->add(std::move(button5), "Button5");
 
 			REQUIRE(areAlmostEqual(layout->get("Button3")->getPosition(), sf::Vector2f({ 252, 54 })));
@@ -153,9 +153,9 @@ TEST_CASE("[HorizontalLayout]")
 			layout->setSpaces(0);
 			layout->setMargins({ 0, 0, 0, 0 });
 
-			auto button1 = ire::core::widgets::Button::create();
+			auto button1 = ire::core::gui::Button::create();
 			layout->add(std::move(button1), "Button1");
-			auto button2 = ire::core::widgets::Button::create();
+			auto button2 = ire::core::gui::Button::create();
 			layout->add(std::move(button2), "Button2");
 
 			layout->setLayoutStretch({ 1,2 });
@@ -165,7 +165,7 @@ TEST_CASE("[HorizontalLayout]")
 			REQUIRE(areAlmostEqual(layout->get("Button2")->getPosition(), sf::Vector2f({ 383 ,50 })));
 			REQUIRE(areAlmostEqual(layout->get("Button2")->getSize(), sf::Vector2f({ 667 ,500 })));
 
-			auto button3 = ire::core::widgets::Button::create();
+			auto button3 = ire::core::gui::Button::create();
 			layout->add(std::move(button3), "Button3");
 			layout->setLayoutStretch({ 1, 2, 1 });
 			REQUIRE(areAlmostEqual(layout->get("Button3")->getPosition(), sf::Vector2f({ 800 ,50 })));
@@ -176,9 +176,9 @@ TEST_CASE("[HorizontalLayout]")
 			layout->setSpaces(0);
 			layout->setMargins({ 6, 6, 5, 5 });
 
-			auto button1 = ire::core::widgets::Button::create();
+			auto button1 = ire::core::gui::Button::create();
 			layout->add(std::move(button1), "Button1");
-			auto button2 = ire::core::widgets::Button::create();
+			auto button2 = ire::core::gui::Button::create();
 			layout->add(std::move(button2), "Button2");
 
 			layout->setLayoutStretch({ 1,2 });
@@ -188,7 +188,7 @@ TEST_CASE("[HorizontalLayout]")
 			REQUIRE(areAlmostEqual(layout->get("Button2")->getPosition(), sf::Vector2f({ 386 ,55 })));
 			REQUIRE(areAlmostEqual(layout->get("Button2")->getSize(), sf::Vector2f({ 659 ,490 })));
 
-			auto button3 = ire::core::widgets::Button::create();
+			auto button3 = ire::core::gui::Button::create();
 			layout->add(std::move(button3), "Button3");
 			layout->setLayoutStretch({ 1, 2, 1 });
 			REQUIRE(areAlmostEqual(layout->get("Button3")->getPosition(), sf::Vector2f({ 798 ,55 })));
@@ -199,9 +199,9 @@ TEST_CASE("[HorizontalLayout]")
 			layout->setSpaces(5);
 			layout->setMargins({ 0, 0, 0, 0 });
 
-			auto button1 = ire::core::widgets::Button::create();
+			auto button1 = ire::core::gui::Button::create();
 			layout->add(std::move(button1), "Button1");
-			auto button2 = ire::core::widgets::Button::create();
+			auto button2 = ire::core::gui::Button::create();
 			layout->add(std::move(button2), "Button2");
 
 			layout->setLayoutStretch({ 1,2 });
@@ -210,7 +210,7 @@ TEST_CASE("[HorizontalLayout]")
 			REQUIRE(areAlmostEqual(layout->get("Button2")->getPosition(), sf::Vector2f({ 387 ,50 })));
 			REQUIRE(areAlmostEqual(layout->get("Button2")->getSize(), sf::Vector2f({ 663 ,500 })));
 
-			auto button3 = ire::core::widgets::Button::create();
+			auto button3 = ire::core::gui::Button::create();
 			layout->add(std::move(button3), "Button3");
 			layout->setLayoutStretch({ 1, 2, 1 });
 			REQUIRE(areAlmostEqual(layout->get("Button3")->getPosition(), sf::Vector2f({ 803 ,50 })));
@@ -221,9 +221,9 @@ TEST_CASE("[HorizontalLayout]")
 			layout->setSpaces(5);
 			layout->setMargins({ 5, 5, 5, 5 });
 
-			auto button1 = ire::core::widgets::Button::create();
+			auto button1 = ire::core::gui::Button::create();
 			layout->add(std::move(button1), "Button1");
-			auto button2 = ire::core::widgets::Button::create();
+			auto button2 = ire::core::gui::Button::create();
 			layout->add(std::move(button2), "Button2");
 
 			layout->setLayoutStretch({ 1,2 });
@@ -233,7 +233,7 @@ TEST_CASE("[HorizontalLayout]")
 			REQUIRE(areAlmostEqual(layout->get("Button2")->getPosition(), sf::Vector2f({ 388 ,55 })));
 			REQUIRE(areAlmostEqual(layout->get("Button2")->getSize(), sf::Vector2f({ 657 , 490 })));
 
-			auto button3 = ire::core::widgets::Button::create();
+			auto button3 = ire::core::gui::Button::create();
 			layout->add(std::move(button3), "Button3");
 			layout->setLayoutStretch({ 1, 2, 1 });
 			REQUIRE(areAlmostEqual(layout->get("Button3")->getPosition(), sf::Vector2f({ 800 ,55 })));

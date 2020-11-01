@@ -6,7 +6,7 @@
 #include <vector>
 #include <string>
 
-namespace ire::core::widgets
+namespace ire::core::gui
 {
     // Base container class for grouping widgets
     struct Container : Widget

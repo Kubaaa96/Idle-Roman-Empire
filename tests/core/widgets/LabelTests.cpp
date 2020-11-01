@@ -6,7 +6,7 @@
 
 TEST_CASE("[Label]")
 {
-	auto label = ire::core::widgets::Label::create();
+	auto label = ire::core::gui::Label::create();
 
 	SECTION("WidgetType")
 	{

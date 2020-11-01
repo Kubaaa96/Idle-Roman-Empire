@@ -9,14 +9,14 @@
 TEST_CASE("[Panel]")
 {
 	
-	auto vLayout = ire::core::widgets::VerticalLayout::create({ 200, 200 });
+	auto vLayout = ire::core::gui::VerticalLayout::create({ 200, 200 });
 
-	auto button = ire::core::widgets::Button::create();
+	auto button = ire::core::gui::Button::create();
 	vLayout->add(std::move(button), "Button");
-	auto button1 = ire::core::widgets::Button::create();
+	auto button1 = ire::core::gui::Button::create();
 	vLayout->add(std::move(button1), "Button1");
 
-	auto panel = ire::core::widgets::Panel::create({300, 300}, std::move(vLayout), "VerticalLayout");
+	auto panel = ire::core::gui::Panel::create({300, 300}, std::move(vLayout), "VerticalLayout");
 
 	SECTION("WidgetType")
 	{

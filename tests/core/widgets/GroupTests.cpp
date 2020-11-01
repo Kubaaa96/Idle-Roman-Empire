@@ -7,7 +7,7 @@
 
 TEST_CASE("[Group]")
 {
-	auto group = ire::core::widgets::Group::create({ 100, 100 });
+	auto group = ire::core::gui::Group::create({ 100, 100 });
 	group->setPosition({ 0, 0 });
 
 	SECTION("WidgetType")
@@ -24,7 +24,7 @@ TEST_CASE("[Group]")
 	}
 	SECTION("ChildWidget")
 	{		
-		auto childWidget = ire::core::widgets::Button::create();
+		auto childWidget = ire::core::gui::Button::create();
 		childWidget->setOrigin(group->getPosition());
 		childWidget->setLocalPosition({ 100,100 });
 		REQUIRE(areAlmostEqual(childWidget->getPosition(), sf::Vector2f({ 100, 100 })));
@@ -34,7 +34,7 @@ TEST_CASE("[Group]")
 		group->setPosition({100, 200});
 		REQUIRE(areAlmostEqual(group->get("ChildWidget")->getPosition(), sf::Vector2f({ 200, 300 })));
 
-		auto childWidget1 = ire::core::widgets::Button::create();
+		auto childWidget1 = ire::core::gui::Button::create();
 		group->add(std::move(childWidget1), "ChildWidget1");
 		REQUIRE(areAlmostEqual(group->getWidgets()[1]->getPosition(), sf::Vector2f({ 100,200 })));
 	}

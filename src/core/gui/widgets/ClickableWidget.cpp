@@ -1,7 +1,7 @@
 #include "ClickableWidget.h"
 #include "WidgetType.h"
 
-namespace ire::core::widgets
+namespace ire::core::gui
 {
 	WidgetType const ClickableWidget::m_type = WidgetType::create<ClickableWidget>("ClickableWidget");
 

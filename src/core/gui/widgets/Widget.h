@@ -5,7 +5,7 @@
 #include <memory>
 #include "WidgetType.h"
 
-namespace ire::core::widgets
+namespace ire::core::gui
 {
     struct Container;
     // Base class for all Widgets and Layouts

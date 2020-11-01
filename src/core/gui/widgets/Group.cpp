@@ -1,5 +1,5 @@
 #include "Group.h"
-namespace ire::core::widgets
+namespace ire::core::gui
 {
 
 	WidgetType const Group::m_type = WidgetType::create<Group>("Group");

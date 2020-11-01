@@ -19,10 +19,10 @@ namespace ire::core {
 
     private:
         sf::RenderWindow& m_window;
-        std::unique_ptr<ire::core::widgets::Group> group;
-        std::unique_ptr<ire::core::widgets::Panel> panel;
-        std::unique_ptr<ire::core::widgets::HorizontalLayout> horizontalLayout;
-        std::unique_ptr<ire::core::widgets::VerticalLayout> verticalLayout;
+        std::unique_ptr<ire::core::gui::Group> group;
+        std::unique_ptr<ire::core::gui::Panel> panel;
+        std::unique_ptr<ire::core::gui::HorizontalLayout> horizontalLayout;
+        std::unique_ptr<ire::core::gui::VerticalLayout> verticalLayout;
     };
 
 }

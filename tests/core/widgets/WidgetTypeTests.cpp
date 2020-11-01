@@ -6,8 +6,8 @@
 
 TEST_CASE("[WidgetType]")
 {
-	auto button = ire::core::widgets::Button::create();
-	auto editBox = ire::core::widgets::EditBox::create();
+	auto button = ire::core::gui::Button::create();
+	auto editBox = ire::core::gui::EditBox::create();
 
 	SECTION("Index")
 	{

@@ -4,7 +4,7 @@
 #include "Group.h"
 #include "Margins.h"
 
-namespace ire::core::widgets
+namespace ire::core::gui
 {
     struct BoxLayout : Group
     {

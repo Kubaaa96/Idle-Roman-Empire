@@ -1,6 +1,6 @@
 #include "HorizontalLayout.h"
 
-namespace ire::core::widgets
+namespace ire::core::gui
 {
 	WidgetType const HorizontalLayout::m_type = WidgetType::create<HorizontalLayout>("HorizontalLayout");
 

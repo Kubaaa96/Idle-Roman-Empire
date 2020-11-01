@@ -1,6 +1,6 @@
 #include "VerticalLayout.h"
 
-namespace ire::core::widgets
+namespace ire::core::gui
 {
 	WidgetType const VerticalLayout::m_type = WidgetType::create<VerticalLayout>("VerticalLayout");
 
