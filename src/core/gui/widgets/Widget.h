@@ -1,15 +1,19 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 
-#include <SFML/Graphics.hpp>
-#include <memory>
 #include "WidgetType.h"
+
+#include "core/gui/Events.h"
+
+#include <SFML/Graphics.hpp>
+
+#include <memory>
 
 namespace ire::core::gui
 {
     struct Container;
     // Base class for all Widgets and Layouts
-    struct Widget
+    struct Widget : EventEmitter
     {
         Widget() = default;
         virtual ~Widget();
@@ -43,14 +47,12 @@ namespace ire::core::gui
     protected:
         std::string m_name;
 
-
         sf::Vector2f m_localPosition;
         sf::Vector2f m_position;
         sf::Vector2f m_size;
         sf::Vector2f m_origin;
 
         Container* m_parent = nullptr;
-
     };
 }
 #endif // !WIDGET_H
