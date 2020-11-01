@@ -1,8 +1,8 @@
 #include <catch2/catch.hpp>
 
-#include "core/widgets/Container.h"
-#include "core/widgets/Button.h"
-#include "core/widgets/VerticalLayout.h"
+#include "core/gui/widgets/Container.h"
+#include "core/gui/widgets/Button.h"
+#include "core/gui/widgets/VerticalLayout.h"
 
 TEST_CASE("[Container]")
 {

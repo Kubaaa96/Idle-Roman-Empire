@@ -1,7 +1,7 @@
 #include <catch2/catch.hpp>
 
-#include "core/widgets/Group.h"
-#include "core/widgets/Button.h"
+#include "core/gui/widgets/Group.h"
+#include "core/gui/widgets/Button.h"
 
 #include "../TestsUtils.h"
 

@@ -1,8 +1,10 @@
 #include <catch2/catch.hpp>
 
-#include "core/widgets/VerticalLayout.h"
-#include "core/widgets/Button.h"
+#include "core/gui/widgets/VerticalLayout.h"
+#include "core/gui/widgets/Button.h"
+
 #include "../TestsUtils.h"
+
 TEST_CASE("[VerticalLayout]")
 {
 	auto layout = ire::core::widgets::VerticalLayout::create({ 100,100 });

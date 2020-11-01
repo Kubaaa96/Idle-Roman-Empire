@@ -23,5 +23,8 @@
 # Editor temp/backup files
 *~
 
-/build
+build/
 .vscode/
+.vs/
+SFML/
+build/

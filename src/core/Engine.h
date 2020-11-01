@@ -2,12 +2,12 @@
 #define ENGINE_H
 
 #include <SFML/Graphics.hpp>
-#include "widgets/Button.h"
-#include "widgets/Label.h"
-#include "widgets/EditBox.h"
-#include "widgets/Panel.h"
-#include "widgets/HorizontalLayout.h"
-#include "widgets/VerticalLayout.h"
+#include "gui/widgets/Button.h"
+#include "gui/widgets/Label.h"
+#include "gui/widgets/EditBox.h"
+#include "gui/widgets/Panel.h"
+#include "gui/widgets/HorizontalLayout.h"
+#include "gui/widgets/VerticalLayout.h"
 #include <memory>
 
 namespace ire::core {

@@ -1,6 +1,9 @@
 #include <catch2/catch.hpp>
-#include "core/widgets/Label.h"
+
+#include "core/gui/widgets/Label.h"
+
 #include "../TestsUtils.h"
+
 TEST_CASE("[Label]")
 {
 	auto label = ire::core::widgets::Label::create();

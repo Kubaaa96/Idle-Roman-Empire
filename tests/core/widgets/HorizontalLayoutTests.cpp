@@ -1,8 +1,10 @@
 #include <catch2/catch.hpp>
 
-#include "core/widgets/HorizontalLayout.h"
-#include "core/widgets/Button.h"
+#include "core/gui/widgets/HorizontalLayout.h"
+#include "core/gui/widgets/Button.h"
+
 #include "../TestsUtils.h"
+
 TEST_CASE("[HorizontalLayout]")
 {
 	auto layout = ire::core::widgets::HorizontalLayout::create({ 100,100 });

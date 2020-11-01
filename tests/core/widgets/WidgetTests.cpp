@@ -1,11 +1,13 @@
 #include <catch2/catch.hpp>
 
-#include "core/widgets/Widget.h"
-#include "core/widgets/Button.h"
-#include "core/widgets/VerticalLayout.h"
-#include "core/widgets/HorizontalLayout.h"
-#include "../TestsUtils.h"
 #include <memory>
+
+#include "core/gui/widgets/Widget.h"
+#include "core/gui/widgets/Button.h"
+#include "core/gui/widgets/VerticalLayout.h"
+#include "core/gui/widgets/HorizontalLayout.h"
+
+#include "../TestsUtils.h"
 
 TEST_CASE("[Widget]")
 {

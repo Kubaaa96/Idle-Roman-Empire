@@ -1,7 +1,8 @@
 #include <catch2/catch.hpp>
-#include "core/widgets/WidgetType.h"
-#include "core/widgets/Button.h"
-#include "core/widgets/EditBox.h"
+
+#include "core/gui/widgets/WidgetType.h"
+#include "core/gui/widgets/Button.h"
+#include "core/gui/widgets/EditBox.h"
 
 TEST_CASE("[WidgetType]")
 {

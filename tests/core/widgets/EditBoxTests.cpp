@@ -1,5 +1,7 @@
 #include <catch2/catch.hpp>
-#include <core/widgets/EditBox.h>
+
+#include "core/gui/widgets/EditBox.h"
+
 #include "../TestsUtils.h"
 
 TEST_CASE("[EditBox]")

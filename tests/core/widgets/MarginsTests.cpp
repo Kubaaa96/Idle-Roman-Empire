@@ -1,6 +1,6 @@
 #include <catch2/catch.hpp>
 
-#include "core/widgets/Margins.h"
+#include "core/gui/widgets/Margins.h"
 
 TEST_CASE("[Margins]")
 {
