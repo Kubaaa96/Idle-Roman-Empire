@@ -7,7 +7,7 @@
 #include "core/gui/widgets/VerticalLayout.h"
 #include "core/gui/widgets/HorizontalLayout.h"
 
-#include "../TestsUtils.h"
+#include "TestsUtils.h"
 
 TEST_CASE("[Widget]")
 {

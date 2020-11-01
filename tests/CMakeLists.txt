@@ -14,6 +14,8 @@ target_link_libraries(IRETests catch)
 include(ParseAndAddCatchTests)
 ParseAndAddCatchTests(IRETests)
 
+include_directories(./)
+
 add_dependencies(IRETests IdleRomanEmpire)
 
 find_package(Threads REQUIRED)

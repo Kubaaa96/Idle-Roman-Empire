@@ -4,7 +4,7 @@
 #include "core/gui/widgets/VerticalLayout.h"
 #include "core/gui/widgets/Button.h"
 
-#include "../TestsUtils.h"
+#include "TestsUtils.h"
 
 TEST_CASE("[Panel]")
 {

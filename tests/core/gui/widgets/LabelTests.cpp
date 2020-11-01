@@ -2,7 +2,7 @@
 
 #include "core/gui/widgets/Label.h"
 
-#include "../TestsUtils.h"
+#include "TestsUtils.h"
 
 TEST_CASE("[Label]")
 {

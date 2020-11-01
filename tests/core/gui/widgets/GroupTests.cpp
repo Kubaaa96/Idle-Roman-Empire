@@ -3,7 +3,7 @@
 #include "core/gui/widgets/Group.h"
 #include "core/gui/widgets/Button.h"
 
-#include "../TestsUtils.h"
+#include "TestsUtils.h"
 
 TEST_CASE("[Group]")
 {
