@@ -1,7 +1,7 @@
 #include <catch2/catch.hpp>
+#include <SFML/Graphics.hpp>
 
-template<typename T>
-bool areAlmostEqual(T sfvector, T sfvector2) 
+inline bool areAlmostEqual(const sf::Vector2f sfvector, const sf::Vector2f sfvector2)
 { 
-    return sfvector.x == Approx(sfvector2.x) && sfvector.y == Approx(sfvector2.y);
+    return sfvector.x == Approx(sfvector2.x).epsilon(0.01) && sfvector.y == Approx(sfvector2.y).epsilon(0.01);
 }

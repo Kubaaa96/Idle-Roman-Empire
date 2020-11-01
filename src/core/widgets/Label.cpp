@@ -24,10 +24,10 @@ namespace ire::core::widgets
 
 	void Label::updateWidget()
 	{
-		const auto size = getSize();
+		//const auto size = getSize();
 		m_rectangleShape.setSize(m_size);
 
-		const auto position = getPosition();
+		//const auto position = getPosition();
 		m_rectangleShape.setPosition(m_position);
 
 	}

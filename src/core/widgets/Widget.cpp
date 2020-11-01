@@ -21,33 +21,25 @@ namespace ire::core::widgets
 		m_position = position;
 	}
 
-	void Widget::setPosition(float x, float y)
-	{
-		setPosition({ x, y });
-	}
-
 	sf::Vector2f Widget::getPosition() const
 	{
 		return m_position;
 	}
 
+	void Widget::setLocalPosition(const sf::Vector2f& localPosition)
+	{
+		m_localPosition = localPosition;
+		m_position = m_origin + localPosition;
+	}
+
 	sf::Vector2f Widget::getLocalPosition() const
 	{
-		if (m_parent)
-		{
-			return m_localPosition;
-		}
-		return m_position;
+		return m_localPosition;
 	}
 
 	void Widget::setSize(const sf::Vector2f& size)
 	{
 		m_size = size;
-	}
-
-	void Widget::setSize(float x, float y)
-	{
-		setSize({ x ,y });
 	}
 
 	void Widget::setWidth(float width)
@@ -70,11 +62,6 @@ namespace ire::core::widgets
 		m_origin = origin;
 	}
 
-	void Widget::setOrigin(float x, float y)
-	{
-		setOrigin({ x, y });
-	}
-
 	sf::Vector2f Widget::getOrigin() const
 	{
 		return m_origin;
@@ -91,9 +78,5 @@ namespace ire::core::widgets
 	{
 		return m_parent;
 
-	}
-	void Widget::setLocalPosition(const sf::Vector2f& localPosition)
-	{
-		m_localPosition = localPosition;
 	}
 }

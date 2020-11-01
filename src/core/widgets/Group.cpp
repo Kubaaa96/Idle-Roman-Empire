@@ -50,11 +50,11 @@ namespace ire::core::widgets
 
 	void Group::updateWidgets()
 	{
-		const auto position = getPosition();
 		for (auto& widget : m_widgets) 
 		{
 			const auto widgetPosition = widget->getPosition();
-			widget->setPosition(position + widgetPosition);
+			widget->setOrigin(m_position);
+			widget->setLocalPosition(widgetPosition);
 		}
 	}
 }

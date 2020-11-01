@@ -88,6 +88,7 @@ namespace ire::core::widgets
 				return getWidgetAt(static_cast<int>(i));
 			}		
 		}
+		throw std::runtime_error("There is no such item in Container");
 		return nullptr;
 	}
 
@@ -100,6 +101,7 @@ namespace ire::core::widgets
 				return getWidgetAt(static_cast<int>(i));
 			}
 		}
+		throw std::runtime_error("There is no such item in Container");
 		return nullptr;
 	}
 
@@ -112,22 +114,27 @@ namespace ire::core::widgets
 			widget->draw(target);
 		}
 	}
+
 	const WidgetType Container::getType() const
 	{
 		return m_type;
 	}
+
 	bool Container::compareWithWidgetNameAt(std::size_t index, const std::string& name)
 	{
 		return m_widgets[index].get()->getWidgetName() == name;
 	}
+
 	const bool Container::compareWithWidgetNameAt(std::size_t index, const std::string& name) const
 	{
 		return m_widgets[index].get()->getWidgetName() == name;
 	}
+
 	Widget* Container::getWidgetAt(int i)
 	{
 		return m_widgets.at(i).get();
 	}
+
 	const Widget* Container::getWidgetAt(int i) const
 	{
 		return m_widgets.at(i).get();

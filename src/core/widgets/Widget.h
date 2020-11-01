@@ -21,19 +21,16 @@ namespace ire::core::widgets
         [[nodiscard]] std::string getWidgetName() const;
 
         virtual void setPosition(const sf::Vector2f& position);
-        virtual void setPosition(float x, float y);
         [[nodiscard]] sf::Vector2f getPosition() const;
-        void setLocalPosition(const sf::Vector2f& localPosition);
+        virtual void setLocalPosition(const sf::Vector2f& localPosition);
         [[nodiscard]] sf::Vector2f getLocalPosition() const;
 
         virtual void setSize(const sf::Vector2f& size);
-        void setSize(float x, float y);
         void setWidth(float width);
         void setHeight(float height);
         [[nodiscard]] sf::Vector2f getSize() const;
 
         void setOrigin(sf::Vector2f origin);
-        void setOrigin(float x, float y);
         [[nodiscard]] sf::Vector2f getOrigin() const;
 
         virtual void draw(sf::RenderTarget& target) = 0;

@@ -73,12 +73,11 @@ namespace ire::core::widgets
 	}
 	void Panel::updateLayout()
 	{
-		const auto size = getSize();
-		m_panelLayout->setSize(size);
-		m_rectangleShape.setSize(size);
+		m_panelLayout->setSize(m_size);
+		m_rectangleShape.setSize(m_size);
 
-		const auto position = getPosition();
-		m_rectangleShape.setPosition(position);
-		m_panelLayout->setPosition(position);
+		m_rectangleShape.setPosition(m_position);
+		m_panelLayout->setOrigin(m_position);
+		m_panelLayout->setLocalPosition({0, 0});
 	}
 }

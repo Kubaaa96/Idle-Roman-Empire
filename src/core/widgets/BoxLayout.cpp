@@ -22,6 +22,13 @@ namespace ire::core::widgets
         Container::setPosition(position);
         updateWidgets();
     }
+
+    void BoxLayout::setLocalPosition(const sf::Vector2f& localPosition)
+    {
+        Container::setLocalPosition(localPosition);
+        updateWidgets();
+    }
+
     void BoxLayout::add(std::unique_ptr<Widget> widgetPtr, const std::string& widgetName)
     {
         insert(m_widgets.size(), std::move(widgetPtr), widgetName);

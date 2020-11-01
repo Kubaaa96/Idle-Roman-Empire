@@ -15,9 +15,8 @@ namespace ire::core::widgets
 	void VerticalLayout::updateWidgets()
 	{
 		// Calculate size of widget
-		const auto size = getSize();
 		const auto sizeOfVector = m_widgets.size();
-		const auto width = size.x - m_margins.m_left - m_margins.m_right;
+		const auto width = m_size.x - m_margins.m_left - m_margins.m_right;
 		float heightPerOneWidget{ 0 };
 		float height{ 0 };
 		bool isStretchValid = isLayoutStretchValid();
@@ -25,7 +24,7 @@ namespace ire::core::widgets
 		float totalHeightOfSpaces = m_spaces * (sizeOfVector - 1);
 		if (!isStretchValid)
 		{
-			heightPerOneWidget = size.y / sizeOfVector;
+			heightPerOneWidget = m_size.y / sizeOfVector;
 			height = heightPerOneWidget - (m_margins.m_top + m_margins.m_bottom + totalHeightOfSpaces) / sizeOfVector;
 		}
 
@@ -40,7 +39,7 @@ namespace ire::core::widgets
 			if (isStretchValid)
 			{
 				float proportion = m_layoutStretch[i] / m_sumOfLayoutStretches;
-				heightPerOneWidget = proportion * size.y;
+				heightPerOneWidget = proportion * m_size.y;
 				height = heightPerOneWidget - ((m_margins.m_top + m_margins.m_bottom + totalHeightOfSpaces) / sizeOfVector);
 				if (i == 0)
 				{
@@ -59,9 +58,8 @@ namespace ire::core::widgets
 				positionOfNextWidgetY = m_margins.m_top + (height * i) + (m_spaces * i);
 			}
 			const auto positionOfNextWidgetX = m_margins.m_right;
-			const sf::Vector2f localWidgetPosition = sf::Vector2f({positionOfNextWidgetX, positionOfNextWidgetY});
-			m_widgets[i]->setLocalPosition(localWidgetPosition);
-			m_widgets[i]->setPosition(position + localWidgetPosition);
+			m_widgets[i].get()->setOrigin(position);
+			m_widgets[i].get()->setLocalPosition(sf::Vector2f{ positionOfNextWidgetX, positionOfNextWidgetY });
 			m_widgets[i]->setSize({ width, height });
 
 		}

@@ -16,7 +16,6 @@ namespace ire::core::widgets
 	void HorizontalLayout::updateWidgets()
 	{
 		// # Calculate size of widget
-		const auto size = getSize();
 		const auto sizeOfVector = m_widgets.size();
 		float widthPerOneWidget{ 0 };
 		float width{ 0 };
@@ -24,10 +23,10 @@ namespace ire::core::widgets
 		bool isStretchValid = isLayoutStretchValid();
 		if (!isStretchValid)
 		{
-			widthPerOneWidget = size.x / sizeOfVector;
+			widthPerOneWidget = m_size.x / sizeOfVector;
 			width = widthPerOneWidget - (m_margins.m_left + m_margins.m_right + totalWidthOfSpaces) / sizeOfVector;
 		}
-		const auto height = size.y - m_margins.m_top - m_margins.m_bottom;
+		const auto height = m_size.y - m_margins.m_top - m_margins.m_bottom;
 
 		auto position = getPosition();
 		float previousPosition{ 0 };
@@ -39,7 +38,7 @@ namespace ire::core::widgets
 			if (isStretchValid)
 			{
 				float proportion = m_layoutStretch[i] / m_sumOfLayoutStretches;
-				widthPerOneWidget = proportion * size.x;
+				widthPerOneWidget = proportion * m_size.x;
 				width = widthPerOneWidget - (m_margins.m_left + m_margins.m_right + totalWidthOfSpaces) / sizeOfVector;
 				if (i == 0)
 				{
@@ -56,13 +55,12 @@ namespace ire::core::widgets
 			else
 			{
 				positionOfNextWidgetX = m_margins.m_left + (width * i) + (m_spaces * i);
-
 			}
 
 			const auto positionOfNextWidgetY = m_margins.m_top;
-			m_widgets[i].get()->setPosition(position + sf::Vector2f{positionOfNextWidgetX, positionOfNextWidgetY});
-			m_widgets[i].get()->setSize(width, height);
+			m_widgets[i].get()->setOrigin(position);
+			m_widgets[i].get()->setLocalPosition(sf::Vector2f{positionOfNextWidgetX, positionOfNextWidgetY});
+			m_widgets[i].get()->setSize({ width, height });
 		}
-
 	}
 }

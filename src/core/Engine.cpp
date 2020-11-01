@@ -7,7 +7,7 @@ namespace ire::core {
         : m_window(window)
     {
         verticalLayout = ire::core::widgets::VerticalLayout::create({ 500, 400 });
-        verticalLayout->setPosition({ 100, 100 });
+        //verticalLayout->setPosition({ 100, 100 });
         verticalLayout->setSpaces(5);
         verticalLayout->setMargins({ 0, 0, 15, 15 });
         auto btn5Ptr = ire::core::widgets::Button::create("test");
