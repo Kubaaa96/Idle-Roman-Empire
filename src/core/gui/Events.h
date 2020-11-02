@@ -47,7 +47,7 @@ namespace ire::core::gui {
             static_assert(std::is_base_of_v<Event, EventT>, "EventT must derive from Event");
             static_assert(
                 std::is_same_v<
-                    decltype(std::declval<FuncT>()(std::declval<EventT&>())), 
+                    decltype(std::declval<FuncT>()(std::declval<EventT&>())),
                     void
                 >, "Invalid event listener signature. Must be void(EventT&)");
 
@@ -133,8 +133,10 @@ namespace ire::core::gui {
         EventEmitter& operator=(const EventEmitter&) = delete;
         EventEmitter& operator=(EventEmitter&&) = delete;
 
-        // The listener currently must outlive the emitter.
-        // In the future it's possible to add unsubscription.
+        // The listener registered through this method will be kept
+        // until the EventEmitter is destroyed. This means that
+        // the references in the provided listener must outlive
+        // the event emitter subscribed to.
         template <typename EventT, typename FuncT>
         void addEventListener(FuncT&& func)
         {
@@ -145,6 +147,10 @@ namespace ire::core::gui {
             m_listeners.emplace(type, std::move(listener));
         }
 
+        // The listener registered through this method will be kept until
+        // the guard is destroyed or the used manually calls stopListening
+        // on the guard object. The event emitter that is subscribed to
+        // must be alive at the first call to stopListening.
         template <typename EventT, typename FuncT>
         [[nodiscard]] EventListenerGuard addTemporaryEventListener(FuncT&& func)
         {
