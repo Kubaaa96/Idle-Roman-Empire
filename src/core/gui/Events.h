@@ -192,18 +192,96 @@ namespace ire::core::gui {
         }
     };
 
-    struct MouseDownEvent : Event
+    struct WindowClosedEvent : Event
     {
-        sf::Mouse::Button button;
-        sf::Vector2f coords;
     };
 
-    struct MouseUpEvent : Event
+    struct WindowResizedEvent : Event
     {
-        sf::Mouse::Button button;
-        sf::Vector2f coords;
+        sf::Vector2f newSize;
     };
 
+    struct WindowLostFocus : Event
+    {
+    };
+
+    struct WindowGainedFocus : Event
+    {
+    };
+
+    struct TextEnteredEvent : Event
+    {
+        char32_t character;
+    };
+
+    struct KeyDownEvent : Event
+    {
+        sf::Keyboard::Key key;
+        bool alt;
+        bool control;
+        bool shift;
+        bool system;
+    };
+
+    struct KeyUpEvent : Event
+    {
+        sf::Keyboard::Key key;
+        bool alt;
+        bool control;
+        bool shift;
+        bool system;
+    };
+
+    struct MouseWheelScrolledEvent : Event
+    {
+        sf::Mouse::Wheel wheel;
+        float delta;
+        sf::Vector2f position;
+    };
+
+    struct MouseButtonDownEvent : Event
+    {
+        sf::Mouse::Button button;
+        sf::Vector2f position;
+    };
+
+    struct MouseButtonUpEvent : Event
+    {
+        sf::Mouse::Button button;
+        sf::Vector2f position;
+    };
+
+    struct MouseMovedEvent : Event
+    {
+        sf::Vector2f prevPosition;
+        sf::Vector2f currPosition;
+    };
+
+    struct MouseEnteredWindowEvent : Event
+    {
+    };
+
+    struct MouseLeftWindowEvent : Event
+    {
+    };
+
+    struct TouchBeganEvent : Event
+    {
+        std::uint32_t finger;
+        sf::Vector2f position;
+    };
+
+    struct TouchMovedEvent : Event
+    {
+        std::uint32_t finger;
+        sf::Vector2f position;
+    };
+
+    struct TouchEndedEvent : Event
+    {
+        std::uint32_t finger;
+        sf::Vector2f position;
+    };
 }
 
 #endif // !IRE_EVENTS_H
