@@ -2,12 +2,12 @@
 #define ENGINE_H
 
 #include <SFML/Graphics.hpp>
-#include "widgets/Button.h"
-#include "widgets/Label.h"
-#include "widgets/EditBox.h"
-#include "widgets/Panel.h"
-#include "widgets/HorizontalLayout.h"
-#include "widgets/VerticalLayout.h"
+#include "gui/widgets/Button.h"
+#include "gui/widgets/Label.h"
+#include "gui/widgets/EditBox.h"
+#include "gui/widgets/Panel.h"
+#include "gui/widgets/HorizontalLayout.h"
+#include "gui/widgets/VerticalLayout.h"
 #include <memory>
 
 namespace ire::core {
@@ -19,10 +19,10 @@ namespace ire::core {
 
     private:
         sf::RenderWindow& m_window;
-        std::unique_ptr<ire::core::widgets::Group> group;
-        std::unique_ptr<ire::core::widgets::Panel> panel;
-        std::unique_ptr<ire::core::widgets::HorizontalLayout> horizontalLayout;
-        std::unique_ptr<ire::core::widgets::VerticalLayout> verticalLayout;
+        std::unique_ptr<ire::core::gui::Group> group;
+        std::unique_ptr<ire::core::gui::Panel> panel;
+        std::unique_ptr<ire::core::gui::HorizontalLayout> horizontalLayout;
+        std::unique_ptr<ire::core::gui::VerticalLayout> verticalLayout;
     };
 
 }
