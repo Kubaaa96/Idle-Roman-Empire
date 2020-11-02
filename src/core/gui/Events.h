@@ -23,6 +23,7 @@ namespace ire::core::gui {
         struct AnyEventListener;
 
         using ListenerMapType = std::multimap<std::type_index, std::unique_ptr<AnyEventListener>>;
+        using ListenerMapIterator = typename ListenerMapType::iterator;
         using EventType = std::type_index;
 
         struct AnyEventListener
@@ -65,6 +66,65 @@ namespace ire::core::gui {
             }
         };
 
+        struct EventListenerGuard
+        {
+            EventListenerGuard() :
+                m_emitter(nullptr),
+                m_iterator{}
+            {
+            }
+
+            EventListenerGuard(EventEmitter& emitter, ListenerMapIterator it) :
+                m_emitter(&emitter),
+                m_iterator(it)
+            {
+            }
+
+            EventListenerGuard(const EventListenerGuard&) = delete;
+            EventListenerGuard(EventListenerGuard&& other) noexcept :
+                m_emitter(other.m_emitter),
+                m_iterator(other.m_iterator)
+            {
+                other.m_emitter = nullptr;
+            }
+
+            EventListenerGuard& operator=(const EventListenerGuard&) = delete;
+            EventListenerGuard& operator=(EventListenerGuard&& other) noexcept
+            {
+                stopListening();
+
+                m_emitter = other.m_emitter;
+                m_iterator = other.m_iterator;
+
+                other.m_emitter = nullptr;
+
+                return *this;
+            }
+
+            void stopListening()
+            {
+                if (isListening())
+                {
+                    m_emitter->removeEventListener(m_iterator);
+                    m_emitter = nullptr;
+                }
+            }
+
+            [[nodiscard]] bool isListening() const
+            {
+                return m_emitter != nullptr;
+            }
+
+            ~EventListenerGuard()
+            {
+                stopListening();
+            }
+
+        private:
+            EventEmitter* m_emitter;
+            ListenerMapIterator m_iterator;
+        };
+
         EventEmitter() = default;
 
         EventEmitter(const EventEmitter&) = delete;
@@ -84,6 +144,18 @@ namespace ire::core::gui {
             auto type = eventType<EventT>();
             m_listeners.emplace(type, std::move(listener));
         }
+
+        template <typename EventT, typename FuncT>
+        [[nodiscard]] EventListenerGuard addTemporaryEventListener(FuncT&& func)
+        {
+            using DecayedFuncT = std::remove_reference_t<FuncT>;
+            using EventListenerType = EventListener<EventT, DecayedFuncT>;
+            auto listener = std::make_unique<EventListenerType>(std::forward<FuncT>(func));
+            auto type = eventType<EventT>();
+            auto it = m_listeners.emplace(type, std::move(listener));
+            return EventListenerGuard(*this, it);
+        }
+
 
     protected:
 
@@ -106,6 +178,11 @@ namespace ire::core::gui {
         [[nodiscard]] static EventType eventType()
         {
             return std::type_index(typeid(EventT));
+        }
+
+        void removeEventListener(ListenerMapIterator it)
+        {
+            m_listeners.erase(it);
         }
     };
 

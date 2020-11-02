@@ -12,12 +12,12 @@ namespace {
 
     struct MockedWidget : EventEmitter
     {
-        virtual void onClick() = 0;
+        virtual void emitMouseDownEvent() = 0;
     };
 
     struct MockedButton : MockedWidget
     {
-        void onClick() override
+        void emitMouseDownEvent() override
         {
             auto ev = MouseDownEvent{ {}, sf::Mouse::Button::Left, sf::Vector2f(123, 321) };
             emitEvent(ev);
@@ -28,8 +28,8 @@ namespace {
 
 TEST_CASE("Event emitter tests", "[events]")
 {
-    std::unique_ptr<MockedWidget> w = std::make_unique<MockedButton>();
-    w->onClick();
+    std::unique_ptr<MockedWidget> widget = std::make_unique<MockedButton>();
+    widget->emitMouseDownEvent();
 
     int counter = 0;
 
@@ -37,22 +37,43 @@ TEST_CASE("Event emitter tests", "[events]")
     auto rightListener = [&counter](MouseDownEvent& ev) { ++counter; };
     auto rightCancellingListener = [&counter](MouseDownEvent& ev) { ++counter; ev.handled = true; };
 
-    w->addEventListener<MouseUpEvent>(wrongListener);
-    w->onClick();
+    widget->addEventListener<MouseUpEvent>(wrongListener);
+    widget->emitMouseDownEvent();
     REQUIRE(counter == 0);
 
-    w->addEventListener<MouseDownEvent>(rightListener);
-    w->onClick();
+    widget->addEventListener<MouseDownEvent>(rightListener);
+    widget->emitMouseDownEvent();
     REQUIRE(counter == 1);
-    w->onClick();
+    widget->emitMouseDownEvent();
     REQUIRE(counter == 2);
 
-    w->addEventListener<MouseDownEvent>(rightListener);
-    w->onClick();
+    widget->addEventListener<MouseDownEvent>(rightListener);
+    widget->emitMouseDownEvent();
     REQUIRE(counter == 4);
 
-    w->addEventListener<MouseDownEvent>(rightCancellingListener);
-    w->addEventListener<MouseDownEvent>(rightListener);
-    w->onClick();
-    REQUIRE(counter == 7);
+    (void)widget->addTemporaryEventListener<MouseDownEvent>(rightListener);
+    widget->emitMouseDownEvent();
+    REQUIRE(counter == 6);
+
+    auto guard = widget->addTemporaryEventListener<MouseDownEvent>(rightCancellingListener);
+    widget->addEventListener<MouseDownEvent>(rightListener);
+    widget->emitMouseDownEvent();
+    REQUIRE(counter == 9);
+
+    guard = widget->addTemporaryEventListener<MouseDownEvent>(rightListener);
+    widget->emitMouseDownEvent();
+    REQUIRE(counter == 13);
+    widget->emitMouseDownEvent();
+    REQUIRE(counter == 17);
+    guard.stopListening();
+    widget->emitMouseDownEvent();
+    REQUIRE(counter == 20);
+
+    {
+        auto guard = widget->addTemporaryEventListener<MouseDownEvent>(rightListener);
+        widget->emitMouseDownEvent();
+        REQUIRE(counter == 24);
+    }
+    widget->emitMouseDownEvent();
+    REQUIRE(counter == 27);
 }
