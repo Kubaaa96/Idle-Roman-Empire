@@ -194,6 +194,7 @@ namespace ire::core::gui {
 
     struct WindowClosedEvent : Event
     {
+        bool cancel = false;
     };
 
     struct WindowResizedEvent : Event

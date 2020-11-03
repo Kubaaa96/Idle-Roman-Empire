@@ -3,7 +3,7 @@
 
 namespace ire::core {
 
-    Engine::Engine(sf::RenderWindow& window)
+    Engine::Engine(gui::SystemWindow& window)
         : m_window(window)
     {
         verticalLayout = ire::core::gui::VerticalLayout::create({ 500, 400 });
@@ -48,16 +48,19 @@ namespace ire::core {
 
     void Engine::run()
     {
-        while (m_window.isOpen()) {
-            sf::Event event;
-            while (m_window.pollEvent(event)) {
-                if (event.type == sf::Event::Closed)
-                    m_window.close();
+        for(;;) 
+        {
+            m_window.processEvents();
+
+            if (!m_window.isOpen())
+            {
+                break;
             }
 
-            m_window.clear();
-            panel->draw(m_window);
-            //horizontalLayout->draw(m_window);
+            auto& renderTarget = m_window.getRenderTarget();
+
+            renderTarget.clear();
+            panel->draw(renderTarget);
             m_window.display();
         }
     }

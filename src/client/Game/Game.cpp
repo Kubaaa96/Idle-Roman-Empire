@@ -14,12 +14,12 @@ namespace ire::client {
         m_engine.run();
     }
 
-    sf::RenderWindow& Game::getWindow()
+    core::gui::SystemWindow& Game::getWindow()
     {
         return m_window;
     }
 
-    const sf::RenderWindow& Game::getWindow() const
+    const core::gui::SystemWindow& Game::getWindow() const
     {
         return m_window;
     }
