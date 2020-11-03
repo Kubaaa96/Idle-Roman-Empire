@@ -1,5 +1,7 @@
 #include "GameWindow.h"
 
+#include "core/gui/Events.h"
+
 namespace ire::client {
 
     void GameWindow::init() 

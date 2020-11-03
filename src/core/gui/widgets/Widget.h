@@ -44,6 +44,10 @@ namespace ire::core::gui
         
         virtual const WidgetType getType() const = 0;
 
+        [[nodiscard]] sf::FloatRect clientBounds() const;
+
+        virtual void onEvent(MouseButtonDownEvent& ev);
+
     protected:
         std::string m_name;
 

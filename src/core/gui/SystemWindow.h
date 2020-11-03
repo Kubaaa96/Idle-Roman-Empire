@@ -48,6 +48,10 @@ namespace ire::core::gui {
         Panel* m_rootPanel;
 
         void processSfmlEvent(sf::Event& ev);
+
+        void processSfmlClosedEvent(sf::Event& ev);
+
+        void processSfmlMouseButtonPressedEvent(sf::Event& ev);
     };
 
 }

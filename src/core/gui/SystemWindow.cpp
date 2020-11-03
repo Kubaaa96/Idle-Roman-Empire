@@ -50,14 +50,46 @@ namespace ire::core::gui {
 
     void SystemWindow::processSfmlEvent(sf::Event& ev)
     {
-        if (ev.type == sf::Event::EventType::Closed)
+        switch (ev.type)
         {
-            WindowClosedEvent translatedEv{};
-            emitEvent<WindowClosedEvent>(translatedEv);
+        case sf::Event::EventType::Closed:
+            processSfmlClosedEvent(ev);
+            break;
 
-            if (!translatedEv.cancel)
+        case sf::Event::EventType::MouseButtonPressed:
+            processSfmlMouseButtonPressedEvent(ev);
+        }
+    }
+
+    void SystemWindow::processSfmlClosedEvent(sf::Event& ev)
+    {
+        WindowClosedEvent translatedEv{};
+        emitEvent<WindowClosedEvent>(translatedEv);
+
+        if (!translatedEv.cancel)
+        {
+            close();
+        }
+    }
+
+    void SystemWindow::processSfmlMouseButtonPressedEvent(sf::Event& ev)
+    {
+        MouseButtonDownEvent translatedEv{};
+        translatedEv.button = ev.mouseButton.button;
+        translatedEv.position = sf::Vector2f(
+            static_cast<float>(ev.mouseButton.x), 
+            static_cast<float>(ev.mouseButton.y));
+
+        if (isOpen() && m_rootPanel != nullptr)
+        {
+            if (m_rootPanel->clientBounds().contains(translatedEv.position))
             {
-                close();
+                m_rootPanel->onEvent(translatedEv);
+            }
+
+            if (!translatedEv.handled)
+            {
+                emitEvent<MouseButtonDownEvent>(translatedEv);
             }
         }
     }

@@ -79,4 +79,17 @@ namespace ire::core::gui
 		return m_parent;
 
 	}
+
+	[[nodiscard]] sf::FloatRect Widget::clientBounds() const 
+	{
+		return sf::FloatRect(m_position, m_size);
+	}
+
+	void Widget::onEvent(MouseButtonDownEvent& ev)
+	{
+		if (!ev.handled)
+		{
+			emitEvent<MouseButtonDownEvent>(ev);
+		}
+	}
 }
