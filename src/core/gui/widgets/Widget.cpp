@@ -87,9 +87,6 @@ namespace ire::core::gui
 
 	void Widget::onEvent(MouseButtonDownEvent& ev)
 	{
-		if (!ev.handled)
-		{
-			emitEvent<MouseButtonDownEvent>(ev);
-		}
+		emitEventIfNotHandled<MouseButtonDownEvent>(ev);
 	}
 }

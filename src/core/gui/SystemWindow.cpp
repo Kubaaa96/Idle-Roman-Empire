@@ -87,10 +87,7 @@ namespace ire::core::gui {
                 m_rootPanel->onEvent(translatedEv);
             }
 
-            if (!translatedEv.handled)
-            {
-                emitEvent<MouseButtonDownEvent>(translatedEv);
-            }
+            emitEventIfNotHandled<MouseButtonDownEvent>(translatedEv);
         }
     }
 

@@ -80,4 +80,11 @@ namespace ire::core::gui
 		m_panelLayout->setOrigin(m_position);
 		m_panelLayout->setLocalPosition({0, 0});
 	}
+
+	void Panel::onEvent(MouseButtonDownEvent& ev)
+	{
+		m_panelLayout->onEvent(ev);
+
+		Widget::onEvent(ev);
+	}
 }

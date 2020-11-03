@@ -177,6 +177,15 @@ namespace ire::core::gui {
             }
         }
 
+        template <typename EventT>
+        void emitEventIfNotHandled(EventT& ev)
+        {
+            if (!ev.handled)
+            {
+                emitEvent<EventT>(ev);
+            }
+        }
+
     private:
         ListenerMapType m_listeners;
 

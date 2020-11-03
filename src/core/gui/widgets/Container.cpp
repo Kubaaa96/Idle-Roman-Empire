@@ -139,4 +139,22 @@ namespace ire::core::gui
 	{
 		return m_widgets.at(i).get();
 	}
+
+	void Container::onEvent(MouseButtonDownEvent& ev)
+	{
+		for (auto& widget : m_widgets)
+		{
+			if (widget->clientBounds().contains(ev.position))
+			{
+				widget->onEvent(ev);
+
+				if (ev.handled)
+				{
+					break;
+				}
+			}
+		}
+
+		Widget::onEvent(ev);
+	}
 }
