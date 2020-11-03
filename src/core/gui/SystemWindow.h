@@ -5,6 +5,8 @@
 
 #include "Events.h"
 
+#include "widgets/Panel.h"
+
 #include <utility>
 
 namespace ire::core::gui {
@@ -14,9 +16,18 @@ namespace ire::core::gui {
 
         template <typename... Ts>
         SystemWindow(Ts&&... args) :
-            m_window(std::forward<Ts>(args)...)
+            m_window(std::forward<Ts>(args)...),
+            m_rootPanel(nullptr)
         {
         }
+
+        SystemWindow(const SystemWindow&) = delete;
+        SystemWindow(SystemWindow&&) = delete;
+
+        SystemWindow& operator=(const SystemWindow&) = delete;
+        SystemWindow& operator=(SystemWindow&&) = delete;
+
+        virtual ~SystemWindow() = default;
 
         [[nodiscard]] sf::RenderTarget& getRenderTarget();
 
@@ -28,8 +39,13 @@ namespace ire::core::gui {
 
         void display();
 
+        void draw();
+
+        void setRootPanel(Panel& panel);
+
     private:
         sf::RenderWindow m_window;
+        Panel* m_rootPanel;
 
         void processSfmlEvent(sf::Event& ev);
     };

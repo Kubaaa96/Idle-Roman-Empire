@@ -5,6 +5,8 @@
 
 #include "core/gui/SystemWindow.h"
 
+#include "GameWindow.h"
+
 namespace ire::client {
 
     struct Game {
@@ -21,7 +23,8 @@ namespace ire::client {
         Game();
         const unsigned int m_windowWidth{ 1024 };
         const unsigned int m_windowHeight{ 768 };
-        core::gui::SystemWindow m_window;
+
+        GameWindow m_window;
         core::Engine m_engine;
     };
 

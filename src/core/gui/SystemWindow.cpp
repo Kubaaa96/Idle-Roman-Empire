@@ -31,6 +31,23 @@ namespace ire::core::gui {
         m_window.display();
     }
 
+    void SystemWindow::draw()
+    {
+        auto& renderTarget = getRenderTarget();
+
+        renderTarget.clear();
+
+        if (m_rootPanel)
+        {
+            m_rootPanel->draw(renderTarget);
+        }
+    }
+
+    void SystemWindow::setRootPanel(Panel& panel)
+    {
+        m_rootPanel = &panel;
+    }
+
     void SystemWindow::processSfmlEvent(sf::Event& ev)
     {
         if (ev.type == sf::Event::EventType::Closed)
