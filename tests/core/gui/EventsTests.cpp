@@ -8,23 +8,19 @@
 
 using namespace ire::core::gui;
 
-namespace {
+struct MockedWidget : EventEmitter
+{
+    virtual void emitMouseDownEvent() = 0;
+};
 
-    struct MockedWidget : EventEmitter
+struct MockedButton : MockedWidget
+{
+    void emitMouseDownEvent() override
     {
-        virtual void emitMouseDownEvent() = 0;
-    };
-
-    struct MockedButton : MockedWidget
-    {
-        void emitMouseDownEvent() override
-        {
-            auto ev = MouseDownEvent{ {}, sf::Mouse::Button::Left, sf::Vector2f(123, 321) };
-            emitEvent(ev);
-        }
-    };
-
-}
+        auto ev = MouseDownEvent{ {}, sf::Mouse::Button::Left, sf::Vector2f(123, 321) };
+        emitEvent(ev);
+    }
+};
 
 TEST_CASE("Event emitter tests", "[events]")
 {
@@ -81,7 +77,7 @@ TEST_CASE("Event emitter tests", "[events]")
     {
         counter = 0;
         std::unique_ptr<MockedWidget> widget = std::make_unique<MockedButton>();
-        
+
         (void)widget->addTemporaryEventListener<MouseDownEvent>(rightListener);
         widget->emitMouseDownEvent();
         REQUIRE(counter == 0);
