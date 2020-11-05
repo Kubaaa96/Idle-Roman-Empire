@@ -20,6 +20,8 @@ set(IDLEROMANEMPIRE_STATIC_STD_LIBS FALSE CACHE BOOL "Use statically linked stan
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED 17)
 
+add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+
 find_package(SFML 2.5 COMPONENTS graphics audio window system REQUIRED)
 
 if(NOT SFML_FOUND)
