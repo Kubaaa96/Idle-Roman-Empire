@@ -1,9 +1,5 @@
 name: IdleRomanEmpire_x64-windows
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [push, pull_request]
 
 env:
   REPO: IdleRomanEmpire
@@ -15,36 +11,41 @@ jobs:
     name: Windows
     runs-on: windows-latest
     env:
-      platform: x64
       VCPKG_DEFAULT_TRIPLET: x64-windows
       GENERATOR: "Visual Studio 16 2019"
       ARCH: "x64"
-      CMAKE_INSTALL_PREFIX: "C:\\install\\IdleRomanEmpire"
-      SFML_DIR: "C:\\vcpkg\\installed\\x64-windows\\share\\sfml"
-      WORKDIR:  "D:\\a\\IdleRomanEmpire\\IdleRomanEmpire\\"
-      MSBUILD:  "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\MSBuild\\Current\\Bin"
+      CMAKE_INSTALL_PREFIX: "${{ github.workspace }}\\install"
     strategy:
       matrix:
-        CONFIG: [Debug, Release]
+        CONFIG:
+          - {
+            BUILD_TYPE: Release
+          }
+          - {
+            BUILD_TYPE: Debug
+          }
     steps:
-      - name: Update PATH
-        run: |
-          echo "::add-path::$Env:MSBUILD"
-      - name: Cache vcpkg packages
+      - name: Print environment variables
+        run: env
+
+      # Since there is no good way of setting a dynamic path for cached
+      # vcpkg packages we currently hardcode the path.
+      # Caching will break if the VCPKG_ROOT changes.
+      - name: Setup vcpkg packages cache
         uses: actions/cache@v1
         id: cache-vcpkg-packages
         with:
           path: C:/vcpkg/packages
-          key:  vcpkg-packages-45e5a67
+          key: cache-vcpkg-packages-x64-windows-45e5a67
 
-      - name: Cache vcpkg installed
+      - name: Setup vcpkg installed cache
         uses: actions/cache@v1
         id: cache-vcpkg-installed
         with:
           path: C:/vcpkg/installed
-          key:  vcpkg-installed-45e5a67
+          key: cache-vcpkg-installed-x64-windows-45e5a67
 
-      - name: Clone the git repo
+      - name: Clone the IRE git repo
         uses: actions/checkout@v2
         with:
           fetch-depth: 50
@@ -56,29 +57,25 @@ jobs:
       - name: vcpkg integrate install
         run: vcpkg integrate install
 
-      - name: Configure
-        run: cmake . -Bbuild
-                    -G "${env:GENERATOR}"
-                    -A "${env:ARCH}"
-                    -DSFML_DIR="${env.SFML_DIR}"
-                    -DCMAKE_INSTALL_PREFIX="${env:CMAKE_INSTALL_PREFIX}"
+      - name: Create IRE build directories
+        run: mkdir -p install
 
-      - name: Configure for tests
+      - name: Configure IRE
         run: cmake . -Bbuild
                     -G "${env:GENERATOR}"
                     -A "${env:ARCH}"
-                    -DSFML_DIR="${env.SFML_DIR}"
-                    -DCMAKE_INSTALL_PREFIX="${env:CMAKE_INSTALL_PREFIX}"
+                    -DCMAKE_INSTALL_PREFIX="./install"
+
+      - name: Configure IRE for tests
+        run: cmake . -Bbuild
+                    -G "${env:GENERATOR}"
+                    -A "${env:ARCH}"
+                    -DCMAKE_INSTALL_PREFIX="./install"
                     -DBUILD_TESTS=ON
 
-      - name: Build
-        run: msbuild build/ALL_BUILD.vcxproj /property:Configuration=${{ matrix.CONFIG }} /verbosity:minimal /m
+      - name: Build and install IRE
+        run: cmake --build ./build --config ${{ matrix.CONFIG.BUILD_TYPE }} --target install
 
-      - name: Tests
+      - name: Run IRE Tests
         working-directory: build/tests
-        run: ctest -C ${{ matrix.CONFIG }} --output-on-failure --timeout 540
-
-      - name: Install
-        working-directory: build
-        run: msbuild INSTALL.vcxproj /verbosity:minimal /m
-
+        run: ctest -C ${{ matrix.CONFIG.BUILD_TYPE }} --output-on-failure --timeout 540
