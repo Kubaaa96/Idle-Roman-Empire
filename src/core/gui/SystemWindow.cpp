@@ -130,9 +130,25 @@ namespace ire::core::gui {
         m_activeWidget = &widget;
     }
 
-    void SystemWindow::resetActiveWidget()
+    void SystemWindow::resetActiveWidget(Widget& widget)
     {
-        m_activeWidget = nullptr;
+        if (m_activeWidget == &widget)
+        {
+            m_activeWidget = nullptr;
+
+            // We emit mouse moved here so that the thing
+            // that didn't receive the previous event
+            // because it was intercepted.
+            reemitLastMouseMoved();
+        }
+    }
+
+    void SystemWindow::reemitLastMouseMoved()
+    {
+        MouseMovedEvent translatedEv{};
+        translatedEv.timestamp = TimePoint::now();
+        translatedEv.position = sf::Vector2f(m_lastMousePosition);
+        forwardEventWithPosition(translatedEv);
     }
 
 }

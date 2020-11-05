@@ -8,7 +8,7 @@ namespace ire::core::gui {
     struct EventRoot
     {
         virtual void setActiveWidget(Widget& widget) = 0;
-        virtual void resetActiveWidget() = 0;
+        virtual void resetActiveWidget(Widget& widget) = 0;
     };
 
 }

@@ -27,8 +27,25 @@ namespace ire::core::gui
         void onEvent(EventRoot& sender, MouseButtonUpEvent& ev) override;
         void onEvent(EventRoot& sender, MouseMovedEvent& ev) override;
 
-    private:
-        
+    protected:
+
+        enum struct State
+        {
+            Idle,
+            Hover,
+            Armed,
+            Disarmed
+        };
+
+        State m_state = State::Idle;
+
+        void onClick(MouseButtonUpEvent& ev);
+    };
+
+    struct MouseClickEvent : TranslatedEvent
+    {
+        sf::Mouse::Button button;
+        sf::Vector2f position;
     };
 }
 

@@ -47,7 +47,7 @@ namespace ire::core::gui {
         void setRootPanel(Panel& panel);
 
         void setActiveWidget(Widget& widget) override;
-        void resetActiveWidget() override;
+        void resetActiveWidget(Widget& widget) override;
 
     private:
         sf::RenderWindow m_window;
@@ -68,6 +68,8 @@ namespace ire::core::gui {
         void processSfmlMouseButtonPressedEvent(sf::Event& ev, TimePoint timestamp);
         void processSfmlMouseButtonReleasedEvent(sf::Event& ev, TimePoint timestamp);
         void processSfmlMouseMovedEvent(sf::Event& ev, TimePoint timestamp);
+
+        void reemitLastMouseMoved();
 
         template <typename EventT>
         void forwardEventWithPosition(EventT& ev)
