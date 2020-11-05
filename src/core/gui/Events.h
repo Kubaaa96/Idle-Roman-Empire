@@ -13,9 +13,13 @@
 
 namespace ire::core::gui {
 
-    struct Event
+    struct RawEvent
     {
         bool handled = false;
+    };
+
+    struct TranslatedEvent : RawEvent
+    {
     };
 
     struct EventEmitter
@@ -44,7 +48,7 @@ namespace ire::core::gui {
         template <typename EventT, typename FuncT>
         struct EventListener : AnyEventListener, private FuncT
         {
-            static_assert(std::is_base_of_v<Event, EventT>, "EventT must derive from Event");
+            static_assert(std::is_base_of_v<RawEvent, EventT>, "EventT must derive from Event");
             static_assert(
                 std::is_same_v<
                     decltype(std::declval<FuncT>()(std::declval<EventT&>())),
@@ -201,30 +205,30 @@ namespace ire::core::gui {
         }
     };
 
-    struct WindowClosedEvent : Event
+    struct WindowClosedEvent : RawEvent
     {
         bool cancel = false;
     };
 
-    struct WindowResizedEvent : Event
+    struct WindowResizedEvent : RawEvent
     {
         sf::Vector2f newSize;
     };
 
-    struct WindowLostFocus : Event
+    struct WindowLostFocus : RawEvent
     {
     };
 
-    struct WindowGainedFocus : Event
+    struct WindowGainedFocus : RawEvent
     {
     };
 
-    struct TextEnteredEvent : Event
+    struct TextEnteredEvent : RawEvent
     {
         char32_t character;
     };
 
-    struct KeyDownEvent : Event
+    struct KeyDownEvent : RawEvent
     {
         sf::Keyboard::Key key;
         bool alt;
@@ -233,7 +237,7 @@ namespace ire::core::gui {
         bool system;
     };
 
-    struct KeyUpEvent : Event
+    struct KeyUpEvent : RawEvent
     {
         sf::Keyboard::Key key;
         bool alt;
@@ -242,52 +246,52 @@ namespace ire::core::gui {
         bool system;
     };
 
-    struct MouseWheelScrolledEvent : Event
+    struct MouseWheelScrolledEvent : RawEvent
     {
         sf::Mouse::Wheel wheel;
         float delta;
         sf::Vector2f position;
     };
 
-    struct MouseButtonDownEvent : Event
+    struct MouseButtonDownEvent : RawEvent
     {
         sf::Mouse::Button button;
         sf::Vector2f position;
     };
 
-    struct MouseButtonUpEvent : Event
+    struct MouseButtonUpEvent : RawEvent
     {
         sf::Mouse::Button button;
         sf::Vector2f position;
     };
 
-    struct MouseMovedEvent : Event
+    struct MouseMovedEvent : RawEvent
     {
         sf::Vector2f prevPosition;
         sf::Vector2f currPosition;
     };
 
-    struct MouseEnteredWindowEvent : Event
+    struct MouseEnteredWindowEvent : RawEvent
     {
     };
 
-    struct MouseLeftWindowEvent : Event
+    struct MouseLeftWindowEvent : RawEvent
     {
     };
 
-    struct TouchBeganEvent : Event
-    {
-        std::uint32_t finger;
-        sf::Vector2f position;
-    };
-
-    struct TouchMovedEvent : Event
+    struct TouchBeganEvent : RawEvent
     {
         std::uint32_t finger;
         sf::Vector2f position;
     };
 
-    struct TouchEndedEvent : Event
+    struct TouchMovedEvent : RawEvent
+    {
+        std::uint32_t finger;
+        sf::Vector2f position;
+    };
+
+    struct TouchEndedEvent : RawEvent
     {
         std::uint32_t finger;
         sf::Vector2f position;
