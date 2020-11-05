@@ -2,6 +2,8 @@
 
 #include "core/gui/Events.h"
 
+#include <iostream>
+
 namespace ire::client {
 
     void GameWindow::init() 
@@ -14,6 +16,12 @@ namespace ire::client {
         auto btn6Ptr = ire::core::gui::Button::create("test1");
         auto label7Ptr = ire::core::gui::Label::create("test");
         auto editBox8Ptr = ire::core::gui::EditBox::create("test1");
+
+        btn5Ptr->addEventListener<ire::core::gui::MouseClickEvent>(
+            [](ire::core::gui::MouseClickEvent& ev) { std::cout << "Clicked btn5Ptr button\n"; });
+
+        btn6Ptr->addEventListener<ire::core::gui::MouseClickEvent>(
+            [](ire::core::gui::MouseClickEvent& ev) { std::cout << "Clicked btn6Ptr button\n"; });
 
         verticalLayout->add(std::move(btn5Ptr), "Button5");
         verticalLayout->add(std::move(btn6Ptr), "Button6");
@@ -29,6 +37,12 @@ namespace ire::client {
         auto btn2Ptr = ire::core::gui::Button::create("test1");
         auto label3Ptr = ire::core::gui::Label::create("test");
         auto btn4Ptr = ire::core::gui::Button::create("test1");
+
+        btn2Ptr->addEventListener<ire::core::gui::MouseClickEvent>(
+            [](ire::core::gui::MouseClickEvent& ev) { std::cout << "Clicked btn2Ptr button\n"; });
+
+        btn4Ptr->addEventListener<ire::core::gui::MouseClickEvent>(
+            [](ire::core::gui::MouseClickEvent& ev) { std::cout << "Clicked btn4Ptr button\n"; });
 
         horizontalLayout->add(std::move(editBox1Ptr), "EditBox2");
         horizontalLayout->add(std::move(btn2Ptr), "Button2");
