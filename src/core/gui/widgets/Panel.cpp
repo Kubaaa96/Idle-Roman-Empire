@@ -83,8 +83,16 @@ namespace ire::core::gui
 
 	void Panel::onEvent(EventRoot& sender, MouseButtonDownEvent& ev)
 	{
-		m_panelLayout->onEvent(sender, ev);
+		forwardEvent(sender, ev);
+	}
 
-		Widget::onEvent(sender, ev);
+	void Panel::onEvent(EventRoot& sender, MouseButtonUpEvent& ev)
+	{
+		forwardEvent(sender, ev);
+	}
+
+	void Panel::onEvent(EventRoot& sender, MouseMovedEvent& ev)
+	{
+		forwardEvent(sender, ev);
 	}
 }

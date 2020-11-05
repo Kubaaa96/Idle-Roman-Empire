@@ -7,4 +7,13 @@ namespace ire::core::gui {
 		emitEventIfNotHandled<MouseButtonDownEvent>(ev);
 	}
 
+	void RawEventHandler::onEvent(EventRoot& sender, MouseButtonUpEvent& ev)
+	{
+		emitEventIfNotHandled<MouseButtonUpEvent>(ev);
+	}
+
+	void RawEventHandler::onEvent(EventRoot& sender, MouseMovedEvent& ev)
+	{
+		emitEventIfNotHandled<MouseMovedEvent>(ev);
+	}
 }

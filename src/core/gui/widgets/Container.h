@@ -47,6 +47,8 @@ namespace ire::core::gui
         const WidgetType getType() const override;
 
         void onEvent(EventRoot& sender, MouseButtonDownEvent& ev) override;
+        void onEvent(EventRoot& sender, MouseButtonUpEvent& ev) override;
+        void onEvent(EventRoot& sender, MouseMovedEvent& ev) override;
 
     protected:
         std::vector<std::unique_ptr<Widget>> m_widgets;
@@ -57,6 +59,25 @@ namespace ire::core::gui
         const bool compareWithWidgetNameAt(std::size_t index, const std::string& name) const;
         Widget* getWidgetAt(int i);
         const Widget* getWidgetAt(int i) const;
+
+        template <typename EventT>
+        void forwardEventWithPosition(EventRoot& sender, EventT& ev)
+        {
+            for (auto& widget : m_widgets)
+            {
+                if (widget->clientBounds().contains(ev.position))
+                {
+                    widget->onEvent(sender, ev);
+
+                    if (ev.handled)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            Widget::onEvent(sender, ev);
+        }
     };
 }
 #endif // !CONTAINER_H

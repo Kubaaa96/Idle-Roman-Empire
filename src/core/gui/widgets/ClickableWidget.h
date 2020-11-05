@@ -24,6 +24,8 @@ namespace ire::core::gui
         }
 
         void onEvent(EventRoot& sender, MouseButtonDownEvent& ev) override;
+        void onEvent(EventRoot& sender, MouseButtonUpEvent& ev) override;
+        void onEvent(EventRoot& sender, MouseMovedEvent& ev) override;
 
     private:
         

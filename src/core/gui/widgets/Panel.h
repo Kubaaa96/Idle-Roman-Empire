@@ -39,12 +39,22 @@ namespace ire::core::gui
         }
 
         void onEvent(EventRoot& sender, MouseButtonDownEvent& ev) override;
+        void onEvent(EventRoot& sender, MouseButtonUpEvent& ev) override;
+        void onEvent(EventRoot& sender, MouseMovedEvent& ev) override;
 
     protected:
         std::unique_ptr<BoxLayout> m_panelLayout;
     private:
         void updateLayout();
         sf::RectangleShape m_rectangleShape;
+
+        template <typename EventT>
+        void forwardEvent(EventRoot& sender, EventT& ev)
+        {
+            m_panelLayout->onEvent(sender, ev);
+
+            Widget::onEvent(sender, ev);
+        }
     };
 }
 

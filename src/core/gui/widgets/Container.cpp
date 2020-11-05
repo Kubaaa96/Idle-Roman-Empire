@@ -142,19 +142,16 @@ namespace ire::core::gui
 
 	void Container::onEvent(EventRoot& sender, MouseButtonDownEvent& ev)
 	{
-		for (auto& widget : m_widgets)
-		{
-			if (widget->clientBounds().contains(ev.position))
-			{
-				widget->onEvent(sender, ev);
+		forwardEventWithPosition(sender, ev);
+	}
 
-				if (ev.handled)
-				{
-					break;
-				}
-			}
-		}
+	void Container::onEvent(EventRoot& sender, MouseButtonUpEvent& ev)
+	{
+		forwardEventWithPosition(sender, ev);
+	}
 
-		Widget::onEvent(sender, ev);
+	void Container::onEvent(EventRoot& sender, MouseMovedEvent& ev)
+	{
+		forwardEventWithPosition(sender, ev);
 	}
 }

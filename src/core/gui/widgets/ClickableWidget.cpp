@@ -29,6 +29,16 @@ namespace ire::core::gui
 
 	void ClickableWidget::onEvent(EventRoot& sender, MouseButtonDownEvent& ev)
 	{
-		std::cout << "Mouse down detected. Initiate click for widget " << m_name << '\n';
+		std::cout << "Mouse down detected. MouseButtonDownEvent on " << m_name << '\n';
+	}
+
+	void ClickableWidget::onEvent(EventRoot& sender, MouseButtonUpEvent& ev)
+	{
+		std::cout << "Mouse down detected. MouseButtonUpEvent on " << m_name << '\n';
+	}
+
+	void ClickableWidget::onEvent(EventRoot& sender, MouseMovedEvent& ev)
+	{
+		std::cout << "Mouse down detected. MouseMovedEvent on " << m_name << '\n';
 	}
 }

@@ -59,6 +59,15 @@ namespace ire::core::gui {
 
         case sf::Event::EventType::MouseButtonPressed:
             processSfmlMouseButtonPressedEvent(ev, timestamp);
+            break;
+
+        case sf::Event::EventType::MouseButtonReleased:
+            processSfmlMouseButtonReleasedEvent(ev, timestamp);
+            break;
+
+        case sf::Event::EventType::MouseMoved:
+            processSfmlMouseMovedEvent(ev, timestamp);
+            break;
         }
     }
 
@@ -76,29 +85,44 @@ namespace ire::core::gui {
     void SystemWindow::processSfmlMouseButtonPressedEvent(sf::Event& ev, TimePoint timestamp)
     {
         MouseButtonDownEvent translatedEv{};
+        translatedEv.timestamp = timestamp;
         translatedEv.button = ev.mouseButton.button;
         translatedEv.position = sf::Vector2f(
             static_cast<float>(ev.mouseButton.x), 
             static_cast<float>(ev.mouseButton.y));
 
-        if (isOpen() && m_rootPanel != nullptr)
+        forwardEventWithPosition(translatedEv);
+    }
+
+    void SystemWindow::processSfmlMouseButtonReleasedEvent(sf::Event& ev, TimePoint timestamp)
+    {
+        MouseButtonUpEvent translatedEv{};
+        translatedEv.timestamp = timestamp;
+        translatedEv.button = ev.mouseButton.button;
+        translatedEv.position = sf::Vector2f(
+            static_cast<float>(ev.mouseButton.x),
+            static_cast<float>(ev.mouseButton.y));
+
+        forwardEventWithPosition(translatedEv);
+    }
+
+    void SystemWindow::processSfmlMouseMovedEvent(sf::Event& ev, TimePoint timestamp)
+    {
+        if (ev.mouseMove.x == m_lastMousePosition.x
+            && ev.mouseMove.y == m_lastMousePosition.y)
         {
-            if (m_activeWidget != nullptr)
-            {
-                m_activeWidget->onEvent(*this, translatedEv);
-                if (translatedEv.handled)
-                {
-                    return;
-                }
-            }
-
-            if (m_rootPanel->clientBounds().contains(translatedEv.position))
-            {
-                m_rootPanel->onEvent(*this, translatedEv);
-            }
-
-            emitEventIfNotHandled<MouseButtonDownEvent>(translatedEv);
+            // We prevent unneccesary MouseMoved events.
+            return;
         }
+
+        MouseMovedEvent translatedEv{};
+        translatedEv.timestamp = timestamp;
+        translatedEv.position = sf::Vector2f(
+            static_cast<float>(ev.mouseMove.x),
+            static_cast<float>(ev.mouseMove.y));
+        m_lastMousePosition = { ev.mouseMove.x, ev.mouseMove.y };
+
+        forwardEventWithPosition(translatedEv);
     }
 
     void SystemWindow::setActiveWidget(Widget& widget)
