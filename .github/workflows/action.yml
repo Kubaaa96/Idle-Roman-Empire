@@ -68,7 +68,7 @@ jobs:
                     -A "${env:ARCH}"
                     -DSFML_DIR="${env.SFML_DIR}"
                     -DCMAKE_INSTALL_PREFIX="${env:CMAKE_INSTALL_PREFIX}"
-                    -DBUILD_TESTS=TRUE
+                    -DBUILD_TESTS=ON
 
       - name: Tests
         working-directory: build/tests
