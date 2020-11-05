@@ -5,6 +5,7 @@
 
 #include "core/gui/Events.h"
 #include "core/gui/EventRoot.h"
+#include "core/gui/RawEventHandler.h"
 
 #include <SFML/Graphics.hpp>
 
@@ -14,7 +15,7 @@ namespace ire::core::gui
 {
     struct Container;
     // Base class for all Widgets and Layouts
-    struct Widget : EventEmitter
+    struct Widget : RawEventHandler
     {
         Widget() = default;
         virtual ~Widget();
@@ -46,8 +47,6 @@ namespace ire::core::gui
         virtual const WidgetType getType() const = 0;
 
         [[nodiscard]] sf::FloatRect clientBounds() const;
-
-        virtual void onEvent(EventRoot& sender, MouseButtonDownEvent& ev);
 
     protected:
         std::string m_name;
