@@ -56,7 +56,6 @@ jobs:
         run: cmake . -Bbuild
                     -G "${env:GENERATOR}"
                     -A "${env:ARCH}"
-                    -DCMAKE_TOOLCHAIN_FILE="${env:CMAKE_TOOLCHAIN_FILE}"
                     -DCMAKE_INSTALL_PREFIX="${env:CMAKE_INSTALL_PREFIX}"
 
       - name: Build
@@ -66,12 +65,11 @@ jobs:
         run: cmake . -Bbuild
                     -G "${env:GENERATOR}"
                     -A "${env:ARCH}"
-                    -DCMAKE_TOOLCHAIN_FILE="${env:CMAKE_TOOLCHAIN_FILE}"
                     -DCMAKE_INSTALL_PREFIX="${env:CMAKE_INSTALL_PREFIX}"
                     -DBUILD_TESTS=TRUE
 
       - name: Tests
-        working-directory: build
+        working-directory: build/tests
         run: ctest -C ${{ matrix.CONFIG }} --output-on-failure --timeout 540
 
       - name: Install
