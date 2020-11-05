@@ -3,6 +3,8 @@
 
 #include <SFML/Window/Event.hpp>
 
+#include "core/time/Time.h"
+
 #include <functional>
 #include <type_traits>
 #include <typeindex>
@@ -15,6 +17,7 @@ namespace ire::core::gui {
 
     struct RawEvent
     {
+        TimePoint timestamp{};
         bool handled = false;
     };
 

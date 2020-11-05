@@ -14,10 +14,11 @@ namespace ire::core::gui {
 
     void SystemWindow::processEvents()
     {
+        TimePoint timestamp = TimePoint::now();
         sf::Event ev;
         while (m_window.pollEvent(ev))
         {
-            processSfmlEvent(ev);
+            processSfmlEvent(ev, timestamp);
         }
     }
 
@@ -48,20 +49,20 @@ namespace ire::core::gui {
         m_rootPanel = &panel;
     }
 
-    void SystemWindow::processSfmlEvent(sf::Event& ev)
+    void SystemWindow::processSfmlEvent(sf::Event& ev, TimePoint timestamp)
     {
         switch (ev.type)
         {
         case sf::Event::EventType::Closed:
-            processSfmlClosedEvent(ev);
+            processSfmlClosedEvent(ev, timestamp);
             break;
 
         case sf::Event::EventType::MouseButtonPressed:
-            processSfmlMouseButtonPressedEvent(ev);
+            processSfmlMouseButtonPressedEvent(ev, timestamp);
         }
     }
 
-    void SystemWindow::processSfmlClosedEvent(sf::Event& ev)
+    void SystemWindow::processSfmlClosedEvent(sf::Event& ev, TimePoint timestamp)
     {
         WindowClosedEvent translatedEv{};
         emitEvent<WindowClosedEvent>(translatedEv);
@@ -72,7 +73,7 @@ namespace ire::core::gui {
         }
     }
 
-    void SystemWindow::processSfmlMouseButtonPressedEvent(sf::Event& ev)
+    void SystemWindow::processSfmlMouseButtonPressedEvent(sf::Event& ev, TimePoint timestamp)
     {
         MouseButtonDownEvent translatedEv{};
         translatedEv.button = ev.mouseButton.button;

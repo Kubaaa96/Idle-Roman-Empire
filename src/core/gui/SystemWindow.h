@@ -56,11 +56,11 @@ namespace ire::core::gui {
         // of the position of the mouse, etc.
         Widget* m_activeWidget;
 
-        void processSfmlEvent(sf::Event& ev);
+        void processSfmlEvent(sf::Event& ev, TimePoint timestamp);
 
-        void processSfmlClosedEvent(sf::Event& ev);
+        void processSfmlClosedEvent(sf::Event& ev, TimePoint timestamp);
 
-        void processSfmlMouseButtonPressedEvent(sf::Event& ev);
+        void processSfmlMouseButtonPressedEvent(sf::Event& ev, TimePoint timestamp);
     };
 
 }
