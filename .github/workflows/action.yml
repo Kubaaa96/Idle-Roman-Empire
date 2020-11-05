@@ -1,0 +1,6 @@
+name: IRE_cpp
+on: [push, pull_request]
+
+env:
+  REPO: IdleRomanEmpire
+  GITHUB_REPO: Kubaaa96/IdleRomanEmpire 
