@@ -26,7 +26,7 @@ jobs:
     strategy:
       matrix:
         CONFIG: [Debug, Release]
-        steps:
+    steps:
       - name: Update PATH
         run: |
           echo "::add-path::$Env:MSBUILD"
