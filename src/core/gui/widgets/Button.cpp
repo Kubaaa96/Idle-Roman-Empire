@@ -19,7 +19,23 @@ namespace ire::core::gui
 
 	void Button::draw(sf::RenderTarget& target)
 	{
-		target.draw(m_rectangleShape);
+		if (m_state == State::Armed)
+		{
+			auto shape = m_rectangleShape;
+			shape.move(sf::Vector2f(1.0f, 1.0f));
+			shape.setFillColor(shape.getFillColor() + sf::Color(40, 40, 40));
+			target.draw(shape);
+		}
+		else if (m_state == State::Hover)
+		{
+			auto shape = m_rectangleShape;
+			shape.setFillColor(shape.getFillColor() + sf::Color(40, 40, 40));
+			target.draw(shape);
+		}
+		else
+		{
+			target.draw(m_rectangleShape);
+		}
 	}
 	void Button::updateWidget()
 	{

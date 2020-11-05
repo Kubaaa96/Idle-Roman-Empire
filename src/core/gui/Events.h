@@ -3,6 +3,8 @@
 
 #include <SFML/Window/Event.hpp>
 
+#include "core/time/Time.h"
+
 #include <functional>
 #include <type_traits>
 #include <typeindex>
@@ -13,9 +15,14 @@
 
 namespace ire::core::gui {
 
-    struct Event
+    struct RawEvent
     {
+        TimePoint timestamp{};
         bool handled = false;
+    };
+
+    struct TranslatedEvent : RawEvent
+    {
     };
 
     struct EventEmitter
@@ -44,7 +51,7 @@ namespace ire::core::gui {
         template <typename EventT, typename FuncT>
         struct EventListener : AnyEventListener, private FuncT
         {
-            static_assert(std::is_base_of_v<Event, EventT>, "EventT must derive from Event");
+            static_assert(std::is_base_of_v<RawEvent, EventT>, "EventT must derive from Event");
             static_assert(
                 std::is_same_v<
                     decltype(std::declval<FuncT>()(std::declval<EventT&>())),
@@ -177,6 +184,15 @@ namespace ire::core::gui {
             }
         }
 
+        template <typename EventT>
+        void emitEventIfNotHandled(EventT& ev)
+        {
+            if (!ev.handled)
+            {
+                emitEvent<EventT>(ev);
+            }
+        }
+
     private:
         ListenerMapType m_listeners;
 
@@ -192,18 +208,96 @@ namespace ire::core::gui {
         }
     };
 
-    struct MouseDownEvent : Event
+    struct WindowClosedEvent : RawEvent
     {
-        sf::Mouse::Button button;
-        sf::Vector2f coords;
+        bool cancel = false;
     };
 
-    struct MouseUpEvent : Event
+    struct WindowResizedEvent : RawEvent
     {
-        sf::Mouse::Button button;
-        sf::Vector2f coords;
+        sf::Vector2f newSize;
     };
 
+    struct WindowLostFocus : RawEvent
+    {
+    };
+
+    struct WindowGainedFocus : RawEvent
+    {
+    };
+
+    struct TextEnteredEvent : RawEvent
+    {
+        char32_t character;
+    };
+
+    struct KeyDownEvent : RawEvent
+    {
+        sf::Keyboard::Key key;
+        bool alt;
+        bool control;
+        bool shift;
+        bool system;
+    };
+
+    struct KeyUpEvent : RawEvent
+    {
+        sf::Keyboard::Key key;
+        bool alt;
+        bool control;
+        bool shift;
+        bool system;
+    };
+
+    struct MouseWheelScrolledEvent : RawEvent
+    {
+        sf::Mouse::Wheel wheel;
+        float delta;
+        sf::Vector2f position;
+    };
+
+    struct MouseButtonDownEvent : RawEvent
+    {
+        sf::Mouse::Button button;
+        sf::Vector2f position;
+    };
+
+    struct MouseButtonUpEvent : RawEvent
+    {
+        sf::Mouse::Button button;
+        sf::Vector2f position;
+    };
+
+    struct MouseMovedEvent : RawEvent
+    {
+        sf::Vector2f position;
+    };
+
+    struct MouseEnteredWindowEvent : RawEvent
+    {
+    };
+
+    struct MouseLeftWindowEvent : RawEvent
+    {
+    };
+
+    struct TouchBeganEvent : RawEvent
+    {
+        std::uint32_t finger;
+        sf::Vector2f position;
+    };
+
+    struct TouchMovedEvent : RawEvent
+    {
+        std::uint32_t finger;
+        sf::Vector2f position;
+    };
+
+    struct TouchEndedEvent : RawEvent
+    {
+        std::uint32_t finger;
+        sf::Vector2f position;
+    };
 }
 
 #endif // !IRE_EVENTS_H

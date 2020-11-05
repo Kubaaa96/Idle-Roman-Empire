@@ -139,4 +139,19 @@ namespace ire::core::gui
 	{
 		return m_widgets.at(i).get();
 	}
+
+	void Container::onEvent(EventRoot& sender, MouseButtonDownEvent& ev)
+	{
+		forwardEventWithPosition(sender, ev);
+	}
+
+	void Container::onEvent(EventRoot& sender, MouseButtonUpEvent& ev)
+	{
+		forwardEventWithPosition(sender, ev);
+	}
+
+	void Container::onEvent(EventRoot& sender, MouseMovedEvent& ev)
+	{
+		forwardEventWithPosition(sender, ev);
+	}
 }

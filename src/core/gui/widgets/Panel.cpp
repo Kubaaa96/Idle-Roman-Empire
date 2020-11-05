@@ -80,4 +80,19 @@ namespace ire::core::gui
 		m_panelLayout->setOrigin(m_position);
 		m_panelLayout->setLocalPosition({0, 0});
 	}
+
+	void Panel::onEvent(EventRoot& sender, MouseButtonDownEvent& ev)
+	{
+		forwardEvent(sender, ev);
+	}
+
+	void Panel::onEvent(EventRoot& sender, MouseButtonUpEvent& ev)
+	{
+		forwardEvent(sender, ev);
+	}
+
+	void Panel::onEvent(EventRoot& sender, MouseMovedEvent& ev)
+	{
+		forwardEvent(sender, ev);
+	}
 }
