@@ -38,7 +38,7 @@ namespace ire::core::gui
             return m_type;
         }
 
-        void onEvent(MouseButtonDownEvent& ev) override;
+        void onEvent(EventRoot& sender, MouseButtonDownEvent& ev) override;
 
     protected:
         std::unique_ptr<BoxLayout> m_panelLayout;

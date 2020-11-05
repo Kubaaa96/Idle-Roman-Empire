@@ -140,13 +140,13 @@ namespace ire::core::gui
 		return m_widgets.at(i).get();
 	}
 
-	void Container::onEvent(MouseButtonDownEvent& ev)
+	void Container::onEvent(EventRoot& sender, MouseButtonDownEvent& ev)
 	{
 		for (auto& widget : m_widgets)
 		{
 			if (widget->clientBounds().contains(ev.position))
 			{
-				widget->onEvent(ev);
+				widget->onEvent(sender, ev);
 
 				if (ev.handled)
 				{
@@ -155,6 +155,6 @@ namespace ire::core::gui
 			}
 		}
 
-		Widget::onEvent(ev);
+		Widget::onEvent(sender, ev);
 	}
 }

@@ -85,7 +85,7 @@ namespace ire::core::gui
 		return sf::FloatRect(m_position, m_size);
 	}
 
-	void Widget::onEvent(MouseButtonDownEvent& ev)
+	void Widget::onEvent(EventRoot& sender, MouseButtonDownEvent& ev)
 	{
 		emitEventIfNotHandled<MouseButtonDownEvent>(ev);
 	}

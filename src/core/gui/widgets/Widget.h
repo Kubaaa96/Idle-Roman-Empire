@@ -4,6 +4,7 @@
 #include "WidgetType.h"
 
 #include "core/gui/Events.h"
+#include "core/gui/EventRoot.h"
 
 #include <SFML/Graphics.hpp>
 
@@ -46,7 +47,7 @@ namespace ire::core::gui
 
         [[nodiscard]] sf::FloatRect clientBounds() const;
 
-        virtual void onEvent(MouseButtonDownEvent& ev);
+        virtual void onEvent(EventRoot& sender, MouseButtonDownEvent& ev);
 
     protected:
         std::string m_name;

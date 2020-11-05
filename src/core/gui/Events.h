@@ -267,8 +267,7 @@ namespace ire::core::gui {
 
     struct MouseMovedEvent : RawEvent
     {
-        sf::Vector2f prevPosition;
-        sf::Vector2f currPosition;
+        sf::Vector2f position;
     };
 
     struct MouseEnteredWindowEvent : RawEvent

@@ -46,7 +46,7 @@ namespace ire::core::gui
 
         const WidgetType getType() const override;
 
-        void onEvent(MouseButtonDownEvent& ev) override;
+        void onEvent(EventRoot& sender, MouseButtonDownEvent& ev) override;
 
     protected:
         std::vector<std::unique_ptr<Widget>> m_widgets;

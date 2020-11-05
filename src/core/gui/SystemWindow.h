@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "Events.h"
+#include "EventRoot.h"
 
 #include "widgets/Panel.h"
 
@@ -11,13 +12,14 @@
 
 namespace ire::core::gui {
 
-    struct SystemWindow : EventEmitter
+    struct SystemWindow : EventEmitter, EventRoot
     {
 
         template <typename... Ts>
         SystemWindow(Ts&&... args) :
             m_window(std::forward<Ts>(args)...),
-            m_rootPanel(nullptr)
+            m_rootPanel(nullptr),
+            m_activeWidget(nullptr)
         {
         }
 
@@ -43,9 +45,16 @@ namespace ire::core::gui {
 
         void setRootPanel(Panel& panel);
 
+        void setActiveWidget(Widget& widget) override;
+        void resetActiveWidget() override;
+
     private:
         sf::RenderWindow m_window;
         Panel* m_rootPanel;
+
+        // The currently active widget receives all events regardless
+        // of the position of the mouse, etc.
+        Widget* m_activeWidget;
 
         void processSfmlEvent(sf::Event& ev);
 

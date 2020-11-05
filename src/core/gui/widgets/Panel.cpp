@@ -81,10 +81,10 @@ namespace ire::core::gui
 		m_panelLayout->setLocalPosition({0, 0});
 	}
 
-	void Panel::onEvent(MouseButtonDownEvent& ev)
+	void Panel::onEvent(EventRoot& sender, MouseButtonDownEvent& ev)
 	{
-		m_panelLayout->onEvent(ev);
+		m_panelLayout->onEvent(sender, ev);
 
-		Widget::onEvent(ev);
+		Widget::onEvent(sender, ev);
 	}
 }

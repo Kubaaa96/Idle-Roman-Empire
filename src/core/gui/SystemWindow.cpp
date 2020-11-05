@@ -82,13 +82,32 @@ namespace ire::core::gui {
 
         if (isOpen() && m_rootPanel != nullptr)
         {
+            if (m_activeWidget != nullptr)
+            {
+                m_activeWidget->onEvent(*this, translatedEv);
+                if (translatedEv.handled)
+                {
+                    return;
+                }
+            }
+
             if (m_rootPanel->clientBounds().contains(translatedEv.position))
             {
-                m_rootPanel->onEvent(translatedEv);
+                m_rootPanel->onEvent(*this, translatedEv);
             }
 
             emitEventIfNotHandled<MouseButtonDownEvent>(translatedEv);
         }
+    }
+
+    void SystemWindow::setActiveWidget(Widget& widget)
+    {
+        m_activeWidget = &widget;
+    }
+
+    void SystemWindow::resetActiveWidget()
+    {
+        m_activeWidget = nullptr;
     }
 
 }
