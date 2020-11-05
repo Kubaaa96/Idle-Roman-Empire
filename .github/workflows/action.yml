@@ -59,16 +59,16 @@ jobs:
                     -DSFML_DIR="${env.SFML_DIR}"
                     -DCMAKE_INSTALL_PREFIX="${env:CMAKE_INSTALL_PREFIX}"
 
-      - name: Build
-        run: msbuild build/ALL_BUILD.vcxproj /property:Configuration=${{ matrix.CONFIG }} /verbosity:minimal /m
-
-      - name: Configure
+      - name: Configure for tests
         run: cmake . -Bbuild
                     -G "${env:GENERATOR}"
                     -A "${env:ARCH}"
                     -DSFML_DIR="${env.SFML_DIR}"
                     -DCMAKE_INSTALL_PREFIX="${env:CMAKE_INSTALL_PREFIX}"
                     -DBUILD_TESTS=ON
+
+      - name: Build
+        run: msbuild build/ALL_BUILD.vcxproj /property:Configuration=${{ matrix.CONFIG }} /verbosity:minimal /m
 
       - name: Tests
         working-directory: build/tests
