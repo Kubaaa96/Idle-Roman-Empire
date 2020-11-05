@@ -6,10 +6,6 @@ env:
   GITHUB_REPO: Kubaaa96/IdleRomanEmpire 
 
 jobs:
-  linux:
-    name: Linux
-    runs-on: ubuntu-latest
-
 
   windows:
     name: Windows
