@@ -1,0 +1,81 @@
+name: IdleRomanEmpire_x64-windows
+on: [push, pull_request]
+
+env:
+  REPO: IdleRomanEmpire
+  GITHUB_REPO: Kubaaa96/IdleRomanEmpire
+
+jobs:
+
+  windows:
+    name: Windows
+    runs-on: windows-latest
+    env:
+      VCPKG_DEFAULT_TRIPLET: x64-windows
+      GENERATOR: "Visual Studio 16 2019"
+      ARCH: "x64"
+      CMAKE_INSTALL_PREFIX: "${{ github.workspace }}\\install"
+    strategy:
+      matrix:
+        CONFIG:
+          - {
+            BUILD_TYPE: Release
+          }
+          - {
+            BUILD_TYPE: Debug
+          }
+    steps:
+      - name: Print environment variables
+        run: env
+
+      # Since there is no good way of setting a dynamic path for cached
+      # vcpkg packages we currently hardcode the path.
+      # Caching will break if the VCPKG_ROOT changes.
+      - name: Setup vcpkg packages cache
+        uses: actions/cache@v1
+        id: cache-vcpkg-packages
+        with:
+          path: C:/vcpkg/packages
+          key: cache-vcpkg-packages-x64-windows-45e5a67
+
+      - name: Setup vcpkg installed cache
+        uses: actions/cache@v1
+        id: cache-vcpkg-installed
+        with:
+          path: C:/vcpkg/installed
+          key: cache-vcpkg-installed-x64-windows-45e5a67
+
+      - name: Clone the IRE git repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 50
+
+      - name: Install SFML
+        run: |
+          vcpkg install sfml:x64-windows
+          vcpkg update
+      - name: vcpkg integrate install
+        run: vcpkg integrate install
+
+      - name: Create IRE build directories
+        run: mkdir -p install
+
+      - name: Configure IRE
+        run: cmake . -Bbuild
+                    -G "${env:GENERATOR}"
+                    -A "${env:ARCH}"
+                    -DCMAKE_INSTALL_PREFIX="./install"
+
+      - name: Configure IRE for tests
+        run: cmake . -Bbuild
+                    -G "${env:GENERATOR}"
+                    -A "${env:ARCH}"
+                    -DCMAKE_INSTALL_PREFIX="./install"
+                    -DBUILD_TESTS=ON
+
+      - name: Build and install IRE
+        run: cmake --build ./build --config ${{ matrix.CONFIG.BUILD_TYPE }} --target install
+
+      - name: Run IRE Tests
+        working-directory: build/tests
+        run: ctest -C ${{ matrix.CONFIG.BUILD_TYPE }} --output-on-failure --timeout 540

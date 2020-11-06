@@ -1,0 +1,129 @@
+name: IdleRomanEmpire_x64-linux
+on: [push, pull_request]
+
+env:
+  REPO: IdleRomanEmpire
+  GITHUB_REPO: Kubaaa96/IdleRomanEmpire
+
+jobs:
+
+  linux:
+    name: Linux (Ubuntu)
+    runs-on: ubuntu-latest
+    env:
+      VCPKG_DEFAULT_TRIPLET: x64-linux
+      SFML_DIR: ${{ github.workspace }}/SFML/install/lib/cmake/SFML
+    strategy:
+      matrix:
+        CONFIG:
+          - {
+            BUILD_TYPE: Release,
+            CC: gcc-10,
+            CXX: g++-10
+          }
+          - {
+            BUILD_TYPE: Debug,
+            CC: gcc-10,
+            CXX: g++-10
+          }
+          - {
+            BUILD_TYPE: Release,
+            CC: clang-9,
+            CXX: clang++-9
+          }
+          - {
+            BUILD_TYPE: Debug,
+            CC: clang-9,
+            CXX: clang++-9
+          }
+    steps:
+      - name: Print environment variables
+        run: env
+
+      - name: Print compiler version
+        env:
+          CC: ${{ matrix.CONFIG.CC }}
+          CXX: ${{ matrix.CONFIG.CXX }}
+        run: |
+          "$CC" --version
+          "$CXX" --version
+
+      - name: Install SFML dependencies
+        run: sudo apt-get install libx11-dev libxrandr-dev libxi-dev libxcursor-dev libudev-dev libgl1-mesa-dev libopenal-dev libvorbis-dev libflac++-dev build-essential
+
+      - name: Setup SFML cache
+        uses: actions/cache@v1
+        id: cache-SFML
+        with:
+          path: ./SFML
+          key: cache-SFML-x64-linux-${{ matrix.CONFIG.BUILD_TYPE }}-45e5a67
+
+      # We cannot use VCPKG because they only have a statically
+      # linked version of SFML and it causes problems on linux.
+      - name: Clone the SFML git repo
+        if: steps.cache-SFML.outputs.cache-hit != 'true'
+        uses: actions/checkout@v2
+        with:
+          repository: SFML/SFML
+          ref: master
+          path: SFML
+          fetch-depth: 50
+
+      - name: Prepare SFML build directories
+        if: steps.cache-SFML.outputs.cache-hit != 'true'
+        working-directory: SFML
+        run: |
+          mkdir -p install
+          mkdir -p build
+
+      - name: Configure SFML
+        if: steps.cache-SFML.outputs.cache-hit != 'true'
+        working-directory: SFML
+        run: cmake . -Bbuild
+                    -DCMAKE_INSTALL_PREFIX=./install
+                    -DSFML_BUILD_FRAMEWORKS=FALSE
+                    -DBUILD_SHARED_LIBS=TRUE
+                    -DCMAKE_C_COMPILER="${{ matrix.CONFIG.CC }}"
+                    -DCMAKE_CXX_COMPILER="${{ matrix.CONFIG.CXX }}"
+
+      - name: Build and install SFML
+        if: steps.cache-SFML.outputs.cache-hit != 'true'
+        working-directory: SFML
+        run: cmake --build ./build --config ${{ matrix.CONFIG.BUILD_TYPE }} --target install
+
+      - name: Clone the IRE git repo
+        uses: actions/checkout@v2
+        with:
+          path: IRE
+          fetch-depth: 50
+
+      - name: Create IRE build directories
+        working-directory: IRE
+        run: mkdir -p install
+
+      - name: Configure IRE
+        working-directory: IRE
+        run: cmake . -Bbuild
+                    -DCMAKE_INSTALL_PREFIX=./install
+                    -DCMAKE_BUILD_TYPE="${{ matrix.CONFIG.BUILD_TYPE }}"
+                    -DCMAKE_C_COMPILER="${{ matrix.CONFIG.CC }}"
+                    -DCMAKE_CXX_COMPILER="${{ matrix.CONFIG.CXX }}"
+
+      - name: Configure IRE for tests
+        working-directory: IRE
+        run: cmake . -Bbuild
+                    -DCMAKE_INSTALL_PREFIX=./install
+                    -DCMAKE_BUILD_TYPE="${{ matrix.CONFIG.BUILD_TYPE }}"
+                    -DCMAKE_C_COMPILER="${{ matrix.CONFIG.CC }}"
+                    -DCMAKE_CXX_COMPILER="${{ matrix.CONFIG.CXX }}"
+                    -DBUILD_TESTS=ON
+
+      - name: Build and install IRE
+        working-directory: IRE
+        run: cmake --build ./build --config ${{ matrix.CONFIG.BUILD_TYPE }} --target install -- -j2
+
+      - name: Run IRE tests
+        working-directory: IRE/build/tests
+        env:
+          LD_LIBRARY_PATH: "/lib:/usr/lib:/usr/local/lib:${{ github.workspace }}/SFML/install/lib"
+        run: ctest -C ${{ matrix.CONFIG.BUILD_TYPE }} --output-on-failure --timeout 540
