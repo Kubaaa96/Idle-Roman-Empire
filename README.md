@@ -8,51 +8,36 @@
 - [About Project](#about-project)
 - [Building](#building)
 - [Roadmap](#roadmap)
-- [Changelog](#changelog)
 - [Contributing](#contributing)
 - [Licence](#licence)
 - [Contact](#contact)
 
 ## About Project
-This will be idle game based on Roman Empire with 3 major states where you play as: Slave, Civilian and Industry Owner. Main objective is to earn money. On Slave phase you can't earn money but get experience in choosen industry related skills. More will be described in future wiki.
+This will be an idle game based on the Roman Empire where you progress through the census rank starting from being a slave and progressing through many generations. Main objective is to earn money. On Slave phase you can't earn money but get experience in choosen industry related skills. More will be described in future wiki.
 
 ## Building
 
-### Prerequisits
-Before you can build from sources you need to download SFML 
-
+Building this project requires [SFML](https://github.com/SFML/SFML) to be installed. You can either build it from source or acquire it from a package manager like VCPKG.
 
 Clone:
 ```
 git clone https://github.com/Kubaaa96/IdleRomanEmpire.git
 ```
-Configure:
-If you want you can use [CMake Gui](https://cmake.org/runningcmake/) of course while setting SFML path in there using SFML_DIR parameter, and if you want tests after initial configuration set BUILD_TESTS to True, but if you want to use commands feel free:
-```
 
+This project uses cmake, so you can build it simply by first configuring with the build system of choice
 ```
-
-Generate:
+cmake . -Bbuild -DCMAKE_INSTALL_PREFIX=./install -DCMAKE_BUILD_TYPE=Release
 ```
-
+and then compiling
 ```
+cmake --build ./build --config Release --target install
+```
+Depending on the way you aquired SFML you may need to provide `-DSFML_DIR=<path>` with the path where SFMLConfig.cmake can be found (if cmake cannot locate this file on its own)
 
-Build:
+You can also refer to github workflows for examples with complete build pipelines.
 
 ## Roadmap
 See the [open issues](https://github.com/Kubaaa96/IdleRomanEmpire/issues) for a list of proposed features (and known issues).
-
-## Changelog
-
-### v0.1.0
-- [Widget system](https://github.com/Kubaaa96/IdleRomanEmpire/pull/15)
-- [Events for Widgets Part 1](https://github.com/Kubaaa96/IdleRomanEmpire/pull/21)
-- [Events for Widgets Part 2](https://github.com/Kubaaa96/IdleRomanEmpire/pull/22)
-- [Basic Time Handling](https://github.com/Kubaaa96/IdleRomanEmpire/pull/11)
-- [Event scheduler, merge after Time handling](https://github.com/Kubaaa96/IdleRomanEmpire/pull/12)
-- [Resource Menager](https://github.com/Kubaaa96/IdleRomanEmpire/pull/16)
-- Basic State system
-- Basic View
 
 ## Contributing
 
