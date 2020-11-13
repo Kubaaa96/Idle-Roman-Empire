@@ -38,15 +38,15 @@ namespace ire::core::gui {
 
         renderTarget.clear();
 
-        if (m_rootPanel)
+        if (m_rootGroup)
         {
-            m_rootPanel->draw(renderTarget);
+            m_rootGroup->draw(renderTarget);
         }
     }
 
-    void SystemWindow::setRootPanel(Panel& panel)
+    void SystemWindow::setRootGroup(Group& group)
     {
-        m_rootPanel = &panel;
+        m_rootGroup = &group;
     }
 
     void SystemWindow::processSfmlEvent(sf::Event& ev, TimePoint timestamp)
@@ -141,6 +141,11 @@ namespace ire::core::gui {
             // because it was intercepted.
             reemitLastMouseMoved();
         }
+    }
+
+    void SystemWindow::setCurrentState(std::unique_ptr<state::State> state)
+    {
+        m_currentState = std::move(state);
     }
 
     void SystemWindow::reemitLastMouseMoved()

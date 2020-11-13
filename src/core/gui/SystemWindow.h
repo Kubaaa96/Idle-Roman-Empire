@@ -8,6 +8,8 @@
 
 #include "widgets/Panel.h"
 
+#include "../states/State.h"
+
 #include <utility>
 
 namespace ire::core::gui {
@@ -18,7 +20,8 @@ namespace ire::core::gui {
         template <typename... Ts>
         SystemWindow(Ts&&... args) :
             m_window(std::forward<Ts>(args)...),
-            m_rootPanel(nullptr),
+            m_currentState(nullptr),
+            m_rootGroup(nullptr),
             m_activeWidget(nullptr),
             m_lastMousePosition(-1, -1)
         {
@@ -44,14 +47,18 @@ namespace ire::core::gui {
 
         void draw();
 
-        void setRootPanel(Panel& panel);
+        void setRootGroup(Group& panel);
 
         void setActiveWidget(Widget& widget) override;
         void resetActiveWidget(Widget& widget) override;
 
+        void setCurrentState(std::unique_ptr<state::State> state);
+
     private:
         sf::RenderWindow m_window;
-        Panel* m_rootPanel;
+        Group* m_rootGroup;
+
+        std::unique_ptr<state::State> m_currentState;
 
         // The currently active widget receives all events regardless
         // of the position of the mouse, etc.
@@ -74,7 +81,7 @@ namespace ire::core::gui {
         template <typename EventT>
         void forwardEventWithPosition(EventT& ev)
         {
-            if (isOpen() && m_rootPanel != nullptr)
+            if (isOpen() && m_rootGroup != nullptr)
             {
                 if (m_activeWidget != nullptr)
                 {
@@ -85,9 +92,9 @@ namespace ire::core::gui {
                     }
                 }
 
-                if (m_rootPanel->clientBounds().contains(ev.position))
+                if (m_rootGroup->clientBounds().contains(ev.position))
                 {
-                    m_rootPanel->onEvent(*this, ev);
+                    m_rootGroup->onEvent(*this, ev);
                 }
 
                 emitEventIfNotHandled<EventT>(ev);

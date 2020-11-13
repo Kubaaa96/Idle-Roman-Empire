@@ -21,7 +21,7 @@ namespace ire::client {
             [](ire::core::gui::MouseClickEvent& ev) { std::cout << "Clicked btn5Ptr button\n"; });
 
         btn6Ptr->addEventListener<ire::core::gui::MouseClickEvent>(
-            [](ire::core::gui::MouseClickEvent& ev) { std::cout << "Clicked btn6Ptr button\n"; });
+            [](ire::core::gui::MouseClickEvent& ev) { std::cout << "Clicked btn6Ptr button " << ev.position.x << "\n"; });
 
         verticalLayout->add(std::move(btn5Ptr), "Button5");
         verticalLayout->add(std::move(btn6Ptr), "Button6");
@@ -53,13 +53,37 @@ namespace ire::client {
         horizontalLayout->setLayoutStretch({ 3, 6, 12, 2, 1 });
 
         panel = ire::core::gui::Panel::create({ 700, 400 }, std::move(horizontalLayout), "HorizontalLayout");
-        //panel->setPosition({200, 200});
-        panel->setPosition({ 200,200 });
+        panel->setPosition({ 300,300 });
         panel->setOpacity(200);
         panel->setOutlineColor(sf::Color::Magenta);
         panel->setOutlineThickness(7);
 
-        setRootPanel(*panel);
+        auto verticalLayout2 = ire::core::gui::VerticalLayout::create({ 100, 200 });
+        verticalLayout2->setSpaces(5);
+        verticalLayout2->setMargins({ 5, 5, 5, 5 });
+
+        auto btn10Ptr = ire::core::gui::Button::create("elo");
+        btn10Ptr->addEventListener<ire::core::gui::MouseClickEvent>(
+            [](ire::core::gui::MouseClickEvent& ev) { std::cout << "Clicked btn10Ptr button\n"; });
+        verticalLayout2->add(std::move(btn10Ptr), "Button10");
+
+        auto btn11Ptr = ire::core::gui::Button::create("elo2");
+        btn11Ptr->addEventListener<ire::core::gui::MouseClickEvent>(
+            [](ire::core::gui::MouseClickEvent& ev) { std::cout << "Clicked btn11Ptr button\n"; });
+
+        verticalLayout2->add(std::move(btn11Ptr), "Button11");
+
+        panel2 = ire::core::gui::Panel::create({ 100, 200 }, std::move(verticalLayout2), "VerticalLayout2");
+        panel2->setPosition({ 100, 100 });
+        panel2->setOutlineColor(sf::Color::Red);
+        panel2->setOutlineThickness(7);
+
+        group = ire::core::gui::Group::create(static_cast<sf::Vector2f>(getRenderTarget().getSize()));
+        group->add(std::move(panel), "panel1");
+        group->add(std::move(panel2), "panel2");
+
+        //setRootPanel(*panel);
+        setRootGroup(*group);
     }
 
 }
