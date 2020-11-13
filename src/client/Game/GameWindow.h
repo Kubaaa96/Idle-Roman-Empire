@@ -10,6 +10,7 @@
 #include "core/gui/widgets/HorizontalLayout.h"
 #include "core/gui/widgets/VerticalLayout.h"
 #include "client/states/IntroState.h"
+#include "client/states/GameState.h"
 
 namespace ire::client {
 
@@ -21,18 +22,13 @@ namespace ire::client {
         GameWindow(Ts&&... args) :
             BaseType(std::forward<Ts>(args)...)
         {
-            // StateMachine runinng current state
             //auto introState = std::make_unique<state::IntroState>();
             //setCurrentState(introState);
-            init();
+            auto gameState = std::make_unique<state::GameState>(getRenderTarget().getSize());
+            setRootGroup(*gameState->drawGUI());
+            //init();
         }
-
     private:
-        std::unique_ptr<ire::core::gui::Group> group;
-        std::unique_ptr<ire::core::gui::Panel> panel;
-        std::unique_ptr<ire::core::gui::Panel> panel2;
-        std::unique_ptr<ire::core::gui::HorizontalLayout> horizontalLayout;
-        std::unique_ptr<ire::core::gui::VerticalLayout> verticalLayout;
 
         void init();
     };
