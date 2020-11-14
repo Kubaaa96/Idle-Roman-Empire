@@ -146,6 +146,7 @@ namespace ire::core::gui {
     void SystemWindow::setCurrentState(std::unique_ptr<state::State> state)
     {
         m_currentState = std::move(state);
+        setRootGroup(*m_currentState->drawGUI());
     }
 
     void SystemWindow::reemitLastMouseMoved()

@@ -25,7 +25,7 @@ namespace ire::client {
             //auto introState = std::make_unique<state::IntroState>();
             //setCurrentState(introState);
             auto gameState = std::make_unique<state::GameState>(getRenderTarget().getSize());
-            setRootGroup(*gameState->drawGUI());
+            setCurrentState(std::move(gameState));
             //init();
         }
     private:

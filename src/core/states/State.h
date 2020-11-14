@@ -11,6 +11,7 @@ namespace ire::core::state
         virtual gui::Group* drawGUI() = 0;
     protected:
         const sf::Vector2f m_sizeOfWindow;
+
     };
 }
 
