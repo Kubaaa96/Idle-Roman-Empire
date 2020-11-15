@@ -20,7 +20,6 @@ namespace ire::core::gui {
         template <typename... Ts>
         SystemWindow(Ts&&... args) :
             m_window(std::forward<Ts>(args)...),
-            m_currentState(nullptr),
             m_rootGroup(nullptr),
             m_activeWidget(nullptr),
             m_lastMousePosition(-1, -1)
@@ -54,16 +53,12 @@ namespace ire::core::gui {
         void setActiveWidget(Widget& widget) override;
         void resetActiveWidget(Widget& widget) override;
 
-        void setCurrentState(std::unique_ptr<state::State> state);
-
     protected:
         state::StateMachine m_machine;
 
     private:
         sf::RenderWindow m_window;
         Group* m_rootGroup;
-
-        std::unique_ptr<state::State> m_currentState;
 
         // The currently active widget receives all events regardless
         // of the position of the mouse, etc.
