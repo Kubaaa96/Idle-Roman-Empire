@@ -10,7 +10,6 @@
 #include "core/gui/widgets/HorizontalLayout.h"
 #include "core/gui/widgets/VerticalLayout.h"
 #include "client/states/IntroState.h"
-#include "client/states/GameState.h"
 #include "core/states/StateMachine.h"
 
 namespace ire::client {
@@ -24,7 +23,7 @@ namespace ire::client {
             BaseType(std::forward<Ts>(args)...)
         {
 
-            m_machine.run(core::state::StateMachine::build<state::GameState>(m_machine, *this, true));
+            m_machine.run(core::state::StateMachine::build<state::IntroState>(m_machine, *this, true));
 
         }
     private:

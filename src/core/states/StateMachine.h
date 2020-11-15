@@ -22,7 +22,6 @@ namespace ire::core::state
         void nextState();
         void lastState();
 
-        void update();
         void draw();
 
         bool running() const;

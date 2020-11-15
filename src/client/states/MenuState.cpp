@@ -1,5 +1,6 @@
 #include "MenuState.h"
 #include "client/Game/GameWindow.h"
+#include "GameState.h"
 #include <iostream>
 namespace ire::client::state
 {

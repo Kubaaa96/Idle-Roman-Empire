@@ -1,7 +1,7 @@
 #include "GameState.h"
 #include "client/Game/GameWindow.h"
+#include "MenuState.h"
 #include <iostream>
-#include "IntroState.h"
 
 namespace ire::client::state
 {
@@ -29,7 +29,6 @@ namespace ire::client::state
     core::gui::Group* GameState::drawGUI()
     {
         verticalLayout = ire::core::gui::VerticalLayout::create({ 500, 400 });
-        //verticalLayout->setPosition({ 100, 100 });
         verticalLayout->setSpaces(5);
         verticalLayout->setMargins({ 0, 0, 15, 15 });
         auto btn5Ptr = ire::core::gui::Button::create("test");
@@ -40,8 +39,8 @@ namespace ire::client::state
         btn5Ptr->addEventListener<ire::core::gui::MouseClickEvent>(
             [=](ire::core::gui::MouseClickEvent& ev)
             { 
-                std::cout << "Clicked btn5Ptr button\n";
-                m_next = core::state::StateMachine::build<IntroState>(m_machine, m_window, true);
+                std::cout << "Clicked btn5Ptr button, Game State\n";
+                m_next = core::state::StateMachine::build<MenuState>(m_machine, m_window, false);
             });
 
         btn6Ptr->addEventListener<ire::core::gui::MouseClickEvent>(
