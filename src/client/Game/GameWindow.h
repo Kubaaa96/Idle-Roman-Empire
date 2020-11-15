@@ -23,16 +23,12 @@ namespace ire::client {
         GameWindow(Ts&&... args) :
             BaseType(std::forward<Ts>(args)...)
         {
-            //auto introState = std::make_unique<state::IntroState>();
-            //setCurrentState(introState);
-            //auto gameState = std::make_unique<state::GameState>(getRenderTarget().getSize());
-            //setCurrentState(std::move(gameState));
+
             m_machine.run(core::state::StateMachine::build<state::GameState>(m_machine, *this, true));
-            //init();
+
         }
     private:
 
-        void init();
     };
 
 }

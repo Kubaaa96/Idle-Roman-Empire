@@ -6,8 +6,4 @@
 
 namespace ire::client {
 
-    void GameWindow::init() 
-    {
-    }
-
 }
