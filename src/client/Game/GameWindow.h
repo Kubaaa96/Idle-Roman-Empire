@@ -11,6 +11,7 @@
 #include "core/gui/widgets/VerticalLayout.h"
 #include "client/states/IntroState.h"
 #include "client/states/GameState.h"
+#include "core/states/StateMachine.h"
 
 namespace ire::client {
 
@@ -24,8 +25,9 @@ namespace ire::client {
         {
             //auto introState = std::make_unique<state::IntroState>();
             //setCurrentState(introState);
-            auto gameState = std::make_unique<state::GameState>(getRenderTarget().getSize());
-            setCurrentState(std::move(gameState));
+            //auto gameState = std::make_unique<state::GameState>(getRenderTarget().getSize());
+            //setCurrentState(std::move(gameState));
+            m_machine.run(core::state::StateMachine::build<state::GameState>(m_machine, *this, true));
             //init();
         }
     private:

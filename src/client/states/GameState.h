@@ -9,13 +9,28 @@
 #include "core/gui/widgets/HorizontalLayout.h"
 #include "core/gui/widgets/VerticalLayout.h"
 
+namespace ire::core::gui
+{
+    struct SystemWindow;
+}
+namespace ire::core::state
+{
+    struct StateMachine;
+}
+
 namespace ire::client::state
 {
     // Temporary State in future there will be state for each different Action involving 
     // different GUI and behaviour like Different industries 
     struct GameState : core::state::State
     {
-        GameState(const sf::Vector2u sizeOfWindow);
+        GameState(core::state::StateMachine& machine, core::gui::SystemWindow& window, bool replace = true);
+
+        void pause() override;
+        void resume() override;
+
+        void draw() override;
+
         core::gui::Group* drawGUI() override;
 
     private:

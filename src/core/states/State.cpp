@@ -2,8 +2,18 @@
 
 namespace ire::core::state
 {
-    State::State(const sf::Vector2u sizeOfWindow)
-        : m_sizeOfWindow(static_cast<sf::Vector2f>(sizeOfWindow))
+    State::State(StateMachine& machine, gui::SystemWindow& window, bool replace)
+        : m_machine{ machine }
+        , m_window{ window }
+        , m_replacing{ replace }
     {
+    }
+    std::unique_ptr<State> State::next()
+    {
+        return std::move(m_next);
+    }
+    bool State::isReplacing() const
+    {
+        return m_replacing;
     }
 }

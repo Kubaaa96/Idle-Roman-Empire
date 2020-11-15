@@ -1,12 +1,30 @@
 #include "GameState.h"
-
+#include "client/Game/GameWindow.h"
 #include <iostream>
+#include "IntroState.h"
 
 namespace ire::client::state
 {
-    GameState::GameState(const sf::Vector2u sizeOfWindow)
-        : State(sizeOfWindow)
+    GameState::GameState(core::state::StateMachine& machine, core::gui::SystemWindow& window, bool replace)
+        : State{ machine, window, replace}
     {
+        m_window.setRootGroup(*drawGUI());
+        std::cout << "GameState Init\n";
+    }
+
+    void GameState::pause()
+    {
+        std::cout << "GameState Pause\n";
+    }
+
+    void GameState::resume()
+    {
+        std::cout << "GameState Resume\n";
+    }
+
+    void GameState::draw()
+    {    
+        m_window.draw();
     }
     core::gui::Group* GameState::drawGUI()
     {
@@ -20,7 +38,11 @@ namespace ire::client::state
         auto editBox8Ptr = ire::core::gui::EditBox::create("test1");
 
         btn5Ptr->addEventListener<ire::core::gui::MouseClickEvent>(
-            [](ire::core::gui::MouseClickEvent& ev) { std::cout << "Clicked btn5Ptr button\n"; });
+            [=](ire::core::gui::MouseClickEvent& ev)
+            { 
+                std::cout << "Clicked btn5Ptr button\n";
+                m_next = core::state::StateMachine::build<IntroState>(m_machine, m_window, true);
+            });
 
         btn6Ptr->addEventListener<ire::core::gui::MouseClickEvent>(
             [](ire::core::gui::MouseClickEvent& ev) { std::cout << "Clicked btn6Ptr button " << ev.position.x << "\n"; });
@@ -80,7 +102,7 @@ namespace ire::client::state
         panel2->setOutlineColor(sf::Color::Red);
         panel2->setOutlineThickness(7);
 
-        group = ire::core::gui::Group::create(m_sizeOfWindow);
+        group = ire::core::gui::Group::create(static_cast<sf::Vector2f>(m_window.getRenderTarget().getSize()));
         group->add(std::move(panel), "panel1");
         group->add(std::move(panel2), "panel2");
         

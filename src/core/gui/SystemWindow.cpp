@@ -28,8 +28,13 @@ namespace ire::core::gui {
     }
 
     void SystemWindow::display()
-    {
+    {     
         m_window.display();
+    }
+
+    void SystemWindow::update()
+    {
+        m_machine.nextState();
     }
 
     void SystemWindow::draw()

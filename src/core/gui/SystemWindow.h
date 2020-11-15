@@ -9,7 +9,7 @@
 #include "widgets/Panel.h"
 
 #include "../states/State.h"
-
+#include "core/states/StateMachine.h"
 #include <utility>
 
 namespace ire::core::gui {
@@ -45,6 +45,8 @@ namespace ire::core::gui {
 
         void display();
 
+        void update();
+
         void draw();
 
         void setRootGroup(Group& panel);
@@ -53,6 +55,9 @@ namespace ire::core::gui {
         void resetActiveWidget(Widget& widget) override;
 
         void setCurrentState(std::unique_ptr<state::State> state);
+
+    protected:
+        state::StateMachine m_machine;
 
     private:
         sf::RenderWindow m_window;

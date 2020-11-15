@@ -18,7 +18,7 @@ namespace ire::core {
             {
                 break;
             }
-
+            m_window.update();
             m_window.draw();
             m_window.display();
         }
