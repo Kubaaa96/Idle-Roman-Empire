@@ -5,40 +5,42 @@
 
 namespace ire::client::state
 {
-    IntroState::IntroState(core::state::StateMachine& machine, core::gui::SystemWindow& window, bool replace)
-        : State {machine, window, replace}
+    IntroState::IntroState(core::state::StateMachine& stateMachine, core::gui::SystemWindow& window, bool replace)
+        : State { stateMachine, window, replace}
     {
-        m_window.setRootGroup(*drawGUI());
+        m_window.setRootGroup(*initializeGUI());
         std::cout << "IntroState Init\n";
-    }
-
-    void IntroState::pause()
-    {
-        std::cout << "IntroState Pause\n";
-    }
-
-    void IntroState::resume()
-    {
-        std::cout << "IntroState Resume\n";
     }
 
     void IntroState::draw()
     {
         m_window.draw();
     }
-    core::gui::Group* IntroState::drawGUI()
+    core::gui::Group* IntroState::initializeGUI()
     {
-        auto btn1Ptr = ire::core::gui::Button::create("test");
-        btn1Ptr->setSize({ 100, 100 });
-        btn1Ptr->addEventListener<ire::core::gui::MouseClickEvent>(
+        auto labelIntroText = ire::core::gui::Label::create("Welcome in Idle Roman Empire");
+        
+        auto buttonContinue = ire::core::gui::Button::create("Continue");
+        buttonContinue->addEventListener<ire::core::gui::MouseClickEvent>(
             [=](ire::core::gui::MouseClickEvent& ev)
             {
                 std::cout << "Clicked btn1Ptr button, Intro State\n";
-                m_next = core::state::StateMachine::build<MenuState>(m_machine, m_window, true);
+                m_next = std::make_unique<MenuState>(m_stateMachine, m_window, true);
             });
 
-        group = ire::core::gui::Group::create(static_cast<sf::Vector2f>(m_window.getRenderTarget().getSize()));
-        group->add(std::move(btn1Ptr), "Test1");
+        const auto currentSizeOfViewPort = static_cast<sf::Vector2f>(m_window.getRenderTarget().getSize());
+
+        auto vLayoutMain = ire::core::gui::VerticalLayout::create(currentSizeOfViewPort);
+
+        vLayoutMain->add(std::move(labelIntroText), "labelIntroText");
+        vLayoutMain->add(std::move(buttonContinue), "buttonContinue");
+
+        vLayoutMain->setMargins({ 50, 50, 50, 50 });
+        vLayoutMain->setSpaces( 20 );
+        vLayoutMain->setLayoutStretch({ 3, 1 });
+
+        group = ire::core::gui::Group::create(currentSizeOfViewPort);
+        group->add(std::move(vLayoutMain), "layoutMain");
         return group.release();
     }
 }

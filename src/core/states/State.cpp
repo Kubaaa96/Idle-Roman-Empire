@@ -2,8 +2,8 @@
 
 namespace ire::core::state
 {
-    State::State(StateMachine& machine, gui::SystemWindow& window, bool replace)
-        : m_machine{ machine }
+    State::State(StateMachine& stateMachine, gui::SystemWindow& window, bool replace)
+        : m_stateMachine{ stateMachine }
         , m_window{ window }
         , m_replacing{ replace }
     {

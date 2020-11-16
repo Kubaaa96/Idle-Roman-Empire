@@ -5,28 +5,18 @@
 
 namespace ire::client::state
 {
-    GameState::GameState(core::state::StateMachine& machine, core::gui::SystemWindow& window, bool replace)
-        : State{ machine, window, replace}
+    GameState::GameState(core::state::StateMachine& stateMachine, core::gui::SystemWindow& window, bool replace)
+        : State{ stateMachine, window, replace}
     {
-        m_window.setRootGroup(*drawGUI());
+        m_window.setRootGroup(*initializeGUI());
         std::cout << "GameState Init\n";
-    }
-
-    void GameState::pause()
-    {
-        std::cout << "GameState Pause\n";
-    }
-
-    void GameState::resume()
-    {
-        std::cout << "GameState Resume\n";
     }
 
     void GameState::draw()
     {    
         m_window.draw();
     }
-    core::gui::Group* GameState::drawGUI()
+    core::gui::Group* GameState::initializeGUI()
     {
         verticalLayout = ire::core::gui::VerticalLayout::create({ 500, 400 });
         verticalLayout->setSpaces(5);
@@ -40,7 +30,7 @@ namespace ire::client::state
             [=](ire::core::gui::MouseClickEvent& ev)
             { 
                 std::cout << "Clicked btn5Ptr button, Game State\n";
-                m_next = core::state::StateMachine::build<MenuState>(m_machine, m_window, false);
+                m_next = std::make_unique<MenuState>(m_stateMachine, m_window, false);
             });
 
         btn6Ptr->addEventListener<ire::core::gui::MouseClickEvent>(

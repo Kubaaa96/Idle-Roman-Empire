@@ -82,7 +82,7 @@ namespace ire::core::gui
         // Check if number of items in initializer_list is the same as m_widgets.size()
         if (relativeSizes.size() != m_widgets.size())
         {
-            throw std::runtime_error("Size of list and widget vector is different. Need to be the same");
+            throw std::runtime_error("Size of list and widget vector is different. Need to be the same. Tip: Add Widgets to Layout before setting Layout Stretch");
             return;
         }
         m_layoutStretch = relativeSizes;

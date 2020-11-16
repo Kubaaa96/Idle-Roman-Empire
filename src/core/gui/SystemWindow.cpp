@@ -34,7 +34,7 @@ namespace ire::core::gui {
 
     void SystemWindow::update()
     {
-        m_machine.nextState();
+        m_stateMachine.nextState();
     }
 
     void SystemWindow::draw()

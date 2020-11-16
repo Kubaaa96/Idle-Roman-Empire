@@ -24,14 +24,11 @@ namespace ire::client::state
     // different GUI and behaviour like Different industries 
     struct GameState : core::state::State
     {
-        GameState(core::state::StateMachine& machine, core::gui::SystemWindow& window, bool replace = true);
-
-        void pause() override;
-        void resume() override;
+        GameState(core::state::StateMachine& stateMachine, core::gui::SystemWindow& window, bool replace);
 
         void draw() override;
 
-        core::gui::Group* drawGUI() override;
+        core::gui::Group* initializeGUI() override;
 
     private:
 

@@ -4,21 +4,11 @@
 #include <iostream>
 namespace ire::client::state
 {
-	MenuState::MenuState(core::state::StateMachine& machine, core::gui::SystemWindow& window, bool replace)
-		: State {machine, window, replace}
+	MenuState::MenuState(core::state::StateMachine& stateMachine, core::gui::SystemWindow& window, bool replace)
+		: State { stateMachine, window, replace}
 	{
-		m_window.setRootGroup(*drawGUI());
+		m_window.setRootGroup(*initializeGUI());
 		std::cout << "MenuState Init\n";
-	}
-
-	void MenuState::pause()
-	{
-		std::cout << "MenuState Pause\n";
-	}
-
-	void MenuState::resume()
-	{
-		std::cout << "MenuState Resume\n";
 	}
 
 	void MenuState::draw()
@@ -26,18 +16,43 @@ namespace ire::client::state
 		m_window.draw();
 	}
 
-	core::gui::Group* MenuState::drawGUI()
+	core::gui::Group* MenuState::initializeGUI()
 	{
-		auto btn1Ptr = ire::core::gui::Button::create("test");
-		btn1Ptr->setSize({ 200, 200 });
-		btn1Ptr->addEventListener<ire::core::gui::MouseClickEvent>(
+		auto buttonStartNewGame = ire::core::gui::Button::create("New Game");
+		buttonStartNewGame->addEventListener<ire::core::gui::MouseClickEvent>(
 			[=](ire::core::gui::MouseClickEvent& ev)
 			{
 				std::cout << "Clicked btn1Ptr button , Menu State\n";
-				m_next = core::state::StateMachine::build<GameState>(m_machine, m_window, true);
+				m_next = std::make_unique<GameState>(m_stateMachine, m_window, true);
 			});
-		group = ire::core::gui::Group::create(static_cast<sf::Vector2f>(m_window.getRenderTarget().getSize()));
-		group->add(std::move(btn1Ptr), "Label");
+
+		auto buttonOptions = ire::core::gui::Button::create("Options");
+		buttonOptions->addEventListener<ire::core::gui::MouseClickEvent>(
+			[=](ire::core::gui::MouseClickEvent& ev)
+			{
+				std::cout << "Open Option State\n";
+			});
+
+		auto buttonExit = ire::core::gui::Button::create("Exit");
+		buttonExit->addEventListener<ire::core::gui::MouseClickEvent>(
+			[=](ire::core::gui::MouseClickEvent& ev)
+			{
+				std::cout << "Quit...\n";
+				m_window.close();
+			});
+
+		const auto currentSizeOfViewPort = static_cast<sf::Vector2f>(m_window.getRenderTarget().getSize());
+
+		auto vLayoutMain = ire::core::gui::VerticalLayout::create(currentSizeOfViewPort);
+		vLayoutMain->add(std::move(buttonStartNewGame), "buttonStartNewGame");
+		vLayoutMain->add(std::move(buttonOptions), "buttonOptions");
+		vLayoutMain->add(std::move(buttonExit), "buttonExit");
+
+		vLayoutMain->setMargins({ 50, 50, 50, 50 });
+		vLayoutMain->setSpaces(20);
+
+		group = ire::core::gui::Group::create(currentSizeOfViewPort);
+		group->add(std::move(vLayoutMain), "layoutMain");
 		return group.release();
 	}
 }

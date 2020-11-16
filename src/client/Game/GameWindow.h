@@ -23,7 +23,7 @@ namespace ire::client {
             BaseType(std::forward<Ts>(args)...)
         {
 
-            m_machine.run(core::state::StateMachine::build<state::IntroState>(m_machine, *this, true));
+            m_stateMachine.run(std::make_unique<state::IntroState>(m_stateMachine, *this, true));
 
         }
     private:

@@ -14,15 +14,12 @@ namespace ire::core::state
 
     struct State
     {
-        State(StateMachine& machine, gui::SystemWindow& window, bool replace = true);
+        State(StateMachine& stateMachine, gui::SystemWindow& window, bool replace);
         virtual ~State() = default;
 
         State(const State&) = delete;
         State& operator=(const State&) = delete;
-        virtual gui::Group* drawGUI() = 0;
-
-        virtual void pause() = 0;
-        virtual void resume() = 0;
+        virtual gui::Group* initializeGUI() = 0;
 
         virtual void draw() = 0;
 
@@ -31,7 +28,7 @@ namespace ire::core::state
         bool isReplacing() const;
 
     protected:
-        StateMachine& m_machine;
+        StateMachine& m_stateMachine;
         gui::SystemWindow& m_window;
 
         bool m_replacing;

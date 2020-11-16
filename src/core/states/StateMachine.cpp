@@ -3,8 +3,7 @@
 namespace ire::core::state
 {
     StateMachine::StateMachine()
-        : m_resume{ false }
-        , m_running{ false }
+        : m_running{ false }
     {
         std::cout << "StateMachine Init\n";
     }
@@ -18,21 +17,6 @@ namespace ire::core::state
 
     void StateMachine::nextState()
     {
-        if (m_resume)
-        {
-            if (!m_states.empty())
-            {
-                m_states.pop();
-            }
-
-            if (!m_states.empty())
-            {
-                m_states.top()->resume();
-            }
-
-            m_resume = false;
-        }
-
         if (!m_states.empty())
         {
             auto temp = m_states.top()->next();
@@ -43,19 +27,10 @@ namespace ire::core::state
                 {
                     m_states.pop();
                 }
-                else
-                {
-                    m_states.top()->pause();
-                }
                 
                 m_states.push(std::move(temp));
             }
         }
-    }
-
-    void StateMachine::lastState()
-    {
-        m_resume = true;
     }
 
     void StateMachine::draw()

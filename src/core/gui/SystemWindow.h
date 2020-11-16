@@ -54,7 +54,7 @@ namespace ire::core::gui {
         void resetActiveWidget(Widget& widget) override;
 
     protected:
-        state::StateMachine m_machine;
+        state::StateMachine m_stateMachine;
 
     private:
         sf::RenderWindow m_window;
