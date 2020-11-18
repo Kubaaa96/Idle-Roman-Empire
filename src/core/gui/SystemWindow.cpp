@@ -28,8 +28,13 @@ namespace ire::core::gui {
     }
 
     void SystemWindow::display()
-    {
+    {     
         m_window.display();
+    }
+
+    void SystemWindow::update()
+    {
+        m_stateMachine.nextState();
     }
 
     void SystemWindow::draw()
@@ -38,15 +43,15 @@ namespace ire::core::gui {
 
         renderTarget.clear();
 
-        if (m_rootPanel)
+        if (m_rootGroup)
         {
-            m_rootPanel->draw(renderTarget);
+            m_rootGroup->draw(renderTarget);
         }
     }
 
-    void SystemWindow::setRootPanel(Panel& panel)
+    void SystemWindow::setRootGroup(Group& group)
     {
-        m_rootPanel = &panel;
+        m_rootGroup = &group;
     }
 
     void SystemWindow::processSfmlEvent(sf::Event& ev, TimePoint timestamp)

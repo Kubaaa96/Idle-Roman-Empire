@@ -9,6 +9,8 @@
 #include "core/gui/widgets/Panel.h"
 #include "core/gui/widgets/HorizontalLayout.h"
 #include "core/gui/widgets/VerticalLayout.h"
+#include "client/states/IntroState.h"
+#include "core/states/StateMachine.h"
 
 namespace ire::client {
 
@@ -20,16 +22,12 @@ namespace ire::client {
         GameWindow(Ts&&... args) :
             BaseType(std::forward<Ts>(args)...)
         {
-            init();
+
+            m_stateMachine.run(std::make_unique<state::IntroState>(m_stateMachine, *this, true));
+
         }
-
     private:
-        std::unique_ptr<ire::core::gui::Group> group;
-        std::unique_ptr<ire::core::gui::Panel> panel;
-        std::unique_ptr<ire::core::gui::HorizontalLayout> horizontalLayout;
-        std::unique_ptr<ire::core::gui::VerticalLayout> verticalLayout;
 
-        void init();
     };
 
 }
