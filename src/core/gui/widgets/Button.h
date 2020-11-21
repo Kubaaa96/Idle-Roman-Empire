@@ -3,6 +3,11 @@
 
 #include "ClickableWidget.h"
 
+#include "core/resource/Resource.h"
+#include "core/resource/ResourceLoader.h"
+#include "core/resource/ResourcePath.h"
+#include "core/resource/FontResourceLoader.h"
+
 namespace ire::core::gui
 {
     struct Button : ClickableWidget
@@ -15,6 +20,9 @@ namespace ire::core::gui
 
         void updateWidget() override;
 
+        void setTextString(const std::string& string);
+        sf::String getTextString();
+
         static const WidgetType m_type;
         const WidgetType getType() const override
         {
@@ -23,6 +31,9 @@ namespace ire::core::gui
 
     private:
         sf::RectangleShape m_rectangleShape;
+        sf::Text m_text;
+        sf::String m_textString;
+        sf::Font m_font;
     };
 }
 

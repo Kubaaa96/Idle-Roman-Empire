@@ -8,17 +8,23 @@ namespace ire::core::gui
 	Button::Button()
 	{
 		m_rectangleShape.setFillColor(sf::Color::Red);
+		detail::EagerResource<sf::Font> rs("times.ttf");
+		m_text.setFont(*rs);
+		m_text.setCharacterSize(15);
+		m_text.setFillColor(sf::Color::Black);
 	}
 
 	std::unique_ptr<Button> Button::create(const std::string& text)
 	{
 		auto widget = std::make_unique<Button>();
 		// Setting up text on Button in future
+		widget->setTextString(text);
 		return widget;
 	}
 
 	void Button::draw(sf::RenderTarget& target)
 	{
+		target.draw(m_text);
 		if (m_state == State::Armed)
 		{
 			auto shape = m_rectangleShape;
@@ -39,11 +45,20 @@ namespace ire::core::gui
 	}
 	void Button::updateWidget()
 	{
-		//const auto size = getSize();
+		m_text.setString(m_textString);
 		m_rectangleShape.setSize(m_size);
 
-		//const auto position = getPosition();
 		m_rectangleShape.setPosition(m_position);
 		
+	}
+
+	void Button::setTextString(const std::string& string)
+	{
+		m_textString = string;
+	}
+
+	sf::String Button::getTextString()
+	{
+		return m_textString;
 	}
 }
