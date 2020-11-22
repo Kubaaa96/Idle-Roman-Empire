@@ -11,7 +11,7 @@ namespace ire::core::gui
 
 		m_text.setFont(*rs);
 		// TODO adjusting Size based on position and size of Button
-		m_text.setCharacterSize(25);
+		m_text.setCharacterSize(30);
 		m_text.setStyle(sf::Text::Bold);
 		m_text.setFillColor(sf::Color::White);
 	}
@@ -47,8 +47,12 @@ namespace ire::core::gui
 	}
 	void Button::updateWidget()
 	{
-		m_text.setPosition(m_position);
 		m_text.setString(m_textString);
+		auto textWidth = m_text.getLocalBounds().width;
+		auto textHeight = m_text.getLocalBounds().height;
+
+		m_text.setPosition(m_position.x + (m_size.x / 2  - textWidth / 2),
+			m_position.y + (m_size.y / 2 - textHeight / 2));
 
 		m_rectangleShape.setSize(m_size);
 		m_rectangleShape.setPosition(m_position);
