@@ -34,6 +34,8 @@ namespace ire::core::gui
         sf::Text m_text;
         sf::String m_textString;
         sf::Font m_font;
+        sf::Font font;
+        detail::EagerResource<sf::Font> rs{ "resource/RomanSD.ttf" };
     };
 }
 
