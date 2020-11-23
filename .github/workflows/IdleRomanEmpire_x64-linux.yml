@@ -49,7 +49,7 @@ jobs:
           "$CXX" --version
 
       - name: Install SFML dependencies
-        run: sudo apt-get install libx11-dev libxrandr-dev libxi-dev libxcursor-dev libudev-dev libgl1-mesa-dev libopenal-dev libvorbis-dev libflac++-dev build-essential
+        run: sudo apt-get install libx11-dev libxrandr-dev libxi-dev libxcursor-dev libudev-dev libgl1-mesa-dev libopenal-dev libvorbis-dev libflac++-dev build-essential --fix-missing
 
       - name: Setup SFML cache
         uses: actions/cache@v1
