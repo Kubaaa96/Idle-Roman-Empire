@@ -9,7 +9,7 @@ namespace ire::core::gui
 	{
 		m_rectangleShape.setFillColor(sf::Color::Red);
 
-		m_text.setFont(*rs);
+		m_text.setFont(*m_font);
 		// TODO adjusting Size based on position and size of Button
 		m_text.setCharacterSize(30);
 		m_text.setStyle(sf::Text::Bold);

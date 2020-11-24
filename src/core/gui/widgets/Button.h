@@ -33,9 +33,7 @@ namespace ire::core::gui
         sf::RectangleShape m_rectangleShape;
         sf::Text m_text;
         sf::String m_textString;
-        sf::Font m_font;
-        sf::Font font;
-        detail::EagerResource<sf::Font> rs{ "resource/RomanSD.ttf" };
+        detail::EagerResource<sf::Font> m_font{ "resource/RomanSD.ttf" };
     };
 }
 
