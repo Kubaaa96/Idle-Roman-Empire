@@ -10,10 +10,9 @@ namespace ire::core::gui
 		m_rectangleShape.setFillColor(sf::Color::Red);
 
 		m_text.setFont(*m_font);
-		// TODO adjusting Size based on position and size of Button
-		m_text.setCharacterSize(30);
-		m_text.setStyle(sf::Text::Bold);
-		m_text.setFillColor(sf::Color::White);
+		setCharacterSize(30);
+		setTextStyle(sf::Text::Bold);
+		setTextFillColor(sf::Color::White);
 	}
 
 	std::unique_ptr<Button> Button::create(const std::string& text)
@@ -45,6 +44,7 @@ namespace ire::core::gui
 		}
 		target.draw(m_text);
 	}
+
 	void Button::updateWidget()
 	{
 		m_text.setString(m_textString);
@@ -54,13 +54,18 @@ namespace ire::core::gui
 		m_text.setPosition(m_position.x + (m_size.x / 2  - textWidth / 2),
 			m_position.y + (m_size.y / 2 - textHeight / 2));
 
+		//m_text.setPosition(m_position.x + 5, m_position.y + (m_size.y / 2 - textHeight / 2));
+
 		m_rectangleShape.setSize(m_size);
 		m_rectangleShape.setPosition(m_position);
 	}
 
 	void Button::setTextString(const std::string& string)
 	{
-		m_textString = string;
+		if (m_textString != string)
+		{
+			m_textString = string;
+		}
 	}
 
 	sf::String Button::getTextString()
