@@ -67,4 +67,34 @@ namespace ire::core::gui
 	{
 		return m_textString;
 	}
+
+	void Button::setCharacterSize(const unsigned int characterSize)
+	{
+		m_text.setCharacterSize(characterSize);
+	}
+
+	const unsigned int Button::getCharacterSize() const
+	{
+		return m_text.getCharacterSize();
+	}
+
+	void Button::setTextStyle(const sf::Uint32 style)
+	{
+		m_text.setStyle(style);
+	}
+
+	const sf::Uint32 Button::getTextStyle() const
+	{
+		return m_text.getStyle();
+	}
+
+	void Button::setTextFillColor(const sf::Color textFillColor)
+	{
+		m_text.setFillColor(textFillColor);
+	}
+
+	const sf::Color Button::getTextFillColor() const
+	{
+		return m_text.getFillColor();
+	}
 }

@@ -23,6 +23,15 @@ namespace ire::core::gui
         void setTextString(const std::string& string);
         sf::String getTextString();
 
+        void setCharacterSize(const unsigned int characterSize);
+        const unsigned int getCharacterSize() const;
+
+        void setTextStyle(const sf::Uint32 style);
+        const sf::Uint32 getTextStyle() const;
+
+        void setTextFillColor(const sf::Color textFillColor);
+        const sf::Color getTextFillColor() const;
+
         static const WidgetType m_type;
         const WidgetType getType() const override
         {
