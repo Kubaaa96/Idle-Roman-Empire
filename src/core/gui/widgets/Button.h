@@ -10,11 +10,26 @@
 
 namespace ire::core::gui
 {
+    enum struct VAlign
+    {
+        Left,
+        Right,
+        Center,
+    };
+    enum struct HAlign
+    {
+        Top,
+        Bottom,
+        Center,
+    };
+
     struct Button : ClickableWidget
     {
         Button();
 
         static std::unique_ptr<Button> create(const std::string& text = "");
+
+
 
         void draw(sf::RenderTarget& target)override;
 
@@ -38,12 +53,26 @@ namespace ire::core::gui
             return m_type;
         }
 
+        void setVAlignment(VAlign vAlign);
+        const VAlign getVAlignment() const;
+
+        void setHAlignment(HAlign hAlign);
+        const HAlign getHAlignment() const;
+
+        void setAlignment(VAlign vAlign, HAlign hAlign);
+
     private:
+        void updatePosition();
+
         sf::RectangleShape m_rectangleShape;
         sf::Text m_text;
         sf::String m_textString;
+        VAlign m_vAlign;
+        HAlign m_hAlign;
         detail::EagerResource<sf::Font> m_font{ "resource/RomanSD.ttf" };
     };
+
+
 }
 
 #endif // !BUTTON_H

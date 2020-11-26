@@ -1,4 +1,5 @@
 #include "Button.h"
+#include <iostream>
 
 namespace ire::core::gui
 {
@@ -11,6 +12,7 @@ namespace ire::core::gui
 
 		m_text.setFont(*m_font);
 		setCharacterSize(30);
+		setAlignment(VAlign::Center, HAlign::Center);
 		setTextStyle(sf::Text::Bold);
 		setTextFillColor(sf::Color::White);
 	}
@@ -51,13 +53,11 @@ namespace ire::core::gui
 		auto textWidth = m_text.getLocalBounds().width;
 		auto textHeight = m_text.getLocalBounds().height;
 
-		m_text.setPosition(m_position.x + (m_size.x / 2  - textWidth / 2),
-			m_position.y + (m_size.y / 2 - textHeight / 2));
-
-		//m_text.setPosition(m_position.x + 5, m_position.y + (m_size.y / 2 - textHeight / 2));
+		updatePosition();
 
 		m_rectangleShape.setSize(m_size);
 		m_rectangleShape.setPosition(m_position);
+
 	}
 
 	void Button::setTextString(const std::string& string)
@@ -101,5 +101,77 @@ namespace ire::core::gui
 	const sf::Color Button::getTextFillColor() const
 	{
 		return m_text.getFillColor();
+	}
+
+	void Button::setVAlignment(VAlign vAlign)
+	{
+		if (m_vAlign != vAlign)
+		{
+			m_vAlign = vAlign;
+		}
+	}
+
+	const VAlign Button::getVAlignment() const
+	{
+		return m_vAlign;
+	}
+
+	void Button::setHAlignment(HAlign hAlign)
+	{
+		if (m_hAlign != hAlign)
+		{
+			m_hAlign = hAlign;
+		}
+	}
+
+	const HAlign Button::getHAlignment() const
+	{
+		return m_hAlign;
+	}
+
+	void Button::setAlignment(VAlign vAlign, HAlign hAlign)
+	{
+	    setVAlignment(vAlign);
+	    setHAlignment(hAlign);
+	}
+	void Button::updatePosition()
+	{
+        auto textWidth = m_text.getLocalBounds().width;
+        auto textHeight = m_text.getLocalBounds().height;
+        auto letterSpacing{ m_text.getLetterSpacing() };
+        auto xPosition = m_text.getPosition().x;
+
+        switch (m_vAlign)
+        {
+	    case VAlign::Left:
+            xPosition = m_position.x + letterSpacing;
+            break;
+        case VAlign::Right:
+            xPosition = m_position.x + m_size.x - textWidth - letterSpacing;
+            break;
+        case VAlign::Center:
+            xPosition = m_position.x + (m_size.x / 2 - textWidth / 2);
+            break;
+        default:
+            break;
+        }
+	
+		auto yPosition = m_text.getPosition().y;
+		switch (m_hAlign)
+		{
+		case HAlign::Top:
+			yPosition = m_position.y + letterSpacing;
+			break;
+		case HAlign::Bottom:
+			yPosition = m_position.y + m_size.y - textHeight - letterSpacing;
+			break;
+		case HAlign::Center:
+			yPosition = m_position.y + (m_size.y / 2 - textHeight / 2);
+			break;
+		default:
+			break;
+		}
+
+		m_text.setPosition(xPosition, yPosition);
 	}
 }
