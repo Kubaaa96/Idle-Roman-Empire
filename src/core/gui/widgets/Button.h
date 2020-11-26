@@ -3,8 +3,27 @@
 
 #include "ClickableWidget.h"
 
+#include "core/resource/Resource.h"
+#include "core/resource/ResourceLoader.h"
+#include "core/resource/ResourcePath.h"
+#include "core/resource/FontResourceLoader.h"
+#include "core/resource/ResourceManager.h"
+
 namespace ire::core::gui
 {
+    enum struct HAlign
+    {
+        Left,
+        Right,
+        Center,
+    };
+    enum struct VAlign
+    {
+        Top,
+        Bottom,
+        Center,
+    };
+
     struct Button : ClickableWidget
     {
         Button();
@@ -15,14 +34,41 @@ namespace ire::core::gui
 
         void updateWidget() override;
 
+        void setTextString(const std::string& string);
+        sf::String getTextString();
+
+        void setCharacterSize(const unsigned int characterSize);
+        const unsigned int getCharacterSize() const;
+
+        void setTextStyle(const sf::Uint32 style);
+        const sf::Uint32 getTextStyle() const;
+
+        void setTextFillColor(const sf::Color textFillColor);
+        const sf::Color getTextFillColor() const;
+
         static const WidgetType m_type;
         const WidgetType getType() const override
         {
             return m_type;
         }
 
+        void setVAlignment(VAlign vAlign);
+        const VAlign getVAlignment() const;
+
+        void setHAlignment(HAlign hAlign);
+        const HAlign getHAlignment() const;
+
+        void setAlignment(VAlign vAlign, HAlign hAlign);
+
     private:
+        void updatePosition();
+
         sf::RectangleShape m_rectangleShape;
+        sf::Text m_text;
+        sf::String m_textString;
+        VAlign m_vAlign;
+        HAlign m_hAlign;
+        ResourcePtr<sf::Font> m_font;
     };
 }
 
