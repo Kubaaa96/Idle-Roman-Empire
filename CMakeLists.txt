@@ -47,6 +47,7 @@ if (NOT DEFINED SFML_STATIC_LIBRARIES)
 endif()
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resource/ DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/resource/)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resource/ DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/tests/resource/)
 
 set(IDLEROMANEMPIRE_STATIC_STD_LIBS FALSE CACHE BOOL "Use statically linked standard/runtime libraries? This option must match the one used for SFML.")
 
