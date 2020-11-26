@@ -29,8 +29,6 @@ namespace ire::core::gui
 
         static std::unique_ptr<Button> create(const std::string& text = "");
 
-
-
         void draw(sf::RenderTarget& target)override;
 
         void updateWidget() override;
@@ -71,8 +69,6 @@ namespace ire::core::gui
         HAlign m_hAlign;
         detail::EagerResource<sf::Font> m_font{ "resource/RomanSD.ttf" };
     };
-
-
 }
 
 #endif // !BUTTON_H

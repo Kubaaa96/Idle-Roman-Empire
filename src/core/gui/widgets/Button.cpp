@@ -50,9 +50,6 @@ namespace ire::core::gui
 	void Button::updateWidget()
 	{
 		m_text.setString(m_textString);
-		auto textWidth = m_text.getLocalBounds().width;
-		auto textHeight = m_text.getLocalBounds().height;
-
 		updatePosition();
 
 		m_rectangleShape.setSize(m_size);
@@ -171,7 +168,6 @@ namespace ire::core::gui
 		default:
 			break;
 		}
-
 		m_text.setPosition(xPosition, yPosition);
 	}
 }
