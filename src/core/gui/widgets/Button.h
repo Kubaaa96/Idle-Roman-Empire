@@ -10,13 +10,13 @@
 
 namespace ire::core::gui
 {
-    enum struct VAlign
+    enum struct HAlign
     {
         Left,
         Right,
         Center,
     };
-    enum struct HAlign
+    enum struct VAlign
     {
         Top,
         Bottom,

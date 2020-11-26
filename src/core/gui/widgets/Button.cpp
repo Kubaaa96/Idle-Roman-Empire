@@ -138,15 +138,15 @@ namespace ire::core::gui
         auto letterSpacing{ m_text.getLetterSpacing() };
         auto xPosition = m_text.getPosition().x;
 
-        switch (m_vAlign)
+        switch (m_hAlign)
         {
-	    case VAlign::Left:
+	    case HAlign::Left:
             xPosition = m_position.x + letterSpacing;
             break;
-        case VAlign::Right:
+        case HAlign::Right:
             xPosition = m_position.x + m_size.x - textWidth - letterSpacing;
             break;
-        case VAlign::Center:
+        case HAlign::Center:
             xPosition = m_position.x + (m_size.x / 2 - textWidth / 2);
             break;
         default:
@@ -154,15 +154,15 @@ namespace ire::core::gui
         }
 	
 		auto yPosition = m_text.getPosition().y;
-		switch (m_hAlign)
+		switch (m_vAlign)
 		{
-		case HAlign::Top:
+		case VAlign::Top:
 			yPosition = m_position.y + letterSpacing;
 			break;
-		case HAlign::Bottom:
+		case VAlign::Bottom:
 			yPosition = m_position.y + m_size.y - textHeight - letterSpacing;
 			break;
-		case HAlign::Center:
+		case VAlign::Center:
 			yPosition = m_position.y + (m_size.y / 2 - textHeight / 2);
 			break;
 		default:
