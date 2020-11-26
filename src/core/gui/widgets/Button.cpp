@@ -10,6 +10,7 @@ namespace ire::core::gui
 	{
 		m_rectangleShape.setFillColor(sf::Color::Red);
 
+		m_font = ResourceManager::instance().get<sf::Font>("resource/RomanSD.ttf");
 		m_text.setFont(*m_font);
 		setCharacterSize(30);
 		setAlignment(VAlign::Center, HAlign::Center);

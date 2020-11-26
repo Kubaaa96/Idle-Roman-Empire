@@ -7,6 +7,7 @@
 #include "core/resource/ResourceLoader.h"
 #include "core/resource/ResourcePath.h"
 #include "core/resource/FontResourceLoader.h"
+#include "core/resource/ResourceManager.h"
 
 namespace ire::core::gui
 {
@@ -67,7 +68,7 @@ namespace ire::core::gui
         sf::String m_textString;
         VAlign m_vAlign;
         HAlign m_hAlign;
-        detail::EagerResource<sf::Font> m_font{ "resource/RomanSD.ttf" };
+        ResourcePtr<sf::Font> m_font;
     };
 }
 
