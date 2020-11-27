@@ -138,6 +138,7 @@ namespace ire::core::gui
 
 	void EditBox::onEvent(EventRoot& sender, TextEnteredEvent& ev)
 	{
+		// Preventing Backspace from printing 
 		if (ev.character == 8)
 		{
 			return;
@@ -153,10 +154,10 @@ namespace ire::core::gui
 
 	void EditBox::onEvent(EventRoot& sender, KeyDownEvent& ev)
 	{
-		sender.setActiveWidget(*this);
 		switch (ev.key)
 		{
 		case sf::Keyboard::Left:
+			// CTRL + Left arrow Shortcut
 			if (ev.control)
 			{
 				std::cout << "Left + CTRL Clicked\n";
@@ -168,6 +169,7 @@ namespace ire::core::gui
 			}
 			break;
 		case sf::Keyboard::Right:
+			// CTRL + Right Shortcut
 			if (ev.control)
 			{
 				std::cout << "Right + CTRL Clicked\n";
@@ -184,6 +186,12 @@ namespace ire::core::gui
 			{
 				backspaceKeyPressed();
 
+			}
+			break;
+		case sf::Keyboard::Delete:
+			if (m_currentCaretPosition != m_textString.length())
+			{
+				deleteKeyPressed();
 			}
 			break;
 		default:
@@ -232,6 +240,12 @@ namespace ire::core::gui
 		m_textString.erase(m_currentCaretPosition - 1, 1);
 		m_text.setString(m_textString);
 		--m_currentCaretPosition;
+		updateCaretPosition();
+	}
+	void EditBox::deleteKeyPressed()
+	{
+		m_textString.erase(m_currentCaretPosition, 1);
+		m_text.setString(m_textString);
 		updateCaretPosition();
 	}
 	void EditBox::updateCaretPosition()
