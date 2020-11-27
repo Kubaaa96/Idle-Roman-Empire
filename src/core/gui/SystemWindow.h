@@ -24,6 +24,7 @@ namespace ire::core::gui {
             m_activeWidget(nullptr),
             m_lastMousePosition(-1, -1)
         {
+            m_window.setFramerateLimit(60);
         }
 
         SystemWindow(const SystemWindow&) = delete;
@@ -78,6 +79,8 @@ namespace ire::core::gui {
 
         void reemitLastMouseMoved();
 
+        void processSfmlTextEnteredEvent(sf::Event& ev, TimePoint timestamp);
+
         template <typename EventT>
         void forwardEventWithPosition(EventT& ev)
         {
@@ -100,6 +103,21 @@ namespace ire::core::gui {
                 emitEventIfNotHandled<EventT>(ev);
             }
         }
+
+        template <typename EventT>
+        void forwardEvent(EventT& ev)
+        {
+            if (isOpen() && m_rootGroup != nullptr)
+            {
+                m_activeWidget->onEvent(*this, ev);
+                if (ev.handled)
+                {
+                    return;
+                }
+            }
+            emitEventIfNotHandled<EventT>(ev);
+        }
+
     };
 
 }

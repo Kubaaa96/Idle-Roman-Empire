@@ -26,6 +26,14 @@ namespace ire::client::state
         auto label7Ptr = ire::core::gui::Label::create("test");
         auto editBox8Ptr = ire::core::gui::EditBox::create("test1");
 
+        editBox8Ptr->addEventListener<ire::core::gui::TextChangedEvent>(
+            [=](ire::core::gui::TextChangedEvent& ev)
+            {
+                //std::wcout << "Text entered: " << 
+                //    static_cast<wchar_t>(ev.characters) << "\n";
+                
+            });
+
         btn5Ptr->addEventListener<ire::core::gui::MouseClickEvent>(
             [=](ire::core::gui::MouseClickEvent& ev)
             { 
@@ -34,7 +42,10 @@ namespace ire::client::state
             });
 
         btn6Ptr->addEventListener<ire::core::gui::MouseClickEvent>(
-            [](ire::core::gui::MouseClickEvent& ev) { std::cout << "Clicked btn6Ptr button " << ev.position.x << "\n"; });
+            [](ire::core::gui::MouseClickEvent& ev) 
+            {
+                std::cout << "Clicked btn6Ptr button " << ev.position.x << "\n"; 
+            });
 
         verticalLayout->add(std::move(btn5Ptr), "Button5");
         verticalLayout->add(std::move(btn6Ptr), "Button6");

@@ -16,4 +16,8 @@ namespace ire::core::gui {
 	{
 		emitEventIfNotHandled<MouseMovedEvent>(ev);
 	}
+	void RawEventHandler::onEvent(EventRoot& sender, TextEnteredEvent& ev)
+	{
+		emitEventIfNotHandled<TextEnteredEvent>(ev);
+	}
 }
