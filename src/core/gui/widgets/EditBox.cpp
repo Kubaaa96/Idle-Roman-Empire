@@ -12,7 +12,6 @@ namespace ire::core::gui
 		m_text.setFont(*m_font);
 		m_text.setCharacterSize(15);
 		m_text.setFillColor(sf::Color::Black);
-		m_text.setStyle(sf::Text::Bold);
 		//m_text.setLetterSpacing(0.75);
 
 
@@ -45,9 +44,8 @@ namespace ire::core::gui
 
 		m_text.setPosition(m_position.x + 15, m_position.y + 15);
 
-		auto positinOfFirstletter = m_text.findCharacterPos(m_currentCaretPosition);
-		m_caret.setPosition(positinOfFirstletter.x - 1, positinOfFirstletter.y);
-		m_caret.setSize(sf::Vector2f(1, 15));
+		updateCaretPosition();
+		m_caret.setSize(sf::Vector2f(2, 15));
 	}
 
 	void EditBox::setTextString(const std::string& string)
@@ -141,24 +139,24 @@ namespace ire::core::gui
 	void EditBox::onEvent(EventRoot& sender, TextEnteredEvent& ev)
 	{
 		std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
-		m_textString.append(conv.to_bytes(ev.character));
+		//m_textString.append(conv.to_bytes(ev.character));
+		m_textString.insert(m_currentCaretPosition, conv.to_bytes(ev.character));
+		++m_currentCaretPosition;
 		m_text.setString(m_textString);
+		updateCaretPosition();
 		//std::cout << m_textString << "\n";
 		onTextChanged(ev);
 	}
 
 	void EditBox::onEvent(EventRoot& sender, KeyDownEvent& ev)
 	{
-	}
-
-	void EditBox::onEvent(EventRoot& sender, KeyUpEvent& ev)
-	{
+		sender.setActiveWidget(*this);
 		switch (ev.key)
 		{
 		case sf::Keyboard::Left:
 			if (ev.control)
 			{
-				std::cout << "Left + CTRL Released\n";
+				std::cout << "Left + CTRL Clicked\n";
 				break;
 			}
 			if (m_currentCaretPosition != 0)
@@ -169,10 +167,10 @@ namespace ire::core::gui
 		case sf::Keyboard::Right:
 			if (ev.control)
 			{
-				std::cout << "Right + CTRL Released\n";
+				std::cout << "Right + CTRL Clicked\n";
 				break;
 			}
-			
+
 			if (m_currentCaretPosition != m_textString.length())
 			{
 				++m_currentCaretPosition;
@@ -181,8 +179,13 @@ namespace ire::core::gui
 		default:
 			break;
 		}
-		updateWidget();
+		updateCaretPosition();
 		onKeyClicked(ev);
+	}
+
+	void EditBox::onEvent(EventRoot& sender, KeyUpEvent& ev)
+	{
+
 	}
 
 	void EditBox::onTextChanged(TextEnteredEvent& ev)
@@ -192,7 +195,7 @@ namespace ire::core::gui
 		textChangedEv.characters = ev.character;
 		emitEvent<TextChangedEvent>(textChangedEv);
 	}
-	void EditBox::onKeyClicked(KeyUpEvent& ev)
+	void EditBox::onKeyReleased(KeyUpEvent& ev)
 	{
 		KeyReleasedEvent keyClickedEv{};
 		keyClickedEv.timestamp = ev.timestamp;
@@ -202,5 +205,21 @@ namespace ire::core::gui
 		keyClickedEv.shift = ev.control;
 		keyClickedEv.system = ev.system;
 		emitEvent<KeyReleasedEvent>(keyClickedEv);
+	}
+	void EditBox::onKeyClicked(KeyDownEvent& ev)
+	{
+		KeyPressedEvent keyClickedEv{};
+		keyClickedEv.timestamp = ev.timestamp;
+		keyClickedEv.key = ev.key;
+		keyClickedEv.alt = ev.alt;
+		keyClickedEv.control = ev.control;
+		keyClickedEv.shift = ev.control;
+		keyClickedEv.system = ev.system;
+		emitEvent<KeyPressedEvent>(keyClickedEv);
+	}
+	void EditBox::updateCaretPosition()
+	{
+		auto positinOfFirstletter = m_text.findCharacterPos(m_currentCaretPosition);
+		m_caret.setPosition(positinOfFirstletter.x - 1, positinOfFirstletter.y);
 	}
 }

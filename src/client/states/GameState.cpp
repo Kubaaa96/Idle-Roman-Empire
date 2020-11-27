@@ -30,8 +30,8 @@ namespace ire::client::state
             [=](ire::core::gui::TextChangedEvent& ev)
             {
             });
-        editBox8Ptr->addEventListener<ire::core::gui::KeyReleasedEvent>(
-            [=](ire::core::gui::KeyReleasedEvent& ev)
+        editBox8Ptr->addEventListener<ire::core::gui::KeyPressedEvent>(
+            [=](ire::core::gui::KeyPressedEvent& ev)
             {
 
             });

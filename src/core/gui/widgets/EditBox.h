@@ -58,7 +58,8 @@ namespace ire::core::gui
 
     protected:
         void onTextChanged(TextEnteredEvent& ev);
-        void onKeyClicked(KeyUpEvent& ev);
+        void onKeyReleased(KeyUpEvent& ev);
+        void onKeyClicked(KeyDownEvent& ev);
     private:
         sf::RectangleShape m_rectangleShape;
 
@@ -73,6 +74,7 @@ namespace ire::core::gui
         sf::RectangleShape m_caret;
         bool m_caretVisible = true;
         std::size_t m_currentCaretPosition{ 0 };
+        void updateCaretPosition();
 
         bool m_readOnly = false;
 
