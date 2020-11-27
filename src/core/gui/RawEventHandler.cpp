@@ -20,4 +20,12 @@ namespace ire::core::gui {
 	{
 		emitEventIfNotHandled<TextEnteredEvent>(ev);
 	}
+	void RawEventHandler::onEvent(EventRoot& sender, KeyDownEvent& ev)
+	{
+		emitEventIfNotHandled<KeyDownEvent>(ev);
+	}
+	void RawEventHandler::onEvent(EventRoot& sender, KeyUpEvent& ev)
+	{
+		emitEventIfNotHandled<KeyUpEvent>(ev);
+	}
 }

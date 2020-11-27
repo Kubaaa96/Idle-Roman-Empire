@@ -29,9 +29,11 @@ namespace ire::client::state
         editBox8Ptr->addEventListener<ire::core::gui::TextChangedEvent>(
             [=](ire::core::gui::TextChangedEvent& ev)
             {
-                //std::wcout << "Text entered: " << 
-                //    static_cast<wchar_t>(ev.characters) << "\n";
-                
+            });
+        editBox8Ptr->addEventListener<ire::core::gui::KeyReleasedEvent>(
+            [=](ire::core::gui::KeyReleasedEvent& ev)
+            {
+
             });
 
         btn5Ptr->addEventListener<ire::core::gui::MouseClickEvent>(

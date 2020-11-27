@@ -53,10 +53,12 @@ namespace ire::core::gui
         }
 
         void onEvent(EventRoot& sender, TextEnteredEvent& ev) override;
+        void onEvent(EventRoot& sender, KeyDownEvent& ev) override;
+        void onEvent(EventRoot& sender, KeyUpEvent& ev) override;
 
     protected:
         void onTextChanged(TextEnteredEvent& ev);
-
+        void onKeyClicked(KeyUpEvent& ev);
     private:
         sf::RectangleShape m_rectangleShape;
 
@@ -64,15 +66,13 @@ namespace ire::core::gui
 
         void deleteKeyPressed();
 
-        std::string m_stringText;
+        std::string m_textString;
         sf::Text m_text;
-        sf::String m_textString;
         sf::String m_ghostTextString;
 
         sf::RectangleShape m_caret;
-        int m_caretCounter = 0;
-        const int m_caretBlinkingFrequency = 30;
         bool m_caretVisible = true;
+        std::size_t m_currentCaretPosition{ 0 };
 
         bool m_readOnly = false;
 
@@ -82,13 +82,28 @@ namespace ire::core::gui
         Alignment m_textAlignment{ Alignment::Left };
 
         ResourcePtr<sf::Font> m_font;
-    
-
     };
 
     struct TextChangedEvent : TranslatedEvent
     {
         char32_t characters;
+    };
+    struct KeyPressedEvent : TranslatedEvent
+    {
+        sf::Keyboard::Key key;
+        bool alt;
+        bool control;
+        bool shift;
+        bool system;
+    };
+
+    struct KeyReleasedEvent : TranslatedEvent
+    {
+        sf::Keyboard::Key key;
+        bool alt;
+        bool control;
+        bool shift;
+        bool system;
     };
 }
 

@@ -80,6 +80,8 @@ namespace ire::core::gui {
         void reemitLastMouseMoved();
 
         void processSfmlTextEnteredEvent(sf::Event& ev, TimePoint timestamp);
+        void processSfmlKeybordPressedEvent(sf::Event& ev, TimePoint timestamp);
+        void processSfmlKeybordReleasedEvent(sf::Event& ev, TimePoint timestamp);
 
         template <typename EventT>
         void forwardEventWithPosition(EventT& ev)

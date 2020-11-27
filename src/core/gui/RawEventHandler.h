@@ -12,6 +12,8 @@ namespace ire::core::gui {
         virtual void onEvent(EventRoot& sender, MouseButtonUpEvent& ev);
         virtual void onEvent(EventRoot& sender, MouseMovedEvent& ev);
         virtual void onEvent(EventRoot& sender, TextEnteredEvent& ev);
+        virtual void onEvent(EventRoot& sender, KeyDownEvent& ev);
+        virtual void onEvent(EventRoot& sender, KeyUpEvent& ev);
 
     };
 
