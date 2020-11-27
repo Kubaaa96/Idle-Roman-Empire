@@ -111,10 +111,13 @@ namespace ire::core::gui {
         {
             if (isOpen() && m_rootGroup != nullptr)
             {
-                m_activeWidget->onEvent(*this, ev);
-                if (ev.handled)
+                if (m_activeWidget != nullptr)
                 {
-                    return;
+                    m_activeWidget->onEvent(*this, ev);
+                    if (ev.handled)
+                    {
+                        return;
+                    }
                 }
             }
             emitEventIfNotHandled<EventT>(ev);

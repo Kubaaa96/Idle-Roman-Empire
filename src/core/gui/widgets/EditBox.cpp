@@ -138,8 +138,11 @@ namespace ire::core::gui
 
 	void EditBox::onEvent(EventRoot& sender, TextEnteredEvent& ev)
 	{
+		if (ev.character == 8)
+		{
+			return;
+		}
 		std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
-		//m_textString.append(conv.to_bytes(ev.character));
 		m_textString.insert(m_currentCaretPosition, conv.to_bytes(ev.character));
 		++m_currentCaretPosition;
 		m_text.setString(m_textString);
@@ -174,6 +177,13 @@ namespace ire::core::gui
 			if (m_currentCaretPosition != m_textString.length())
 			{
 				++m_currentCaretPosition;
+			}
+			break;
+		case sf::Keyboard::Backspace:
+			if (m_currentCaretPosition != 0)
+			{
+				backspaceKeyPressed();
+
 			}
 			break;
 		default:
@@ -216,6 +226,13 @@ namespace ire::core::gui
 		keyClickedEv.shift = ev.control;
 		keyClickedEv.system = ev.system;
 		emitEvent<KeyPressedEvent>(keyClickedEv);
+	}
+	void EditBox::backspaceKeyPressed()
+	{
+		m_textString.erase(m_currentCaretPosition - 1, 1);
+		m_text.setString(m_textString);
+		--m_currentCaretPosition;
+		updateCaretPosition();
 	}
 	void EditBox::updateCaretPosition()
 	{
