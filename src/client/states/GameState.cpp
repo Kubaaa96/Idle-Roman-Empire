@@ -26,6 +26,7 @@ namespace ire::client::state
         auto label7Ptr = ire::core::gui::Label::create("test");
         auto editBox8Ptr = ire::core::gui::EditBox::create("test1");
         editBox8Ptr->setGhostTextString("Enter Text...");
+        //editBox8Ptr->setMaximumCharacters(5);
         editBox8Ptr->addEventListener<ire::core::gui::TextChangedEvent>(
             [=](ire::core::gui::TextChangedEvent& ev)
             {

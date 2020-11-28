@@ -95,11 +95,16 @@ namespace ire::core::gui
 		{
 			charactersBeforeCaret = m_textString.length();
 		}
+
+		if (m_currentCaretPosition == charactersBeforeCaret)
+		{
+			m_currentCaretPosition = charactersBeforeCaret;
+		}
 	}
 
 	const std::size_t EditBox::getCaretPosition() const
 	{
-		return std::size_t();
+		return m_currentCaretPosition;
 	}
 
 	void EditBox::setReadOnly(bool readOnly)
@@ -113,15 +118,6 @@ namespace ire::core::gui
 	bool EditBox::isReadOnly() const
 	{
 		return m_readOnly;
-	}
-
-	void EditBox::setTextSize(unsigned int textSize)
-	{
-	}
-
-	const unsigned int EditBox::getTextSize() const
-	{
-		return 0;
 	}
 
 	void EditBox::setAlignment(Alignment alignment)
@@ -159,11 +155,24 @@ namespace ire::core::gui
 			return;
 		}
 		std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
-		m_textString.insert(m_currentCaretPosition, conv.to_bytes(ev.character));
+		// Unlimited Characters
 
-		++m_currentCaretPosition;
-		m_text.setString(m_textString);
-
+		switch (m_maxChars)
+		{
+		case 0:
+			m_textString.insert(m_currentCaretPosition, conv.to_bytes(ev.character));
+			++m_currentCaretPosition;
+			m_text.setString(m_textString);
+			break;
+		default:
+			if (m_textString.length() < m_maxChars)
+			{
+				m_textString.insert(m_currentCaretPosition, conv.to_bytes(ev.character));
+				++m_currentCaretPosition;
+				m_text.setString(m_textString);
+			}
+			break;
+		}
 		updateCaretPosition();
 		onTextChanged(ev);
 	}

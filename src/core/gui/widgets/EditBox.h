@@ -31,17 +31,11 @@ namespace ire::core::gui
         void setGhostTextString(const std::string& string);
         const std::string getGhostTextString() const;
 
-        void setDefaultTextString(const std::string& string);
-        const std::string getDefaultTextString() const;
-
         void setCaretPosition(std::size_t charactersBeforeCaret);
         const std::size_t getCaretPosition() const;
 
         void setReadOnly(bool readOnly = true);
         bool isReadOnly() const;
-
-        void setTextSize(unsigned int textSize);
-        const unsigned int getTextSize() const;
 
         void setAlignment(Alignment alignment);
         const Alignment getAlignment() const;
