@@ -25,7 +25,7 @@ namespace ire::client::state
         auto btn6Ptr = ire::core::gui::Button::create("test1");
         auto label7Ptr = ire::core::gui::Label::create("test");
         auto editBox8Ptr = ire::core::gui::EditBox::create("test1");
-
+        editBox8Ptr->setGhostTextString("Enter Text...");
         editBox8Ptr->addEventListener<ire::core::gui::TextChangedEvent>(
             [=](ire::core::gui::TextChangedEvent& ev)
             {
@@ -60,6 +60,7 @@ namespace ire::client::state
         horizontalLayout->setSpaces(10);
         horizontalLayout->setMargins({ 10, 10, 10, 10 });
         auto editBox1Ptr = ire::core::gui::EditBox::create("test");
+        editBox1Ptr->setTextString("Welcome");
         auto btn2Ptr = ire::core::gui::Button::create("test1");
         auto label3Ptr = ire::core::gui::Label::create("test");
         auto btn4Ptr = ire::core::gui::Button::create("test1");

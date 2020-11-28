@@ -31,6 +31,9 @@ namespace ire::core::gui
         void setGhostTextString(const std::string& string);
         const std::string getGhostTextString() const;
 
+        void setDefaultTextString(const std::string& string);
+        const std::string getDefaultTextString() const;
+
         void setCaretPosition(std::size_t charactersBeforeCaret);
         const std::size_t getCaretPosition() const;
 
@@ -69,7 +72,8 @@ namespace ire::core::gui
 
         std::string m_textString;
         sf::Text m_text;
-        sf::String m_ghostTextString;
+        std::string m_ghostTextString;
+        sf::Text m_ghostText;
 
         sf::RectangleShape m_caret;
         bool m_caretVisible = true;
@@ -88,8 +92,9 @@ namespace ire::core::gui
 
     struct TextChangedEvent : TranslatedEvent
     {
-        char32_t characters;
+        char32_t character;
     };
+
     struct KeyPressedEvent : TranslatedEvent
     {
         sf::Keyboard::Key key;

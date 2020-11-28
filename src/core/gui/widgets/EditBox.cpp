@@ -12,8 +12,12 @@ namespace ire::core::gui
 		m_text.setFont(*m_font);
 		m_text.setCharacterSize(15);
 		m_text.setFillColor(sf::Color::Black);
-		//m_text.setLetterSpacing(0.75);
 
+		//setGhostTextString("Ghost Text");
+
+		m_ghostText.setFont(*m_font);
+		m_ghostText.setCharacterSize(15);
+		m_ghostText.setFillColor(sf::Color(140, 140, 140)); // Gray Color for Ghost text
 
 		m_caret.setFillColor(sf::Color::Red);
 
@@ -34,7 +38,15 @@ namespace ire::core::gui
 		target.draw(m_rectangleShape);
 		target.draw(m_caret);
 
-		target.draw(m_text);
+		if (!m_text.getString().isEmpty())
+		{
+			target.draw(m_text);
+		}
+		else
+		{
+			target.draw(m_ghostText);
+		}
+
 	}
 
 	void EditBox::updateWidget()
@@ -43,6 +55,7 @@ namespace ire::core::gui
 		m_rectangleShape.setPosition(m_position);
 
 		m_text.setPosition(m_position.x + 15, m_position.y + 15);
+		m_ghostText.setPosition(m_position.x + 15, m_position.y + 15);
 
 		updateCaretPosition();
 		m_caret.setSize(sf::Vector2f(2, 15));
@@ -53,6 +66,7 @@ namespace ire::core::gui
 		if (m_textString != string)
 		{
 			m_textString = string;
+			m_text.setString(m_textString);
 		}
 	}
 
@@ -66,6 +80,7 @@ namespace ire::core::gui
 		if (m_ghostTextString != ghostString)
 		{
 			m_ghostTextString = ghostString;
+			m_ghostText.setString(m_ghostTextString);
 		}
 	}
 
@@ -145,10 +160,11 @@ namespace ire::core::gui
 		}
 		std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
 		m_textString.insert(m_currentCaretPosition, conv.to_bytes(ev.character));
+
 		++m_currentCaretPosition;
 		m_text.setString(m_textString);
+
 		updateCaretPosition();
-		//std::cout << m_textString << "\n";
 		onTextChanged(ev);
 	}
 
@@ -210,7 +226,7 @@ namespace ire::core::gui
 	{
 		TextChangedEvent textChangedEv{};
 		textChangedEv.timestamp = ev.timestamp;
-		textChangedEv.characters = ev.character;
+		textChangedEv.character = ev.character;
 		emitEvent<TextChangedEvent>(textChangedEv);
 	}
 	void EditBox::onKeyReleased(KeyUpEvent& ev)
@@ -235,6 +251,7 @@ namespace ire::core::gui
 		keyClickedEv.system = ev.system;
 		emitEvent<KeyPressedEvent>(keyClickedEv);
 	}
+
 	void EditBox::backspaceKeyPressed()
 	{
 		m_textString.erase(m_currentCaretPosition - 1, 1);
@@ -242,12 +259,14 @@ namespace ire::core::gui
 		--m_currentCaretPosition;
 		updateCaretPosition();
 	}
+
 	void EditBox::deleteKeyPressed()
 	{
 		m_textString.erase(m_currentCaretPosition, 1);
 		m_text.setString(m_textString);
 		updateCaretPosition();
 	}
+
 	void EditBox::updateCaretPosition()
 	{
 		auto positinOfFirstletter = m_text.findCharacterPos(m_currentCaretPosition);
