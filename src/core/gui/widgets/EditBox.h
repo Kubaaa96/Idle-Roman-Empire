@@ -21,7 +21,7 @@ namespace ire::core::gui
 
         static std::unique_ptr<EditBox> create(const std::string& text = "");
 
-        void draw(sf::RenderTarget& target)override;
+        void draw(sf::RenderTarget& target) override;
 
         void updateWidget() override;
 
@@ -57,6 +57,7 @@ namespace ire::core::gui
         void onTextChanged(TextEnteredEvent& ev);
         void onKeyReleased(KeyUpEvent& ev);
         void onKeyClicked(KeyDownEvent& ev);
+
     private:
         sf::RectangleShape m_rectangleShape;
 

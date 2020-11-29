@@ -182,10 +182,17 @@ namespace ire::core::gui
 		switch (ev.key)
 		{
 		case sf::Keyboard::Left:
+
 			// CTRL + Left arrow Shortcut
 			if (ev.control)
 			{
-				std::cout << "Left + CTRL Clicked\n";
+				auto nextJumpIndex = m_textString.rfind(' ', m_currentCaretPosition);
+				if (m_currentCaretPosition == nextJumpIndex + 1)
+				{
+					nextJumpIndex = m_textString.rfind(' ', m_currentCaretPosition - 2);
+				}
+				if (nextJumpIndex < m_textString.length())
+					m_currentCaretPosition = nextJumpIndex + 1;
 				break;
 			}
 			if (m_currentCaretPosition != 0)
@@ -197,7 +204,15 @@ namespace ire::core::gui
 			// CTRL + Right Shortcut
 			if (ev.control)
 			{
-				std::cout << "Right + CTRL Clicked\n";
+				auto nextJumpIndex = m_textString.find(' ', m_currentCaretPosition);
+				if (m_currentCaretPosition == nextJumpIndex)
+				{
+					nextJumpIndex = m_textString.find(' ', m_currentCaretPosition + 1);
+				}
+				if(nextJumpIndex < m_textString.length())
+					m_currentCaretPosition = nextJumpIndex + 1;
+				//std::cout << "Next Space " << nextSpaceIndex << "\n";
+
 				break;
 			}
 
