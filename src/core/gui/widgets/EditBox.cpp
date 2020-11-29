@@ -186,15 +186,22 @@ namespace ire::core::gui
 			// CTRL + Left arrow Shortcut
 			if (ev.control)
 			{
-				auto nextJumpIndex = m_textString.rfind(' ', m_currentCaretPosition);
+				auto nextJumpIndex = m_textString.find_last_of(" \t", m_currentCaretPosition);
 				if (m_currentCaretPosition == nextJumpIndex + 1)
 				{
-					nextJumpIndex = m_textString.rfind(' ', m_currentCaretPosition - 2);
+					nextJumpIndex = m_textString.find_last_of(" \t", m_currentCaretPosition - 2);
 				}
-				if (nextJumpIndex < m_textString.length())
+				if (m_currentCaretPosition != 0 && nextJumpIndex < m_textString.length())
+				{
 					m_currentCaretPosition = nextJumpIndex + 1;
+				}
+				else
+				{
+					m_currentCaretPosition = 0;
+				}
 				break;
 			}
+
 			if (m_currentCaretPosition != 0)
 			{
 				--m_currentCaretPosition;
@@ -204,15 +211,19 @@ namespace ire::core::gui
 			// CTRL + Right Shortcut
 			if (ev.control)
 			{
-				auto nextJumpIndex = m_textString.find(' ', m_currentCaretPosition);
+				auto nextJumpIndex = m_textString.find_first_of(" \t", m_currentCaretPosition);
 				if (m_currentCaretPosition == nextJumpIndex)
 				{
-					nextJumpIndex = m_textString.find(' ', m_currentCaretPosition + 1);
+					nextJumpIndex = m_textString.find_first_of(" \t", m_currentCaretPosition + 1);
 				}
-				if(nextJumpIndex < m_textString.length())
+				if (nextJumpIndex < m_textString.length())
+				{
 					m_currentCaretPosition = nextJumpIndex + 1;
-				//std::cout << "Next Space " << nextSpaceIndex << "\n";
-
+				}
+				else
+				{
+					m_currentCaretPosition = m_textString.length();
+				}
 				break;
 			}
 
