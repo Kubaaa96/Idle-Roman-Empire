@@ -267,18 +267,17 @@ namespace ire::core::gui
 
 	void EditBox::onEvent(EventRoot& sender, MouseButtonDownEvent& ev)
 	{
-		ClickableWidget::onEvent(sender, ev);
+
 		//std::cout << "Pressed: X: " << ev.position.x << ", Y:" << ev.position.y << "\n";
 
 		// Setting Caret in clicked position.x
-		if (ev.button == sf::Mouse::Button::Left)
+		auto clickedXPosition = ev.position.x;
+		auto positionOfRight = m_text.getGlobalBounds().left + m_text.getGlobalBounds().getSize().x;
+		switch (ev.button)
 		{
-
-			auto clickedXPosition = ev.position.x;
-			auto positionOfRight = m_text.getGlobalBounds().left + m_text.getGlobalBounds().getSize().x;
+		case sf::Mouse::Button::Left:		
 			if (clickedXPosition < positionOfRight)
 			{
-				std::vector<float> positionsOfLetters{};
 
 				for (std::size_t i = 0; i < m_textString.length(); ++i)
 				{
@@ -289,14 +288,15 @@ namespace ire::core::gui
 				{
 					return;
 				}
-				std::vector<float> distanceToLetters{};
-	
+
 				for (auto position : positionsOfLetters)
 				{
 					distanceToLetters.push_back(std::abs(position - clickedXPosition));
-				}		
+				}
 				m_currentCaretPosition = std::min_element(distanceToLetters.begin(),
 					distanceToLetters.end()) - distanceToLetters.begin();
+				positionsOfLetters.clear();
+				distanceToLetters.clear();
 			}
 			else
 			{
@@ -304,7 +304,16 @@ namespace ire::core::gui
 			}
 
 			updateCaretPosition();
+			break;
+		case sf::Mouse::Button::Right:
+			break;
+		case sf::Mouse::Button::Middle:
+			break;
+		default:
+			break;
 		}
+		m_state = State::Armed;
+		ev.handled = true;
 
 		// If Button is Down set Selection to active
 		// If Mouse moving Left change sel start index

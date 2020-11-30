@@ -86,6 +86,9 @@ namespace ire::core::gui
 
         Alignment m_textAlignment{ Alignment::Left };
 
+        std::vector<float> positionsOfLetters{};
+        std::vector<float> distanceToLetters{};
+
         ResourcePtr<sf::Font> m_font;
     };
 
