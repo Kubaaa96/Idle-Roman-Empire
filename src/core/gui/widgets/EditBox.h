@@ -52,14 +52,18 @@ namespace ire::core::gui
         void onEvent(EventRoot& sender, TextEnteredEvent& ev) override;
         void onEvent(EventRoot& sender, KeyDownEvent& ev) override;
         void onEvent(EventRoot& sender, KeyUpEvent& ev) override;
+        void onEvent(EventRoot& sender, MouseButtonDownEvent& ev) override;
+        void onEvent(EventRoot& sender, MouseButtonUpEvent& ev) override;
+        void onEvent(EventRoot& sender, MouseMovedEvent& ev) override;
 
     protected:
         void onTextChanged(TextEnteredEvent& ev);
-        void onKeyReleased(KeyUpEvent& ev);
         void onKeyClicked(KeyDownEvent& ev);
 
     private:
         sf::RectangleShape m_rectangleShape;
+
+        bool isActive = false;
 
         void backspaceKeyPressed();
 
@@ -99,14 +103,6 @@ namespace ire::core::gui
         bool system;
     };
 
-    struct KeyReleasedEvent : TranslatedEvent
-    {
-        sf::Keyboard::Key key;
-        bool alt;
-        bool control;
-        bool shift;
-        bool system;
-    };
 }
 
 #endif // !EDITBOX_H

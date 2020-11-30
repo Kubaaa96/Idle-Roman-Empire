@@ -1,5 +1,7 @@
 #include "EditBox.h"
 #include <codecvt>
+#include <vector>
+#include <cmath>
 #include <iostream>
 
 namespace ire::core::gui
@@ -36,8 +38,12 @@ namespace ire::core::gui
 	void EditBox::draw(sf::RenderTarget& target)
 	{
 		target.draw(m_rectangleShape);
-		target.draw(m_caret);
 
+		if (m_state != State::Idle)
+		{
+			target.draw(m_caret);
+		}
+		
 		if (!m_text.getString().isEmpty())
 		{
 			target.draw(m_text);
@@ -173,6 +179,7 @@ namespace ire::core::gui
 			}
 			break;
 		}
+		ev.handled = true;
 		updateCaretPosition();
 		onTextChanged(ev);
 	}
@@ -248,12 +255,74 @@ namespace ire::core::gui
 		default:
 			break;
 		}
+		ev.handled = true;
 		updateCaretPosition();
 		onKeyClicked(ev);
 	}
 
 	void EditBox::onEvent(EventRoot& sender, KeyUpEvent& ev)
 	{
+		ev.handled = true;
+	}
+
+	void EditBox::onEvent(EventRoot& sender, MouseButtonDownEvent& ev)
+	{
+		ClickableWidget::onEvent(sender, ev);
+		//std::cout << "Pressed: X: " << ev.position.x << ", Y:" << ev.position.y << "\n";
+
+		// Setting Caret in clicked position.x
+		if (ev.button == sf::Mouse::Button::Left)
+		{
+
+			auto clickedXPosition = ev.position.x;
+			auto positionOfRight = m_text.getGlobalBounds().left + m_text.getGlobalBounds().getSize().x;
+			if (clickedXPosition < positionOfRight)
+			{
+				std::vector<float> positionsOfLetters{};
+
+				for (std::size_t i = 0; i < m_textString.length(); ++i)
+				{
+					positionsOfLetters.push_back(m_text.findCharacterPos(i).x);
+				}
+
+				if (positionsOfLetters.empty())
+				{
+					return;
+				}
+				std::vector<float> distanceToLetters{};
+	
+				for (auto position : positionsOfLetters)
+				{
+					distanceToLetters.push_back(std::abs(position - clickedXPosition));
+				}		
+				m_currentCaretPosition = std::min_element(distanceToLetters.begin(),
+					distanceToLetters.end()) - distanceToLetters.begin();
+			}
+			else
+			{
+				m_currentCaretPosition = m_textString.length();
+			}
+
+			updateCaretPosition();
+		}
+
+		// If Button is Down set Selection to active
+		// If Mouse moving Left change sel start index
+		// if mouse moving Right change sel end index
+		// If Mouse clicked while selection is active. remove selection
+	}
+
+	void EditBox::onEvent(EventRoot& sender, MouseButtonUpEvent& ev)
+	{
+		ClickableWidget::onEvent(sender, ev);
+		//std::cout << "Released: X: " << ev.position.x << ", Y:" << ev.position.y << "\n";
+
+	}
+
+	void EditBox::onEvent(EventRoot& sender, MouseMovedEvent& ev)
+	{
+		ClickableWidget::onEvent(sender, ev);
+		//std::cout << "Moved: X: " << ev.position.x << ", Y:" << ev.position.y << "\n";
 
 	}
 
@@ -264,17 +333,7 @@ namespace ire::core::gui
 		textChangedEv.character = ev.character;
 		emitEvent<TextChangedEvent>(textChangedEv);
 	}
-	void EditBox::onKeyReleased(KeyUpEvent& ev)
-	{
-		KeyReleasedEvent keyClickedEv{};
-		keyClickedEv.timestamp = ev.timestamp;
-		keyClickedEv.key = ev.key;
-		keyClickedEv.alt = ev.alt;
-		keyClickedEv.control = ev.control;
-		keyClickedEv.shift = ev.control;
-		keyClickedEv.system = ev.system;
-		emitEvent<KeyReleasedEvent>(keyClickedEv);
-	}
+
 	void EditBox::onKeyClicked(KeyDownEvent& ev)
 	{
 		KeyPressedEvent keyClickedEv{};
