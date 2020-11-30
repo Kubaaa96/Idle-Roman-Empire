@@ -272,7 +272,7 @@ namespace ire::core::gui
 
 		// Setting Caret in clicked position.x
 		auto clickedXPosition = ev.position.x;
-		auto positionOfRight = m_text.getGlobalBounds().left + m_text.getGlobalBounds().getSize().x;
+		auto positionOfRight = m_text.getGlobalBounds().left + m_text.getGlobalBounds().width;
 		switch (ev.button)
 		{
 		case sf::Mouse::Button::Left:		
