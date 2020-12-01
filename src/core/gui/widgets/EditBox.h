@@ -28,6 +28,9 @@ namespace ire::core::gui
         void setTextString(const std::string& string);
         const std::string getTextString() const;
 
+        void setCharacterSize(unsigned int characterSize);
+        const unsigned int getCharacterSize() const;
+
         void setGhostTextString(const std::string& string);
         const std::string getGhostTextString() const;
 
@@ -69,6 +72,8 @@ namespace ire::core::gui
 
         void deleteKeyPressed();
 
+        unsigned int m_characterSize{ 15 };
+
         std::string m_textString;
         sf::Text m_text;
         std::string m_ghostTextString;
@@ -89,8 +94,19 @@ namespace ire::core::gui
         std::vector<std::size_t> indexesOfWordStarting{};
         std::vector<std::size_t> setIndexesWhereWordsStarts();
 
+        std::size_t findIndexOfLetterUnderMouse(float clickedXPosition);
+
         std::vector<float> positionsOfLetters{};
         std::vector<float> distanceToLetters{};
+
+        std::size_t m_selStart{ 0 };
+        std::size_t m_selEnd{ 0 };
+        std::size_t m_previousPositionOfMouse{ 0 };
+        std::string m_selectedString;
+        bool m_isSelectingWithMouse = false;
+        void updateSelectionPosition();
+
+        sf::RectangleShape m_selection;
 
         ResourcePtr<sf::Font> m_font;
     };

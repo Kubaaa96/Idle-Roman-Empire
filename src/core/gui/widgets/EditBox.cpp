@@ -13,7 +13,7 @@ namespace ire::core::gui
 	{
 		m_font = ResourceManager::instance().get<sf::Font>("resource/RomanSD.ttf");
 		m_text.setFont(*m_font);
-		m_text.setCharacterSize(15);
+		m_text.setCharacterSize(m_characterSize);
 		m_text.setFillColor(sf::Color::Black);
 
 		//setGhostTextString("Ghost Text");
@@ -23,6 +23,9 @@ namespace ire::core::gui
 		m_ghostText.setFillColor(sf::Color(140, 140, 140)); // Gray Color for Ghost text
 
 		m_caret.setFillColor(sf::Color::Red);
+		m_caret.setSize(sf::Vector2f(2, m_characterSize));
+
+		m_selection.setFillColor(sf::Color(0, 191, 255, 127));
 
 		m_rectangleShape.setFillColor(sf::Color::White);
 		m_rectangleShape.setOutlineColor(sf::Color::Blue);
@@ -45,6 +48,11 @@ namespace ire::core::gui
 			target.draw(m_caret);
 		}
 		
+		if (m_selStart != m_selEnd)
+		{
+			target.draw(m_selection);
+		}
+
 		if (!m_text.getString().isEmpty())
 		{
 			target.draw(m_text);
@@ -64,8 +72,9 @@ namespace ire::core::gui
 		m_text.setPosition(m_position.x + 15, m_position.y + 15);
 		m_ghostText.setPosition(m_position.x + 15, m_position.y + 15);
 
+		updateSelectionPosition();
 		updateCaretPosition();
-		m_caret.setSize(sf::Vector2f(2, 15));
+
 	}
 
 	void EditBox::setTextString(const std::string& string)
@@ -80,6 +89,19 @@ namespace ire::core::gui
 	const std::string EditBox::getTextString() const
 	{
 		return m_textString;
+	}
+
+	void EditBox::setCharacterSize(unsigned int characterSize)
+	{
+		if (m_characterSize != characterSize)
+		{
+			m_characterSize = characterSize;
+		}
+	}
+
+	const unsigned int EditBox::getCharacterSize() const
+	{
+		return m_characterSize;
 	}
 
 	void EditBox::setGhostTextString(const std::string& ghostString)
@@ -162,10 +184,10 @@ namespace ire::core::gui
 			return;
 		}
 		std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
-		// Unlimited Characters
 
 		switch (m_maxChars)
 		{
+		// Unlimited Characters
 		case 0:
 			m_textString.insert(m_currentCaretPosition, conv.to_bytes(ev.character));
 			++m_currentCaretPosition;
@@ -256,9 +278,6 @@ namespace ire::core::gui
 
 	void EditBox::onEvent(EventRoot& sender, MouseButtonDownEvent& ev)
 	{
-
-		//std::cout << "Pressed: X: " << ev.position.x << ", Y:" << ev.position.y << "\n";
-
 		// Setting Caret in clicked position.x
 		auto clickedXPosition = ev.position.x;
 		auto positionOfRight = m_text.getGlobalBounds().left + m_text.getGlobalBounds().width;
@@ -268,22 +287,7 @@ namespace ire::core::gui
 			if (clickedXPosition < positionOfRight)
 			{
 
-				for (std::size_t i = 0; i < m_textString.length(); ++i)
-				{
-					positionsOfLetters.push_back(m_text.findCharacterPos(i).x);
-				}
-
-				if (positionsOfLetters.empty())
-				{
-					return;
-				}
-
-				for (auto position : positionsOfLetters)
-				{
-					distanceToLetters.push_back(std::abs(position - clickedXPosition));
-				}
-				m_currentCaretPosition = std::min_element(distanceToLetters.begin(),
-					distanceToLetters.end()) - distanceToLetters.begin();
+				m_currentCaretPosition = findIndexOfLetterUnderMouse(clickedXPosition);
 				positionsOfLetters.clear();
 				distanceToLetters.clear();
 			}
@@ -292,6 +296,13 @@ namespace ire::core::gui
 				m_currentCaretPosition = m_textString.length();
 			}
 
+			// Selection Initializing
+			m_selStart = m_currentCaretPosition;
+			m_selEnd = m_currentCaretPosition;
+			m_previousPositionOfMouse = m_currentCaretPosition;
+			m_isSelectingWithMouse = true;
+
+			updateSelectionPosition();
 			updateCaretPosition();
 			break;
 		case sf::Mouse::Button::Right:
@@ -312,16 +323,86 @@ namespace ire::core::gui
 
 	void EditBox::onEvent(EventRoot& sender, MouseButtonUpEvent& ev)
 	{
-		ClickableWidget::onEvent(sender, ev);
-		//std::cout << "Released: X: " << ev.position.x << ", Y:" << ev.position.y << "\n";
+		if (ev.button != sf::Mouse::Button::Left)
+		{
+			return;
+		}
 
+		if (m_state == State::Armed && clientBounds().contains(ev.position))
+		{
+			onClick(ev);
+		}
+
+		m_isSelectingWithMouse = false;
+		m_state = State::Idle;
+		ev.handled = true;
+
+		sender.resetActiveWidget(*this);
 	}
 
 	void EditBox::onEvent(EventRoot& sender, MouseMovedEvent& ev)
 	{
-		ClickableWidget::onEvent(sender, ev);
-		//std::cout << "Moved: X: " << ev.position.x << ", Y:" << ev.position.y << "\n";
+		if (clientBounds().contains(ev.position))
+		{
+			m_state = (
+				(m_state == State::Idle || m_state == State::Hover)
+				? State::Hover
+				: State::Armed);
 
+			if (m_isSelectingWithMouse)
+			{
+				auto clickedXPosition = ev.position.x;
+				auto positionOfRight = m_text.getGlobalBounds().left + m_text.getGlobalBounds().width;
+				if (clickedXPosition < positionOfRight)
+				{
+					auto currentIndexOfLetter = findIndexOfLetterUnderMouse(clickedXPosition);
+
+					if (currentIndexOfLetter > m_previousPositionOfMouse)
+					{
+						m_selStart = currentIndexOfLetter;
+						// If moving Right set selEnd to current Index
+
+					}
+					else
+					{
+						m_selEnd = currentIndexOfLetter;
+						// If moving Left set selStart to currentIndex
+					}
+					
+
+					//m_currentCaretPosition = findIndexOfLetterUnderMouse(clickedXPosition);
+
+				}
+				else
+				{
+					m_selStart = m_currentCaretPosition;
+					m_selEnd = m_textString.length();
+					//m_currentCaretPosition = m_textString.length();
+				}
+				positionsOfLetters.clear();
+				distanceToLetters.clear();
+				updateSelectionPosition();
+				//updateCaretPosition();
+			}
+		}
+		else
+		{
+			m_state =
+				(m_state == State::Armed || m_state == State::Disarmed)
+				? State::Disarmed
+				: State::Idle;
+		}
+
+		ev.handled = true;
+
+		if (m_state == State::Idle)
+		{
+			sender.resetActiveWidget(*this);
+		}
+		else
+		{
+			sender.setActiveWidget(*this);
+		}
 	}
 
 	void EditBox::onTextChanged(TextEnteredEvent& ev)
@@ -386,6 +467,34 @@ namespace ire::core::gui
 		}
 		std::sort(tempIndexes.begin(), tempIndexes.end());
 		return tempIndexes;
+	}
+
+	std::size_t EditBox::findIndexOfLetterUnderMouse(float clickedXPosition)
+	{
+		for (std::size_t i = 0; i < m_textString.length(); ++i)
+		{
+			positionsOfLetters.push_back(m_text.findCharacterPos(i).x);
+		}
+		if (positionsOfLetters.empty())
+		{
+			return m_currentCaretPosition;
+		}
+		for (auto position : positionsOfLetters)
+		{
+			distanceToLetters.push_back(std::abs(position - clickedXPosition));
+		}
+		return std::min_element(distanceToLetters.begin(),
+			distanceToLetters.end()) - distanceToLetters.begin();
+	}
+
+	void EditBox::updateSelectionPosition()
+	{
+		m_selection.setPosition(m_text.findCharacterPos(m_selStart));
+		auto widthOfSelection = m_text.findCharacterPos(m_selEnd).x -
+			m_text.findCharacterPos(m_selStart).x;
+		m_selection.setSize({ widthOfSelection, static_cast<float>(m_characterSize + 2) });
+
+		
 	}
 
 }
