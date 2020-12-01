@@ -2,6 +2,7 @@
 #include <codecvt>
 #include <vector>
 #include <cmath>
+#include <algorithm>
 #include <iostream>
 
 namespace ire::core::gui
@@ -180,6 +181,7 @@ namespace ire::core::gui
 			break;
 		}
 		ev.handled = true;
+		indexesOfWordStarting = setIndexesWhereWordsStarts();
 		updateCaretPosition();
 		onTextChanged(ev);
 	}
@@ -193,19 +195,13 @@ namespace ire::core::gui
 			// CTRL + Left arrow Shortcut
 			if (ev.control)
 			{
-				auto nextJumpIndex = m_textString.find_last_of(" \t", m_currentCaretPosition);
-				if (m_currentCaretPosition == nextJumpIndex + 1)
+				if (!indexesOfWordStarting.empty() && m_currentCaretPosition != 0)
 				{
-					nextJumpIndex = m_textString.find_last_of(" \t", m_currentCaretPosition - 2);
+					auto firstOccurance = std::lower_bound(indexesOfWordStarting.rbegin(),
+						indexesOfWordStarting.rend(), m_currentCaretPosition - 1, std::greater<std::size_t>());
+					m_currentCaretPosition = *firstOccurance;
 				}
-				if (m_currentCaretPosition != 0 && nextJumpIndex < m_textString.length())
-				{
-					m_currentCaretPosition = nextJumpIndex + 1;
-				}
-				else
-				{
-					m_currentCaretPosition = 0;
-				}
+
 				break;
 			}
 
@@ -218,18 +214,11 @@ namespace ire::core::gui
 			// CTRL + Right Shortcut
 			if (ev.control)
 			{
-				auto nextJumpIndex = m_textString.find_first_of(" \t", m_currentCaretPosition);
-				if (m_currentCaretPosition == nextJumpIndex)
+				if (!indexesOfWordStarting.empty() && m_currentCaretPosition != m_textString.length())
 				{
-					nextJumpIndex = m_textString.find_first_of(" \t", m_currentCaretPosition + 1);
-				}
-				if (nextJumpIndex < m_textString.length())
-				{
-					m_currentCaretPosition = nextJumpIndex + 1;
-				}
-				else
-				{
-					m_currentCaretPosition = m_textString.length();
+					auto valueGreater = std::upper_bound(indexesOfWordStarting.begin(),
+						indexesOfWordStarting.end(), m_currentCaretPosition);
+					m_currentCaretPosition = *valueGreater;
 				}
 				break;
 			}
@@ -360,6 +349,7 @@ namespace ire::core::gui
 		m_textString.erase(m_currentCaretPosition - 1, 1);
 		m_text.setString(m_textString);
 		--m_currentCaretPosition;
+		indexesOfWordStarting = setIndexesWhereWordsStarts();
 		updateCaretPosition();
 	}
 
@@ -367,6 +357,7 @@ namespace ire::core::gui
 	{
 		m_textString.erase(m_currentCaretPosition, 1);
 		m_text.setString(m_textString);
+		indexesOfWordStarting = setIndexesWhereWordsStarts();
 		updateCaretPosition();
 	}
 
@@ -375,4 +366,26 @@ namespace ire::core::gui
 		auto positinOfFirstletter = m_text.findCharacterPos(m_currentCaretPosition);
 		m_caret.setPosition(positinOfFirstletter.x - 1, positinOfFirstletter.y);
 	}
+	std::vector<std::size_t> EditBox::setIndexesWhereWordsStarts()
+	{
+		std::vector<std::size_t> tempIndexes{};
+		if (!m_textString.empty())
+		{
+			tempIndexes.push_back(0); // Start of the Text
+			tempIndexes.push_back(m_textString.length()); // End of the text
+			for (std::size_t i = 1; i < m_textString.length(); ++i)
+			{
+				if (m_textString.at(i) != ' ' && m_textString.at(i) != '\t')
+				{
+					if (m_textString.at(i - 1) == ' ' || m_textString.at(i - 1) == '\t')
+					{
+						tempIndexes.push_back(i);
+					}
+				}
+			}
+		}
+		std::sort(tempIndexes.begin(), tempIndexes.end());
+		return tempIndexes;
+	}
+
 }
