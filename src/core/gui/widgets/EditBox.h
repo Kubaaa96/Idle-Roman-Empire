@@ -104,6 +104,7 @@ namespace ire::core::gui
         std::size_t m_previousPositionOfMouse{ 0 };
         std::string m_selectedString;
         bool m_isSelectingWithMouse = false;
+        void initializeSelection();
         void updateSelectionPosition();
 
         sf::RectangleShape m_selection;

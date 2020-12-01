@@ -296,10 +296,7 @@ namespace ire::core::gui
 				m_currentCaretPosition = m_textString.length();
 			}
 
-			// Selection Initializing
-			m_selStart = m_currentCaretPosition;
-			m_selEnd = m_currentCaretPosition;
-			m_previousPositionOfMouse = m_currentCaretPosition;
+			initializeSelection();
 			m_isSelectingWithMouse = true;
 
 			updateSelectionPosition();
@@ -314,11 +311,6 @@ namespace ire::core::gui
 		}
 		m_state = State::Armed;
 		ev.handled = true;
-
-		// If Button is Down set Selection to active
-		// If Mouse moving Left change sel start index
-		// if mouse moving Right change sel end index
-		// If Mouse clicked while selection is active. remove selection
 	}
 
 	void EditBox::onEvent(EventRoot& sender, MouseButtonUpEvent& ev)
@@ -332,7 +324,6 @@ namespace ire::core::gui
 		{
 			onClick(ev);
 		}
-
 		m_isSelectingWithMouse = false;
 		m_state = State::Idle;
 		ev.handled = true;
@@ -359,30 +350,21 @@ namespace ire::core::gui
 
 					if (currentIndexOfLetter > m_previousPositionOfMouse)
 					{
-						m_selStart = currentIndexOfLetter;
-						// If moving Right set selEnd to current Index
-
+						m_selEnd = currentIndexOfLetter;
 					}
 					else
 					{
-						m_selEnd = currentIndexOfLetter;
-						// If moving Left set selStart to currentIndex
-					}
-					
-
-					//m_currentCaretPosition = findIndexOfLetterUnderMouse(clickedXPosition);
-
+						m_selStart = currentIndexOfLetter;
+					}				
 				}
 				else
 				{
 					m_selStart = m_currentCaretPosition;
 					m_selEnd = m_textString.length();
-					//m_currentCaretPosition = m_textString.length();
 				}
 				positionsOfLetters.clear();
 				distanceToLetters.clear();
 				updateSelectionPosition();
-				//updateCaretPosition();
 			}
 		}
 		else
@@ -397,7 +379,7 @@ namespace ire::core::gui
 
 		if (m_state == State::Idle)
 		{
-			sender.resetActiveWidget(*this);
+			//sender.resetActiveWidget(*this);
 		}
 		else
 		{
@@ -431,6 +413,7 @@ namespace ire::core::gui
 		m_text.setString(m_textString);
 		--m_currentCaretPosition;
 		indexesOfWordStarting = setIndexesWhereWordsStarts();
+		initializeSelection();
 		updateCaretPosition();
 	}
 
@@ -439,6 +422,7 @@ namespace ire::core::gui
 		m_textString.erase(m_currentCaretPosition, 1);
 		m_text.setString(m_textString);
 		indexesOfWordStarting = setIndexesWhereWordsStarts();
+		initializeSelection();
 		updateCaretPosition();
 	}
 
@@ -487,6 +471,13 @@ namespace ire::core::gui
 			distanceToLetters.end()) - distanceToLetters.begin();
 	}
 
+	void EditBox::initializeSelection()
+	{
+		m_selStart = m_currentCaretPosition;
+		m_selEnd = m_currentCaretPosition;
+		m_previousPositionOfMouse = m_currentCaretPosition;
+	}
+
 	void EditBox::updateSelectionPosition()
 	{
 		m_selection.setPosition(m_text.findCharacterPos(m_selStart));
@@ -494,7 +485,7 @@ namespace ire::core::gui
 			m_text.findCharacterPos(m_selStart).x;
 		m_selection.setSize({ widthOfSelection, static_cast<float>(m_characterSize + 2) });
 
-		
+		m_selectedString = m_textString.substr(m_selStart, m_selEnd - m_selStart);
 	}
 
 }
