@@ -68,9 +68,9 @@ namespace ire::core::gui
 
         bool isActive = false;
 
-        void backspaceKeyPressed();
+        void deleteOneLetterBeforeCaret();
 
-        void deleteKeyPressed();
+        void deleteOneLetterAfterCaret();
 
         unsigned int m_characterSize{ 15 };
 
@@ -99,11 +99,12 @@ namespace ire::core::gui
         std::vector<float> positionsOfLetters{};
         std::vector<float> distanceToLetters{};
 
-        std::size_t m_selStart{ 0 };
-        std::size_t m_selEnd{ 0 };
-        std::size_t m_previousPositionOfMouse{ 0 };
+        std::size_t m_selStarting{ 0 };
+        std::size_t m_selIndex{ 0 };
+
         std::string m_selectedString;
-        bool m_isSelectingWithMouse = false;
+        bool m_isSelecting = false;
+        bool m_isSelectingActive = false;
         void initializeSelection();
         void updateSelectionPosition();
 

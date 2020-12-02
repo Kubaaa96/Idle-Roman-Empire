@@ -30,6 +30,8 @@ namespace ire::core::gui
 		m_rectangleShape.setFillColor(sf::Color::White);
 		m_rectangleShape.setOutlineColor(sf::Color::Blue);
 		m_rectangleShape.setOutlineThickness(3);
+
+		initializeSelection();
 	}
 
 	std::unique_ptr<EditBox> EditBox::create(const std::string& text)
@@ -48,7 +50,7 @@ namespace ire::core::gui
 			target.draw(m_caret);
 		}
 		
-		if (m_selStart != m_selEnd)
+		if (m_selStarting != m_selIndex)
 		{
 			target.draw(m_selection);
 		}
@@ -214,26 +216,64 @@ namespace ire::core::gui
 		{
 		case sf::Keyboard::Left:
 
-			// CTRL + Left arrow Shortcut
 			if (ev.control)
 			{
+				// CTRL + SHIFT + LEFT
+				if (ev.shift)
+				{
+
+				}
+
+				// CTRL + Left 
 				if (!indexesOfWordStarting.empty() && m_currentCaretPosition != 0)
 				{
-					auto firstOccurance = std::lower_bound(indexesOfWordStarting.rbegin(),
+					auto valueSmaller = std::lower_bound(indexesOfWordStarting.rbegin(),
 						indexesOfWordStarting.rend(), m_currentCaretPosition - 1, std::greater<std::size_t>());
-					m_currentCaretPosition = *firstOccurance;
+					m_currentCaretPosition = *valueSmaller;
+					break;
 				}
+
+			}
+			// SHIFT + LEFT
+			if (ev.shift && m_selIndex > 0)
+			{
+				if (!m_isSelectingActive)
+				{
+					initializeSelection();
+				}
+				--m_selIndex;
+				m_currentCaretPosition = m_selIndex;
+				if (m_selIndex == m_selStarting)
+				{
+					m_isSelectingActive = false;
+					break;
+				}
+				else
+				{
+					m_isSelectingActive = true;
+				}
+
+				updateSelectionPosition();
+				break;
+			}
+			if (m_isSelectingActive && m_selIndex > 0)
+			{
+				if (m_selIndex > m_selStarting)
+				{
+					m_currentCaretPosition = m_selStarting;
+				}
+				initializeSelection();
 
 				break;
 			}
-
-			if (m_currentCaretPosition != 0)
+			if (m_currentCaretPosition > 0 )
 			{
 				--m_currentCaretPosition;
 			}
 			break;
 		case sf::Keyboard::Right:
-			// CTRL + Right Shortcut
+
+			// CTRL + Right
 			if (ev.control)
 			{
 				if (!indexesOfWordStarting.empty() && m_currentCaretPosition != m_textString.length())
@@ -241,11 +281,49 @@ namespace ire::core::gui
 					auto valueGreater = std::upper_bound(indexesOfWordStarting.begin(),
 						indexesOfWordStarting.end(), m_currentCaretPosition);
 					m_currentCaretPosition = *valueGreater;
+					break;
 				}
+				// CTRL + SHIFT + RIGHT
+				if (ev.shift)
+				{
+
+				}
+			}
+
+			// SHIFT + RIGHT
+			if (ev.shift && m_selIndex < m_textString.length())
+			{
+				if (!m_isSelectingActive)
+				{
+					initializeSelection();
+				}
+				++m_selIndex;
+				m_currentCaretPosition = m_selIndex;
+				if (m_selIndex == m_selStarting)
+				{
+					m_isSelectingActive = false;
+					break;
+				}
+				else
+				{
+					m_isSelectingActive = true;
+				}
+
+				updateSelectionPosition();
 				break;
 			}
 
-			if (m_currentCaretPosition != m_textString.length())
+			if (m_isSelectingActive && m_selIndex < m_textString.length())
+			{
+				if (m_selIndex < m_selStarting)
+				{
+					m_currentCaretPosition = m_selStarting;
+				}
+				initializeSelection();
+				break;
+			}
+
+			if (m_currentCaretPosition < m_textString.length())
 			{
 				++m_currentCaretPosition;
 			}
@@ -253,14 +331,13 @@ namespace ire::core::gui
 		case sf::Keyboard::Backspace:
 			if (m_currentCaretPosition != 0)
 			{
-				backspaceKeyPressed();
-
+				deleteOneLetterBeforeCaret();
 			}
 			break;
 		case sf::Keyboard::Delete:
 			if (m_currentCaretPosition != m_textString.length())
 			{
-				deleteKeyPressed();
+				deleteOneLetterAfterCaret();
 			}
 			break;
 		default:
@@ -278,7 +355,6 @@ namespace ire::core::gui
 
 	void EditBox::onEvent(EventRoot& sender, MouseButtonDownEvent& ev)
 	{
-		// Setting Caret in clicked position.x
 		auto clickedXPosition = ev.position.x;
 		auto positionOfRight = m_text.getGlobalBounds().left + m_text.getGlobalBounds().width;
 		switch (ev.button)
@@ -286,7 +362,6 @@ namespace ire::core::gui
 		case sf::Mouse::Button::Left:		
 			if (clickedXPosition < positionOfRight)
 			{
-
 				m_currentCaretPosition = findIndexOfLetterUnderMouse(clickedXPosition);
 				positionsOfLetters.clear();
 				distanceToLetters.clear();
@@ -297,7 +372,7 @@ namespace ire::core::gui
 			}
 
 			initializeSelection();
-			m_isSelectingWithMouse = true;
+			m_isSelecting = true;
 
 			updateSelectionPosition();
 			updateCaretPosition();
@@ -324,7 +399,17 @@ namespace ire::core::gui
 		{
 			onClick(ev);
 		}
-		m_isSelectingWithMouse = false;
+
+		if (m_selIndex != m_selStarting)
+		{
+			m_isSelectingActive = true;
+		}
+		else
+		{
+			m_isSelectingActive = false;
+		}
+
+		m_isSelecting = false;
 		m_state = State::Idle;
 		ev.handled = true;
 
@@ -340,31 +425,26 @@ namespace ire::core::gui
 				? State::Hover
 				: State::Armed);
 
-			if (m_isSelectingWithMouse)
+			if (m_isSelecting)
 			{
 				auto clickedXPosition = ev.position.x;
 				auto positionOfRight = m_text.getGlobalBounds().left + m_text.getGlobalBounds().width;
 				if (clickedXPosition < positionOfRight)
 				{
 					auto currentIndexOfLetter = findIndexOfLetterUnderMouse(clickedXPosition);
-
-					if (currentIndexOfLetter > m_previousPositionOfMouse)
-					{
-						m_selEnd = currentIndexOfLetter;
-					}
-					else
-					{
-						m_selStart = currentIndexOfLetter;
-					}				
+					m_currentCaretPosition = currentIndexOfLetter;
+					m_selIndex = currentIndexOfLetter;
 				}
 				else
 				{
-					m_selStart = m_currentCaretPosition;
-					m_selEnd = m_textString.length();
+					m_currentCaretPosition = m_textString.length();
+					m_selIndex = m_textString.length();
+
 				}
 				positionsOfLetters.clear();
 				distanceToLetters.clear();
 				updateSelectionPosition();
+				updateCaretPosition();
 			}
 		}
 		else
@@ -407,7 +487,7 @@ namespace ire::core::gui
 		emitEvent<KeyPressedEvent>(keyClickedEv);
 	}
 
-	void EditBox::backspaceKeyPressed()
+	void EditBox::deleteOneLetterBeforeCaret()
 	{
 		m_textString.erase(m_currentCaretPosition - 1, 1);
 		m_text.setString(m_textString);
@@ -417,7 +497,7 @@ namespace ire::core::gui
 		updateCaretPosition();
 	}
 
-	void EditBox::deleteKeyPressed()
+	void EditBox::deleteOneLetterAfterCaret()
 	{
 		m_textString.erase(m_currentCaretPosition, 1);
 		m_text.setString(m_textString);
@@ -473,19 +553,34 @@ namespace ire::core::gui
 
 	void EditBox::initializeSelection()
 	{
-		m_selStart = m_currentCaretPosition;
-		m_selEnd = m_currentCaretPosition;
-		m_previousPositionOfMouse = m_currentCaretPosition;
+		m_selStarting = m_currentCaretPosition;
+		m_selIndex = m_currentCaretPosition;
+		m_isSelectingActive = false;
 	}
 
 	void EditBox::updateSelectionPosition()
 	{
-		m_selection.setPosition(m_text.findCharacterPos(m_selStart));
-		auto widthOfSelection = m_text.findCharacterPos(m_selEnd).x -
-			m_text.findCharacterPos(m_selStart).x;
+		if (m_selStarting == m_selIndex)
+		{
+			return;
+		}
+		float widthOfSelection = 0;
+		if (m_selStarting < m_selIndex)
+		{
+			m_selection.setPosition(m_text.findCharacterPos(m_selStarting));
+			widthOfSelection = m_text.findCharacterPos(m_selIndex).x -
+				m_text.findCharacterPos(m_selStarting).x;
+			m_selectedString = m_textString.substr(m_selStarting, m_selIndex - m_selStarting);
+		}
+		else 
+		{
+			m_selection.setPosition(m_text.findCharacterPos(m_selIndex));
+			widthOfSelection = m_text.findCharacterPos(m_selStarting).x -
+				m_text.findCharacterPos(m_selIndex).x;
+			m_selectedString = m_textString.substr(m_selIndex, m_selStarting - m_selIndex);
+			
+		}
 		m_selection.setSize({ widthOfSelection, static_cast<float>(m_characterSize + 2) });
-
-		m_selectedString = m_textString.substr(m_selStart, m_selEnd - m_selStart);
 	}
 
 }
