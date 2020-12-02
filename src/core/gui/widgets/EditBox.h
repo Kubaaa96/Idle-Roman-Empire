@@ -92,7 +92,7 @@ namespace ire::core::gui
         Alignment m_textAlignment{ Alignment::Left };
 
         std::vector<std::size_t> indexesOfWordStarting{};
-        std::vector<std::size_t> setIndexesWhereWordsStarts();
+        void updateIndexesOfWordStarting();
 
         std::size_t findIndexOfLetterUnderMouse(float clickedXPosition);
 

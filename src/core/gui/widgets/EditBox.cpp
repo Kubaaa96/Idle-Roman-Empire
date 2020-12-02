@@ -180,8 +180,9 @@ namespace ire::core::gui
 
 	void EditBox::onEvent(EventRoot& sender, TextEnteredEvent& ev)
 	{
-		// Preventing Backspace from printing 
-		if (ev.character == 8)
+		// Preventing Backspace, CTRL + C, CTRL + X, CTRL + V, CTRL + A from printing 
+		if (ev.character == 8 || ev.character == 3 || ev.character == 24 
+			|| ev.character == 22 || ev.character == 1)
 		{
 			return;
 		}
@@ -206,7 +207,7 @@ namespace ire::core::gui
 		}
 		ev.handled = true;
 		m_isSelectingActive = false;
-		indexesOfWordStarting = setIndexesWhereWordsStarts();
+		updateIndexesOfWordStarting();
 		updateCaretPosition();
 		onTextChanged(ev);
 	}
@@ -309,7 +310,6 @@ namespace ire::core::gui
 					m_currentCaretPosition = *valueGreater;
 					break;
 				}
-
 			}
 
 			// SHIFT + RIGHT
@@ -355,6 +355,88 @@ namespace ire::core::gui
 				++m_currentCaretPosition;
 			}
 			break;
+
+		case sf::Keyboard::C:
+			if (ev.control)
+			{
+				if (!m_selectedString.empty())
+				{
+					sf::Clipboard::setString(m_selectedString);
+				}
+			}
+			break;
+
+		case sf::Keyboard::X:
+			if (ev.control)
+			{
+				if (!m_selectedString.empty())
+				{
+					sf::Clipboard::setString(m_selectedString);
+					if (m_selStarting < m_selIndex)
+					{
+						m_textString.erase(m_selStarting, m_selIndex - m_selStarting);
+						m_currentCaretPosition = m_selStarting;
+					}
+					else
+					{
+						m_textString.erase(m_selIndex, m_selStarting - m_selIndex);
+						m_currentCaretPosition = m_selIndex;
+					}
+					// Bug with not moving right or left arrow after taking from it
+					m_isSelecting = false;
+					m_text.setString(m_textString);
+				}	
+				updateIndexesOfWordStarting();
+				initializeSelection();
+				updateSelectionPosition();
+			}
+			break;
+
+		case sf::Keyboard::V:
+			if (ev.control)
+			{
+				auto stringFromClipboard = sf::Clipboard::getString().toAnsiString();
+				if (!stringFromClipboard.empty())
+				{
+					if (!m_selectedString.empty())
+					{
+						// Make Function Erase selected String
+						if (m_selStarting < m_selIndex)
+						{
+							m_textString.erase(m_selStarting, m_selIndex - m_selStarting);
+							m_currentCaretPosition = m_selStarting;
+						}
+						else
+						{
+							m_textString.erase(m_selIndex, m_selStarting - m_selIndex);
+							m_currentCaretPosition = m_selIndex;
+						}
+					}
+					m_textString.insert(m_currentCaretPosition, stringFromClipboard);
+					m_currentCaretPosition = m_currentCaretPosition + stringFromClipboard.length();
+				}
+				m_text.setString(m_textString);
+				updateIndexesOfWordStarting();
+				initializeSelection();
+				updateSelectionPosition();
+			}
+			break;
+
+		case sf::Keyboard::A:
+			if (ev.control)
+			{
+				if (!m_textString.empty())
+				{
+					m_selStarting = 0;
+					m_selIndex = m_textString.length();
+					m_isSelectingActive = true;
+					m_currentCaretPosition = m_selIndex;
+				}
+				updateSelectionPosition();
+				updateCaretPosition();
+			}
+			break;
+
 		case sf::Keyboard::Backspace:
 			if (m_currentCaretPosition != 0)
 			{
@@ -400,6 +482,7 @@ namespace ire::core::gui
 
 			initializeSelection();
 			m_isSelecting = true;
+			m_isSelectingActive = true;
 
 			updateSelectionPosition();
 			updateCaretPosition();
@@ -519,7 +602,7 @@ namespace ire::core::gui
 		m_textString.erase(m_currentCaretPosition - 1, 1);
 		m_text.setString(m_textString);
 		--m_currentCaretPosition;
-		indexesOfWordStarting = setIndexesWhereWordsStarts();
+		updateIndexesOfWordStarting();
 		initializeSelection();
 		updateCaretPosition();
 	}
@@ -528,7 +611,7 @@ namespace ire::core::gui
 	{
 		m_textString.erase(m_currentCaretPosition, 1);
 		m_text.setString(m_textString);
-		indexesOfWordStarting = setIndexesWhereWordsStarts();
+		updateIndexesOfWordStarting();
 		initializeSelection();
 		updateCaretPosition();
 	}
@@ -538,7 +621,8 @@ namespace ire::core::gui
 		auto positinOfFirstletter = m_text.findCharacterPos(m_currentCaretPosition);
 		m_caret.setPosition(positinOfFirstletter.x - 1, positinOfFirstletter.y);
 	}
-	std::vector<std::size_t> EditBox::setIndexesWhereWordsStarts()
+
+	void EditBox::updateIndexesOfWordStarting()
 	{
 		std::vector<std::size_t> tempIndexes{};
 		if (!m_textString.empty())
@@ -557,7 +641,7 @@ namespace ire::core::gui
 			}
 		}
 		std::sort(tempIndexes.begin(), tempIndexes.end());
-		return tempIndexes;
+		indexesOfWordStarting = tempIndexes;
 	}
 
 	std::size_t EditBox::findIndexOfLetterUnderMouse(float clickedXPosition)
