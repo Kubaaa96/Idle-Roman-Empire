@@ -50,7 +50,7 @@ namespace ire::core::gui
 			target.draw(m_caret);
 		}
 		
-		if (m_selStarting != m_selIndex)
+		if (m_selStarting != m_selIndex && m_isSelectingActive)
 		{
 			target.draw(m_selection);
 		}
@@ -205,6 +205,7 @@ namespace ire::core::gui
 			break;
 		}
 		ev.handled = true;
+		m_isSelectingActive = false;
 		indexesOfWordStarting = setIndexesWhereWordsStarts();
 		updateCaretPosition();
 		onTextChanged(ev);
@@ -218,31 +219,45 @@ namespace ire::core::gui
 
 			if (ev.control)
 			{
-				// CTRL + SHIFT + LEFT
-				if (ev.shift)
-				{
-
-				}
-
-				// CTRL + Left 
 				if (!indexesOfWordStarting.empty() && m_currentCaretPosition != 0)
-				{
+				{		
 					auto valueSmaller = std::lower_bound(indexesOfWordStarting.rbegin(),
 						indexesOfWordStarting.rend(), m_currentCaretPosition - 1, std::greater<std::size_t>());
+
+					// CTRL + SHIFT + LEFT
+					if (ev.shift)
+					{
+						if (!m_isSelectingActive)
+						{
+							initializeSelection();
+						}
+						m_selIndex = *valueSmaller;
+						m_isSelectingActive = true;
+						updateSelectionPosition();
+					}
+					// CTRL + Left 
 					m_currentCaretPosition = *valueSmaller;
 					break;
 				}
 
 			}
 			// SHIFT + LEFT
-			if (ev.shift && m_selIndex > 0)
+			if (ev.shift)
 			{
+
+				// Prevent from going from 0 to std::size_t max value
+
 				if (!m_isSelectingActive)
 				{
 					initializeSelection();
 				}
-				--m_selIndex;
-				m_currentCaretPosition = m_selIndex;
+
+				if (m_selIndex > 0)
+				{
+					--m_selIndex;
+					m_currentCaretPosition = m_selIndex;
+				}
+				
 				if (m_selIndex == m_selStarting)
 				{
 					m_isSelectingActive = false;
@@ -252,7 +267,7 @@ namespace ire::core::gui
 				{
 					m_isSelectingActive = true;
 				}
-
+				
 				updateSelectionPosition();
 				break;
 			}
@@ -263,7 +278,7 @@ namespace ire::core::gui
 					m_currentCaretPosition = m_selStarting;
 				}
 				initializeSelection();
-
+				m_isSelectingActive = false;
 				break;
 			}
 			if (m_currentCaretPosition > 0 )
@@ -273,32 +288,43 @@ namespace ire::core::gui
 			break;
 		case sf::Keyboard::Right:
 
-			// CTRL + Right
 			if (ev.control)
 			{
 				if (!indexesOfWordStarting.empty() && m_currentCaretPosition != m_textString.length())
-				{
+				{				
 					auto valueGreater = std::upper_bound(indexesOfWordStarting.begin(),
 						indexesOfWordStarting.end(), m_currentCaretPosition);
+					// CTRL + SHIFT + RIGHT
+					if (ev.shift)
+					{
+						if (!m_isSelectingActive)
+						{
+							initializeSelection();
+						}
+						m_selIndex = *valueGreater;
+						m_isSelectingActive = true;
+						updateSelectionPosition();
+					}
+					// CTRL + Right
 					m_currentCaretPosition = *valueGreater;
 					break;
 				}
-				// CTRL + SHIFT + RIGHT
-				if (ev.shift)
-				{
 
-				}
 			}
 
 			// SHIFT + RIGHT
-			if (ev.shift && m_selIndex < m_textString.length())
+			if (ev.shift)
 			{
 				if (!m_isSelectingActive)
 				{
 					initializeSelection();
 				}
-				++m_selIndex;
-				m_currentCaretPosition = m_selIndex;
+				if (m_selIndex < m_textString.length())
+				{
+					++m_selIndex;
+					m_currentCaretPosition = m_selIndex;
+				}
+				
 				if (m_selIndex == m_selStarting)
 				{
 					m_isSelectingActive = false;
@@ -320,6 +346,7 @@ namespace ire::core::gui
 					m_currentCaretPosition = m_selStarting;
 				}
 				initializeSelection();
+				m_isSelectingActive = false;
 				break;
 			}
 
@@ -555,7 +582,6 @@ namespace ire::core::gui
 	{
 		m_selStarting = m_currentCaretPosition;
 		m_selIndex = m_currentCaretPosition;
-		m_isSelectingActive = false;
 	}
 
 	void EditBox::updateSelectionPosition()
