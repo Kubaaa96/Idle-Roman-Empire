@@ -237,10 +237,10 @@ namespace ire::core::gui
 
 			if (ev.control)
 			{
-				if (!indexesOfWordStarting.empty() && m_currentCaretPosition != 0)
+				if (!m_indexesOfWordStarting.empty() && m_currentCaretPosition != 0)
 				{		
-					auto valueSmaller = std::lower_bound(indexesOfWordStarting.rbegin(),
-						indexesOfWordStarting.rend(), m_currentCaretPosition - 1, std::greater<std::size_t>());
+					auto valueSmaller = std::lower_bound(m_indexesOfWordStarting.rbegin(),
+						m_indexesOfWordStarting.rend(), m_currentCaretPosition - 1, std::greater<std::size_t>());
 
 					// CTRL + SHIFT + LEFT
 					if (ev.shift)
@@ -309,10 +309,10 @@ namespace ire::core::gui
 
 			if (ev.control)
 			{
-				if (!indexesOfWordStarting.empty() && m_currentCaretPosition != m_textString.length())
+				if (!m_indexesOfWordStarting.empty() && m_currentCaretPosition != m_textString.length())
 				{				
-					auto valueGreater = std::upper_bound(indexesOfWordStarting.begin(),
-						indexesOfWordStarting.end(), m_currentCaretPosition);
+					auto valueGreater = std::upper_bound(m_indexesOfWordStarting.begin(),
+						m_indexesOfWordStarting.end(), m_currentCaretPosition);
 					// CTRL + SHIFT + RIGHT
 					if (ev.shift)
 					{
@@ -462,8 +462,7 @@ namespace ire::core::gui
 			if (clickedXPosition < positionOfRight)
 			{
 				m_currentCaretPosition = findIndexOfLetterUnderMouse(clickedXPosition);
-				positionsOfLetters.clear();
-				distanceToLetters.clear();
+				clearPositionAndDistanceToLetters();
 			}
 			else
 			{
@@ -542,8 +541,7 @@ namespace ire::core::gui
 					m_selIndex = m_textString.length();
 
 				}
-				positionsOfLetters.clear();
-				distanceToLetters.clear();
+				clearPositionAndDistanceToLetters();
 				updateSelectionPosition();
 				updateCaretPosition();
 			}
@@ -652,25 +650,31 @@ namespace ire::core::gui
 			}
 		}
 		std::sort(tempIndexes.begin(), tempIndexes.end());
-		indexesOfWordStarting = tempIndexes;
+		m_indexesOfWordStarting = tempIndexes;
 	}
 
 	std::size_t EditBox::findIndexOfLetterUnderMouse(float clickedXPosition)
 	{
 		for (std::size_t i = 0; i < m_textString.length(); ++i)
 		{
-			positionsOfLetters.push_back(m_text.findCharacterPos(i).x);
+			m_positionsOfLetters.push_back(m_text.findCharacterPos(i).x);
 		}
-		if (positionsOfLetters.empty())
+		if (m_positionsOfLetters.empty())
 		{
 			return m_currentCaretPosition;
 		}
-		for (auto position : positionsOfLetters)
+		for (auto position : m_positionsOfLetters)
 		{
-			distanceToLetters.push_back(std::abs(position - clickedXPosition));
+			m_distanceToLetters.push_back(std::abs(position - clickedXPosition));
 		}
-		return std::min_element(distanceToLetters.begin(),
-			distanceToLetters.end()) - distanceToLetters.begin();
+		return std::min_element(m_distanceToLetters.begin(),
+			m_distanceToLetters.end()) - m_distanceToLetters.begin();
+	}
+
+	void EditBox::clearPositionAndDistanceToLetters()
+	{
+		m_positionsOfLetters.clear();
+		m_distanceToLetters.clear();
 	}
 
 	void EditBox::initializeSelection()
