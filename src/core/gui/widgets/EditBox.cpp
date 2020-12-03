@@ -143,7 +143,7 @@ namespace ire::core::gui
 			charactersBeforeCaret = m_textString.length();
 		}
 
-		if (m_currentCaretPosition == charactersBeforeCaret)
+		if (m_currentCaretPosition != charactersBeforeCaret)
 		{
 			m_currentCaretPosition = charactersBeforeCaret;
 		}
