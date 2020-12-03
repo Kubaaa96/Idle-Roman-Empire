@@ -33,10 +33,6 @@ namespace ire::client::state
     private:
 
         std::unique_ptr<ire::core::gui::Group> group;
-        std::unique_ptr<ire::core::gui::Panel> panel;
-        std::unique_ptr<ire::core::gui::Panel> panel2;
-        std::unique_ptr<ire::core::gui::HorizontalLayout> horizontalLayout;
-        std::unique_ptr<ire::core::gui::VerticalLayout> verticalLayout;
     };
 }
 

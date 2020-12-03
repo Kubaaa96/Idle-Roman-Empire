@@ -16,14 +16,12 @@ namespace ire::core::gui
 		m_text.setCharacterSize(m_characterSize);
 		m_text.setFillColor(sf::Color::Black);
 
-		//setGhostTextString("Ghost Text");
-
 		m_ghostText.setFont(*m_font);
 		m_ghostText.setCharacterSize(15);
 		m_ghostText.setFillColor(sf::Color(140, 140, 140)); // Gray Color for Ghost text
 
 		m_caret.setFillColor(sf::Color::Red);
-		m_caret.setSize(sf::Vector2f(2, m_characterSize));
+		m_caret.setSize(sf::Vector2f(2, static_cast<float>(m_characterSize)));
 
 		m_selection.setFillColor(sf::Color(0, 191, 255, 127));
 
@@ -37,7 +35,7 @@ namespace ire::core::gui
 	std::unique_ptr<EditBox> EditBox::create(const std::string& text)
 	{
 		auto widget = std::make_unique<EditBox>();
-		// Setting up text on Button in future
+		widget->setTextString(text);
 		return widget;
 	}
 
@@ -76,19 +74,37 @@ namespace ire::core::gui
 
 		updateSelectionPosition();
 		updateCaretPosition();
-
 	}
 
 	void EditBox::setTextString(const std::string& string)
 	{
 		if (m_textString != string)
 		{
-			m_textString = string;
-			m_text.setString(m_textString);
+			switch (m_maxChars)
+			{
+			case 0:
+				m_textString = string;
+				m_text.setString(m_textString);
+				break;
+			default:			
+				if (string.length() > m_maxChars)
+				{
+					m_textString = string;
+					m_text.setString(m_textString);
+				}
+				else
+				{
+					throw std::runtime_error("Choosen string is not fitting because of Max character limit Try setMaximumCharacters");
+				}
+				break;
+			}
+
+			// TODO Cut String if it is longer than m_maxChar and give info to client
+
 		}
 	}
 
-	const std::string EditBox::getTextString() const
+	const std::string& EditBox::getTextString() const
 	{
 		return m_textString;
 	}
@@ -169,7 +185,8 @@ namespace ire::core::gui
 		if (m_maxChars != maxChars)
 		{
 			m_maxChars = maxChars;
-			// TODO Erasing all characters that are after maxChar position
+			m_textString.erase(m_maxChars);
+			m_text.setString(m_textString);
 		}
 	}
 
@@ -240,14 +257,11 @@ namespace ire::core::gui
 					m_currentCaretPosition = *valueSmaller;
 					break;
 				}
-
 			}
 			// SHIFT + LEFT
 			if (ev.shift)
 			{
-
 				// Prevent from going from 0 to std::size_t max value
-
 				if (!m_isSelectingActive)
 				{
 					initializeSelection();
@@ -274,7 +288,11 @@ namespace ire::core::gui
 			}
 			if (m_isSelectingActive && m_selIndex > 0)
 			{
-				if (m_selIndex > m_selStarting)
+				if (m_selIndex == m_selStarting)
+				{
+					--m_currentCaretPosition;
+				}
+				else if (m_selIndex > m_selStarting)
 				{
 					m_currentCaretPosition = m_selStarting;
 				}
@@ -334,14 +352,17 @@ namespace ire::core::gui
 				{
 					m_isSelectingActive = true;
 				}
-
 				updateSelectionPosition();
 				break;
 			}
 
 			if (m_isSelectingActive && m_selIndex < m_textString.length())
 			{
-				if (m_selIndex < m_selStarting)
+				if (m_selIndex == m_selStarting)
+				{
+					++m_currentCaretPosition;
+				}
+				else if (m_selIndex < m_selStarting)
 				{
 					m_currentCaretPosition = m_selStarting;
 				}
@@ -372,17 +393,7 @@ namespace ire::core::gui
 				if (!m_selectedString.empty())
 				{
 					sf::Clipboard::setString(m_selectedString);
-					if (m_selStarting < m_selIndex)
-					{
-						m_textString.erase(m_selStarting, m_selIndex - m_selStarting);
-						m_currentCaretPosition = m_selStarting;
-					}
-					else
-					{
-						m_textString.erase(m_selIndex, m_selStarting - m_selIndex);
-						m_currentCaretPosition = m_selIndex;
-					}
-					// Bug with not moving right or left arrow after taking from it
+					eraseSelectedFromString();
 					m_isSelecting = false;
 					m_text.setString(m_textString);
 				}	
@@ -400,17 +411,7 @@ namespace ire::core::gui
 				{
 					if (!m_selectedString.empty())
 					{
-						// Make Function Erase selected String
-						if (m_selStarting < m_selIndex)
-						{
-							m_textString.erase(m_selStarting, m_selIndex - m_selStarting);
-							m_currentCaretPosition = m_selStarting;
-						}
-						else
-						{
-							m_textString.erase(m_selIndex, m_selStarting - m_selIndex);
-							m_currentCaretPosition = m_selIndex;
-						}
+						eraseSelectedFromString();
 					}
 					m_textString.insert(m_currentCaretPosition, stringFromClipboard);
 					m_currentCaretPosition = m_currentCaretPosition + stringFromClipboard.length();
@@ -438,16 +439,10 @@ namespace ire::core::gui
 			break;
 
 		case sf::Keyboard::Backspace:
-			if (m_currentCaretPosition != 0)
-			{
-				deleteOneLetterBeforeCaret();
-			}
+			deleteOneLetterBeforeCaret();		
 			break;
 		case sf::Keyboard::Delete:
-			if (m_currentCaretPosition != m_textString.length())
-			{
-				deleteOneLetterAfterCaret();
-			}
+			deleteOneLetterAfterCaret();
 			break;
 		default:
 			break;
@@ -455,11 +450,6 @@ namespace ire::core::gui
 		ev.handled = true;
 		updateCaretPosition();
 		onKeyClicked(ev);
-	}
-
-	void EditBox::onEvent(EventRoot& sender, KeyUpEvent& ev)
-	{
-		ev.handled = true;
 	}
 
 	void EditBox::onEvent(EventRoot& sender, MouseButtonDownEvent& ev)
@@ -488,6 +478,7 @@ namespace ire::core::gui
 			updateCaretPosition();
 			break;
 		case sf::Mouse::Button::Right:
+			std::cout << "Context Menu\n";
 			break;
 		case sf::Mouse::Button::Middle:
 			break;
@@ -569,7 +560,7 @@ namespace ire::core::gui
 
 		if (m_state == State::Idle)
 		{
-			//sender.resetActiveWidget(*this);
+			sender.resetActiveWidget(*this);
 		}
 		else
 		{
@@ -599,21 +590,41 @@ namespace ire::core::gui
 
 	void EditBox::deleteOneLetterBeforeCaret()
 	{
-		m_textString.erase(m_currentCaretPosition - 1, 1);
-		m_text.setString(m_textString);
-		--m_currentCaretPosition;
-		updateIndexesOfWordStarting();
-		initializeSelection();
-		updateCaretPosition();
+		if (m_currentCaretPosition < m_textString.length() + 1)
+		{
+			m_textString.erase(m_currentCaretPosition - 1, 1);
+			m_text.setString(m_textString);
+			--m_currentCaretPosition;
+			updateIndexesOfWordStarting();
+			initializeSelection();
+			updateCaretPosition();
+		}
 	}
 
 	void EditBox::deleteOneLetterAfterCaret()
 	{
-		m_textString.erase(m_currentCaretPosition, 1);
-		m_text.setString(m_textString);
-		updateIndexesOfWordStarting();
-		initializeSelection();
-		updateCaretPosition();
+		if (m_currentCaretPosition >= 0)
+		{
+			m_textString.erase(m_currentCaretPosition, 1);
+			m_text.setString(m_textString);
+			updateIndexesOfWordStarting();
+			initializeSelection();
+			updateCaretPosition();
+		}
+	}
+
+	void EditBox::eraseSelectedFromString()
+	{
+		if (m_selStarting < m_selIndex)
+		{
+			m_textString.erase(m_selStarting, m_selIndex - m_selStarting);
+			m_currentCaretPosition = m_selStarting;
+		}
+		else
+		{
+			m_textString.erase(m_selIndex, m_selStarting - m_selIndex);
+			m_currentCaretPosition = m_selIndex;
+		}
 	}
 
 	void EditBox::updateCaretPosition()

@@ -172,7 +172,10 @@ namespace ire::core::gui {
     {
         TextEnteredEvent translatedEv{};
         translatedEv.timestamp = TimePoint::now();
-        translatedEv.character = ev.text.unicode;
+        if (ev.text.unicode < 128)
+        {
+            translatedEv.character = ev.text.unicode;
+        }
         forwardEvent(translatedEv);
     }
 

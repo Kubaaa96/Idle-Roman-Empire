@@ -26,7 +26,7 @@ namespace ire::core::gui
         void updateWidget() override;
 
         void setTextString(const std::string& string);
-        const std::string getTextString() const;
+        const std::string& getTextString() const;
 
         void setCharacterSize(unsigned int characterSize);
         const unsigned int getCharacterSize() const;
@@ -54,7 +54,6 @@ namespace ire::core::gui
 
         void onEvent(EventRoot& sender, TextEnteredEvent& ev) override;
         void onEvent(EventRoot& sender, KeyDownEvent& ev) override;
-        void onEvent(EventRoot& sender, KeyUpEvent& ev) override;
         void onEvent(EventRoot& sender, MouseButtonDownEvent& ev) override;
         void onEvent(EventRoot& sender, MouseButtonUpEvent& ev) override;
         void onEvent(EventRoot& sender, MouseMovedEvent& ev) override;
@@ -71,6 +70,8 @@ namespace ire::core::gui
         void deleteOneLetterBeforeCaret();
 
         void deleteOneLetterAfterCaret();
+
+        void eraseSelectedFromString();
 
         unsigned int m_characterSize{ 15 };
 
