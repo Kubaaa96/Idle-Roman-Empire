@@ -78,6 +78,10 @@ namespace ire::core::gui {
 
         void reemitLastMouseMoved();
 
+        void processSfmlTextEnteredEvent(sf::Event& ev, TimePoint timestamp);
+        void processSfmlKeybordPressedEvent(sf::Event& ev, TimePoint timestamp);
+        void processSfmlKeybordReleasedEvent(sf::Event& ev, TimePoint timestamp);
+
         template <typename EventT>
         void forwardEventWithPosition(EventT& ev)
         {
@@ -100,6 +104,24 @@ namespace ire::core::gui {
                 emitEventIfNotHandled<EventT>(ev);
             }
         }
+
+        template <typename EventT>
+        void forwardEvent(EventT& ev)
+        {
+            if (isOpen() && m_rootGroup != nullptr)
+            {
+                if (m_activeWidget != nullptr)
+                {
+                    m_activeWidget->onEvent(*this, ev);
+                    if (ev.handled)
+                    {
+                        return;
+                    }
+                }
+            }
+            emitEventIfNotHandled<EventT>(ev);
+        }
+
     };
 
 }

@@ -18,23 +18,27 @@ namespace ire::client::state
     }
     core::gui::Group* GameState::initializeGUI()
     {
-        verticalLayout = ire::core::gui::VerticalLayout::create({ 500, 400 });
+        auto verticalLayout = ire::core::gui::VerticalLayout::create({ 500, 400 });
         verticalLayout->setSpaces(5);
         verticalLayout->setMargins({ 0, 0, 15, 15 });
         auto btn5Ptr = ire::core::gui::Button::create("test");
         auto btn6Ptr = ire::core::gui::Button::create("test1");
         auto label7Ptr = ire::core::gui::Label::create("test");
         auto editBox8Ptr = ire::core::gui::EditBox::create("test1");
+        editBox8Ptr->setGhostTextString("Enter Text...");
 
         btn5Ptr->addEventListener<ire::core::gui::MouseClickEvent>(
             [=](ire::core::gui::MouseClickEvent& ev)
-            { 
+            {
                 std::cout << "Clicked btn5Ptr button, Game State\n";
                 m_next = std::make_unique<MenuState>(m_stateMachine, m_window, false);
             });
 
         btn6Ptr->addEventListener<ire::core::gui::MouseClickEvent>(
-            [](ire::core::gui::MouseClickEvent& ev) { std::cout << "Clicked btn6Ptr button " << ev.position.x << "\n"; });
+            [](ire::core::gui::MouseClickEvent& ev)
+            {
+                std::cout << "Clicked btn6Ptr button " << ev.position.x << "\n";
+            });
 
         verticalLayout->add(std::move(btn5Ptr), "Button5");
         verticalLayout->add(std::move(btn6Ptr), "Button6");
@@ -43,10 +47,11 @@ namespace ire::client::state
 
         verticalLayout->setLayoutStretch({ 1, 3, 6, 2 });
 
-        horizontalLayout = ire::core::gui::HorizontalLayout::create({ 500,400 });
+        auto horizontalLayout = ire::core::gui::HorizontalLayout::create({ 500,400 });
         horizontalLayout->setSpaces(10);
         horizontalLayout->setMargins({ 10, 10, 10, 10 });
         auto editBox1Ptr = ire::core::gui::EditBox::create("test");
+        editBox1Ptr->setTextString("Welcome");
         auto btn2Ptr = ire::core::gui::Button::create("test1");
         auto label3Ptr = ire::core::gui::Label::create("test");
         auto btn4Ptr = ire::core::gui::Button::create("test1");
@@ -65,8 +70,8 @@ namespace ire::client::state
 
         horizontalLayout->setLayoutStretch({ 3, 6, 12, 2, 1 });
 
-        panel = ire::core::gui::Panel::create({ 700, 400 }, std::move(horizontalLayout), "HorizontalLayout");
-        panel->setPosition({ 300,300 });
+        auto panel = ire::core::gui::Panel::create({ 700, 400 }, std::move(horizontalLayout), "HorizontalLayout");
+        panel->setPosition({ 300, 350 });
         panel->setOpacity(200);
         panel->setOutlineColor(sf::Color::Magenta);
         panel->setOutlineThickness(7);
@@ -86,15 +91,42 @@ namespace ire::client::state
 
         verticalLayout2->add(std::move(btn11Ptr), "Button11");
 
-        panel2 = ire::core::gui::Panel::create({ 100, 200 }, std::move(verticalLayout2), "VerticalLayout2");
+        auto panel2 = ire::core::gui::Panel::create({ 100, 200 }, std::move(verticalLayout2), "VerticalLayout2");
         panel2->setPosition({ 100, 100 });
         panel2->setOutlineColor(sf::Color::Red);
         panel2->setOutlineThickness(7);
 
+
+        auto editBoxExampleVerticalLayout = ire::core::gui::VerticalLayout::create({ 100, 200 });
+        editBoxExampleVerticalLayout->setSpaces(5);
+        editBoxExampleVerticalLayout->setMargins({ 5, 5, 5, 5 });
+
+        auto editBoxExample1 = ire::core::gui::EditBox::create("Example 1");
+        editBoxExampleVerticalLayout->add(std::move(editBoxExample1), "EditBoxExample1");
+
+        auto editBoxExample2 = ire::core::gui::EditBox::create("12345678901234567890");
+        editBoxExampleVerticalLayout->add(std::move(editBoxExample2), "EditBoxExample2");
+
+        auto editBoxExample3 = ire::core::gui::EditBox::create("12345678901234567890");
+        editBoxExample3->setMaximumCharacters(10);
+        editBoxExampleVerticalLayout->add(std::move(editBoxExample3), "EditBoxExample3");
+
+        auto editBoxExample4 = ire::core::gui::EditBox::create("Example 4");
+        editBoxExampleVerticalLayout->add(std::move(editBoxExample4), "EditBoxExample4");
+
+        auto editBoxExamplePanel = ire::core::gui::Panel::create({ 600, 250 }, std::move(editBoxExampleVerticalLayout), "EditBoxExampleVerticalLayout");
+        editBoxExamplePanel->setPosition({ 300, 50 });
+        editBoxExamplePanel->setOutlineColor(sf::Color::Blue);
+        editBoxExamplePanel->setOutlineThickness(3);
+
         group = ire::core::gui::Group::create(static_cast<sf::Vector2f>(m_window.getRenderTarget().getSize()));
         group->add(std::move(panel), "panel1");
         group->add(std::move(panel2), "panel2");
+        group->add(std::move(editBoxExamplePanel), "EditBoxExamplePanel");
         
+
+
+
         return group.release();
     }
 }

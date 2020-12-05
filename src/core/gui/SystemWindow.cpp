@@ -73,6 +73,18 @@ namespace ire::core::gui {
         case sf::Event::EventType::MouseMoved:
             processSfmlMouseMovedEvent(ev, timestamp);
             break;
+
+        case sf::Event::EventType::TextEntered:
+            processSfmlTextEnteredEvent(ev, timestamp);
+            break;
+
+        case sf::Event::EventType::KeyPressed:
+            processSfmlKeybordPressedEvent(ev, timestamp);
+            break;
+
+        case sf::Event::EventType::KeyReleased:
+            processSfmlKeybordReleasedEvent(ev, timestamp);
+            break;
         }
     }
 
@@ -154,6 +166,39 @@ namespace ire::core::gui {
         translatedEv.timestamp = TimePoint::now();
         translatedEv.position = sf::Vector2f(m_lastMousePosition);
         forwardEventWithPosition(translatedEv);
+    }
+
+    void SystemWindow::processSfmlTextEnteredEvent(sf::Event& ev, TimePoint timestamp)
+    {
+        TextEnteredEvent translatedEv{};
+        translatedEv.timestamp = TimePoint::now();
+        translatedEv.character = ev.text.unicode;
+
+        forwardEvent(translatedEv);
+    }
+
+    void SystemWindow::processSfmlKeybordPressedEvent(sf::Event& ev, TimePoint timestamp)
+    {
+        KeyDownEvent translatedEv{};
+        translatedEv.timestamp = TimePoint::now();
+        translatedEv.key = ev.key.code;
+        translatedEv.alt = ev.key.alt;
+        translatedEv.control = ev.key.control;
+        translatedEv.shift = ev.key.shift;
+        translatedEv.system = ev.key.system;
+        forwardEvent(translatedEv);
+    }
+
+    void SystemWindow::processSfmlKeybordReleasedEvent(sf::Event& ev, TimePoint timestamp)
+    {
+        KeyUpEvent translatedEv{};
+        translatedEv.timestamp = TimePoint::now();
+        translatedEv.key = ev.key.code;
+        translatedEv.alt = ev.key.alt;
+        translatedEv.control = ev.key.control;
+        translatedEv.shift = ev.key.shift;
+        translatedEv.system = ev.key.system;
+        forwardEvent(translatedEv);
     }
 
 }

@@ -4,8 +4,6 @@
 #include "ClickableWidget.h"
 
 #include "core/resource/Resource.h"
-#include "core/resource/ResourceLoader.h"
-#include "core/resource/ResourcePath.h"
 #include "core/resource/FontResourceLoader.h"
 #include "core/resource/ResourceManager.h"
 
