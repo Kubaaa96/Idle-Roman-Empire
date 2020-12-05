@@ -104,10 +104,11 @@ namespace ire::client::state
         auto editBoxExample1 = ire::core::gui::EditBox::create("Example 1");
         editBoxExampleVerticalLayout->add(std::move(editBoxExample1), "EditBoxExample1");
 
-        auto editBoxExample2 = ire::core::gui::EditBox::create("Example 2");
+        auto editBoxExample2 = ire::core::gui::EditBox::create("12345678901234567890");
         editBoxExampleVerticalLayout->add(std::move(editBoxExample2), "EditBoxExample2");
 
-        auto editBoxExample3 = ire::core::gui::EditBox::create("Example 3");
+        auto editBoxExample3 = ire::core::gui::EditBox::create("12345678901234567890");
+        editBoxExample3->setMaximumCharacters(10);
         editBoxExampleVerticalLayout->add(std::move(editBoxExample3), "EditBoxExample3");
 
         auto editBoxExample4 = ire::core::gui::EditBox::create("Example 4");

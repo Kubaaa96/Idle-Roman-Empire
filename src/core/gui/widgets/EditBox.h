@@ -7,6 +7,8 @@
 #include "core/resource/FontResourceLoader.h"
 #include "core/resource/ResourceManager.h"
 
+#include <optional>
+
 namespace ire::core::gui
 {
     enum class Alignment
@@ -54,6 +56,7 @@ namespace ire::core::gui
 
         void onEvent(EventRoot& sender, TextEnteredEvent& ev) override;
         void onEvent(EventRoot& sender, KeyDownEvent& ev) override;
+
         void onEvent(EventRoot& sender, MouseButtonDownEvent& ev) override;
         void onEvent(EventRoot& sender, MouseButtonUpEvent& ev) override;
         void onEvent(EventRoot& sender, MouseMovedEvent& ev) override;
@@ -67,13 +70,15 @@ namespace ire::core::gui
 
         bool isActive = false;
 
-        void deleteOneLetterBeforeCaret();
-
-        void deleteOneLetterAfterCaret();
-
+        void deleteCharacterAt(std::size_t indexOfCharacter);
         void eraseSelectedFromString();
+        void moveAndSelectOneToLeft();
+        void selectToWordStartIndex(std::size_t wordStartingIndex);
+        void moveAndSelectByOne(sf::Keyboard::Key arrowKey);
 
         unsigned int m_characterSize{ 15 };
+
+        void moveCaretToClickedPostion(float clickedXPosition, float positionOfRightBound);
 
         std::string m_textString;
         sf::Text m_text;
@@ -88,14 +93,16 @@ namespace ire::core::gui
         bool m_readOnly = false;
 
         // Zero mean no limit
-        unsigned int m_maxChars = 0;
+
+        std::optional<unsigned int> m_maxChars;
+
 
         Alignment m_textAlignment{ Alignment::Left };
 
         std::vector<std::size_t> m_indexesOfWordStarting{};
-        void updateIndexesOfWordStarting();
+        void updateWordIndices();
 
-        std::size_t findIndexOfLetterUnderMouse(float clickedXPosition);
+        std::size_t findIndexOfPointedCharacter(float clickedXPosition);
 
         std::vector<float> m_positionsOfLetters{};
         std::vector<float> m_distanceToLetters{};

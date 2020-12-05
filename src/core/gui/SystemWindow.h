@@ -24,7 +24,6 @@ namespace ire::core::gui {
             m_activeWidget(nullptr),
             m_lastMousePosition(-1, -1)
         {
-            m_window.setFramerateLimit(60);
         }
 
         SystemWindow(const SystemWindow&) = delete;
