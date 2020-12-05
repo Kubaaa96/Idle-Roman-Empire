@@ -343,6 +343,7 @@ namespace ire::core::gui
                     sf::Clipboard::setString(m_selectedString);
                     eraseSelectedFromString();
                     m_isSelecting = false;
+
                     m_text.setString(m_textString);
                 }
                 updateWordIndices();
@@ -361,8 +362,21 @@ namespace ire::core::gui
                     {
                         eraseSelectedFromString();
                     }
+
                     m_textString.insert(m_currentCaretPosition, stringFromClipboard);
-                    m_currentCaretPosition = m_currentCaretPosition + stringFromClipboard.length();
+                    if (m_maxChars && m_textString.length() > *m_maxChars)
+                    {
+                        m_textString.erase(*m_maxChars);
+                    }
+                    if (m_currentCaretPosition + stringFromClipboard.length() > * m_maxChars)
+                    {
+                        m_currentCaretPosition = m_textString.length();
+                    }
+                    else
+                    {
+                        m_currentCaretPosition = m_currentCaretPosition + stringFromClipboard.length();
+
+                    }
                 }
                 m_text.setString(m_textString);
                 updateWordIndices();
@@ -389,8 +403,17 @@ namespace ire::core::gui
         case sf::Keyboard::Backspace:
             if (m_currentCaretPosition > 0)
             {
-                deleteCharacterAt(m_currentCaretPosition - 1);
-                --m_currentCaretPosition;
+                
+                if (m_isSelectingActive)
+                {
+                    deleteSelected();
+                }
+                else
+                {
+                    deleteCharacterAt(m_currentCaretPosition - 1);
+                    --m_currentCaretPosition;
+                }
+                
                 updateCaretPosition();
             }
             break;
@@ -398,7 +421,14 @@ namespace ire::core::gui
         case sf::Keyboard::Delete:
             if (m_currentCaretPosition < m_textString.length() + 1)
             {
-                deleteCharacterAt(m_currentCaretPosition);
+                if (m_isSelectingActive)
+                {
+                    deleteSelected();
+                }
+                else
+                {
+                    deleteCharacterAt(m_currentCaretPosition);
+                }
                 updateCaretPosition();
             }
             break;
@@ -643,6 +673,15 @@ namespace ire::core::gui
             m_textString.erase(m_selIndex, m_selStarting - m_selIndex);
             m_currentCaretPosition = m_selIndex;
         }
+    }
+
+    void EditBox::deleteSelected()
+    {
+        eraseSelectedFromString();
+        initializeSelection();
+        updateWordIndices();
+        m_text.setString(m_textString);
+        m_isSelectingActive = false;
     }
 
     void EditBox::moveCaretToClickedPostion(float clickedXPosition, float positionOfRightBound)

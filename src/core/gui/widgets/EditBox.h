@@ -8,6 +8,7 @@
 #include "core/resource/ResourceManager.h"
 
 #include <optional>
+#include <list>
 
 namespace ire::core::gui
 {
@@ -72,6 +73,7 @@ namespace ire::core::gui
 
         void deleteCharacterAt(std::size_t indexOfCharacter);
         void eraseSelectedFromString();
+        void deleteSelected();
         void moveAndSelectOneToLeft();
         void selectToWordStartIndex(std::size_t wordStartingIndex);
         void moveAndSelectByOne(sf::Keyboard::Key arrowKey);
