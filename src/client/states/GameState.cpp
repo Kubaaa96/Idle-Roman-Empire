@@ -114,15 +114,36 @@ namespace ire::client::state
         auto editBoxExample4 = ire::core::gui::EditBox::create("Example 4");
         editBoxExampleVerticalLayout->add(std::move(editBoxExample4), "EditBoxExample4");
 
-        auto editBoxExamplePanel = ire::core::gui::Panel::create({ 600, 250 }, std::move(editBoxExampleVerticalLayout), "EditBoxExampleVerticalLayout");
-        editBoxExamplePanel->setPosition({ 300, 50 });
+        auto editBoxExamplePanel = ire::core::gui::Panel::create({ 300, 250 }, std::move(editBoxExampleVerticalLayout), "EditBoxExampleVerticalLayout");
+        editBoxExamplePanel->setPosition({ 650, 50 });
         editBoxExamplePanel->setOutlineColor(sf::Color::Blue);
         editBoxExamplePanel->setOutlineThickness(3);
+
+
+
+        auto progressBarExampleVerticalLayout = ire::core::gui::VerticalLayout::create({ 100,200 });
+        progressBarExampleVerticalLayout->setSpaces(5);
+        progressBarExampleVerticalLayout->setMargins({ 5, 5, 5, 5 });
+
+        auto progressBarExample1 = ire::core::gui::ProgressBar::create();
+        progressBarExampleVerticalLayout->add(std::move(progressBarExample1), "ProgressBarExample1");
+
+        auto progressBarExample2 = ire::core::gui::ProgressBar::create();
+        progressBarExampleVerticalLayout->add(std::move(progressBarExample2), "ProgressBarExample2");
+
+        auto progressBarExample3 = ire::core::gui::ProgressBar::create();
+        progressBarExampleVerticalLayout->add(std::move(progressBarExample3), "ProgressBarExample3");
+
+        auto progressBarExamplePanel = ire::core::gui::Panel::create({ 300, 250 }, std::move(progressBarExampleVerticalLayout),"ProgressBarExampleVerticalLayout");
+        progressBarExamplePanel->setPosition({ 300, 50 });
+        progressBarExamplePanel->setOutlineColor(sf::Color::Green);
+        progressBarExamplePanel->setOutlineThickness(3);
 
         group = ire::core::gui::Group::create(static_cast<sf::Vector2f>(m_window.getRenderTarget().getSize()));
         group->add(std::move(panel), "panel1");
         group->add(std::move(panel2), "panel2");
         group->add(std::move(editBoxExamplePanel), "EditBoxExamplePanel");
+        group->add(std::move(progressBarExamplePanel), "ProgressBarExamplePanel");
         
 
 

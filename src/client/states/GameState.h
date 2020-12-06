@@ -6,6 +6,7 @@
 #include "core/gui/widgets/Label.h"
 #include "core/gui/widgets/EditBox.h"
 #include "core/gui/widgets/Panel.h"
+#include "core/gui/widgets/ProgressBar.h"
 #include "core/gui/widgets/HorizontalLayout.h"
 #include "core/gui/widgets/VerticalLayout.h"
 
