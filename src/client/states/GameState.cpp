@@ -119,8 +119,6 @@ namespace ire::client::state
         editBoxExamplePanel->setOutlineColor(sf::Color::Blue);
         editBoxExamplePanel->setOutlineThickness(3);
 
-
-
         auto progressBarExampleVerticalLayout = ire::core::gui::VerticalLayout::create({ 100,200 });
         progressBarExampleVerticalLayout->setSpaces(5);
         progressBarExampleVerticalLayout->setMargins({ 5, 5, 5, 5 });
@@ -145,9 +143,6 @@ namespace ire::client::state
         group->add(std::move(editBoxExamplePanel), "EditBoxExamplePanel");
         group->add(std::move(progressBarExamplePanel), "ProgressBarExamplePanel");
         
-
-
-
         return group.release();
     }
 }
