@@ -14,6 +14,8 @@ namespace ire::client::state
 
     void GameState::draw()
     {    
+        std::cout << m_group->get("progressBarExamplePanel")->getType().getName() << "\n";
+
         m_window.draw();
     }
     core::gui::Group* GameState::initializeGUI()
@@ -114,6 +116,16 @@ namespace ire::client::state
         auto editBoxExample4 = ire::core::gui::EditBox::create("Example 4");
         editBoxExampleVerticalLayout->add(std::move(editBoxExample4), "EditBoxExample4");
 
+        auto buttonTest = ire::core::gui::Button::create("Test");
+        buttonTest->addEventListener<ire::core::gui::MouseClickEvent>(
+            [=](ire::core::gui::MouseClickEvent& ev)
+            {
+                std::cout << testString << "\n";
+            }
+        );
+        editBoxExampleVerticalLayout->add(std::move(buttonTest), "TestButton");
+
+
         auto editBoxExamplePanel = ire::core::gui::Panel::create({ 300, 250 }, std::move(editBoxExampleVerticalLayout), "EditBoxExampleVerticalLayout");
         editBoxExamplePanel->setPosition({ 650, 50 });
         editBoxExamplePanel->setOutlineColor(sf::Color::Blue);
@@ -137,12 +149,12 @@ namespace ire::client::state
         progressBarExamplePanel->setOutlineColor(sf::Color::Green);
         progressBarExamplePanel->setOutlineThickness(3);
 
-        group = ire::core::gui::Group::create(static_cast<sf::Vector2f>(m_window.getRenderTarget().getSize()));
-        group->add(std::move(panel), "panel1");
-        group->add(std::move(panel2), "panel2");
-        group->add(std::move(editBoxExamplePanel), "EditBoxExamplePanel");
-        group->add(std::move(progressBarExamplePanel), "ProgressBarExamplePanel");
+        m_group = ire::core::gui::Group::create(static_cast<sf::Vector2f>(m_window.getRenderTarget().getSize()));
+        m_group->add(std::move(panel), "panel1");
+        m_group->add(std::move(panel2), "panel2");
+        m_group->add(std::move(editBoxExamplePanel), "EditBoxExamplePanel");
+        m_group->add(std::move(progressBarExamplePanel), "ProgressBarExamplePanel");
         
-        return group.release();
+        return m_group.release();
     }
 }

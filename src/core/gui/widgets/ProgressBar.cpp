@@ -6,7 +6,7 @@ namespace ire::core::gui
 
     ProgressBar::ProgressBar()
 	{
-		m_rectangleShape.setFillColor(sf::Color::Magenta);
+		m_rectangleShape.setFillColor(sf::Color::Blue);
 	}
 
 	std::unique_ptr<ProgressBar> ProgressBar::create(const std::string& text)

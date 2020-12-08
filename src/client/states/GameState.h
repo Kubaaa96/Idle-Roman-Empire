@@ -32,8 +32,8 @@ namespace ire::client::state
         core::gui::Group* initializeGUI() override;
 
     private:
-
-        std::unique_ptr<ire::core::gui::Group> group;
+        std::unique_ptr<ire::core::gui::Group> m_group;
+        std::string testString;
     };
 }
 
