@@ -14,7 +14,7 @@ namespace ire::client::state
 
     void GameState::draw()
     {    
-        std::cout << m_group->get("progressBarExamplePanel")->getType().getName() << "\n";
+        //std::cout << m_group->get("progressBarExamplePanel")->getType().getName() << "\n";
 
         m_window.draw();
     }
