@@ -33,7 +33,6 @@ namespace ire::client::state
 
     private:
         std::unique_ptr<ire::core::gui::Group> m_group;
-        std::string testString;
     };
 }
 

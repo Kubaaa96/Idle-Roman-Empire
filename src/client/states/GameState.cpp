@@ -14,12 +14,10 @@ namespace ire::client::state
 
     void GameState::draw()
     {    
-        //std::cout << m_group->get("progressBarExamplePanel")->getType().getName() << "\n";
-
         m_window.draw();
     }
     core::gui::Group* GameState::initializeGUI()
-    {
+    {        
         auto verticalLayout = ire::core::gui::VerticalLayout::create({ 500, 400 });
         verticalLayout->setSpaces(5);
         verticalLayout->setMargins({ 0, 0, 15, 15 });
@@ -110,17 +108,21 @@ namespace ire::client::state
         editBoxExampleVerticalLayout->add(std::move(editBoxExample2), "EditBoxExample2");
 
         auto editBoxExample3 = ire::core::gui::EditBox::create("12345678901234567890");
+
         editBoxExample3->setMaximumCharacters(10);
+        
         editBoxExampleVerticalLayout->add(std::move(editBoxExample3), "EditBoxExample3");
 
         auto editBoxExample4 = ire::core::gui::EditBox::create("Example 4");
+        auto& editBoxExample4Ref = *editBoxExample4;
+
         editBoxExampleVerticalLayout->add(std::move(editBoxExample4), "EditBoxExample4");
 
         auto buttonTest = ire::core::gui::Button::create("Test");
         buttonTest->addEventListener<ire::core::gui::MouseClickEvent>(
-            [=](ire::core::gui::MouseClickEvent& ev)
-            {
-                std::cout << testString << "\n";
+            [&](ire::core::gui::MouseClickEvent& ev)
+            {        
+                std::cout << editBoxExample4Ref.getTextString() << "\n";
             }
         );
         editBoxExampleVerticalLayout->add(std::move(buttonTest), "TestButton");
@@ -150,6 +152,7 @@ namespace ire::client::state
         progressBarExamplePanel->setOutlineThickness(3);
 
         m_group = ire::core::gui::Group::create(static_cast<sf::Vector2f>(m_window.getRenderTarget().getSize()));
+        //m_group->add(std::move(testEditBoxPtr), "TestEditBox");
         m_group->add(std::move(panel), "panel1");
         m_group->add(std::move(panel2), "panel2");
         m_group->add(std::move(editBoxExamplePanel), "EditBoxExamplePanel");
