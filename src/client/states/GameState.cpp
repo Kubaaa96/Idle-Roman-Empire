@@ -8,15 +8,12 @@ namespace ire::client::state
     GameState::GameState(core::state::StateMachine& stateMachine, core::gui::SystemWindow& window, bool replace)
         : State{ stateMachine, window, replace}
     {
-        m_window.setRootGroup(*initializeGUI());
+        initializeGUI();
+        m_window.setRootGroup(*m_group.get());
         std::cout << "GameState Init\n";
     }
 
-    void GameState::draw()
-    {    
-        m_window.draw();
-    }
-    core::gui::Group* GameState::initializeGUI()
+    void GameState::initializeGUI()
     {        
         auto verticalLayout = ire::core::gui::VerticalLayout::create({ 500, 400 });
         verticalLayout->setSpaces(5);
@@ -157,7 +154,5 @@ namespace ire::client::state
         m_group->add(std::move(panel2), "panel2");
         m_group->add(std::move(editBoxExamplePanel), "EditBoxExamplePanel");
         m_group->add(std::move(progressBarExamplePanel), "ProgressBarExamplePanel");
-        
-        return m_group.release();
     }
 }

@@ -48,7 +48,7 @@ namespace ire::core::gui {
 
         void draw();
 
-        void setRootGroup(Group& panel);
+        void setRootGroup(Group& group);
 
         void setActiveWidget(Widget& widget) override;
         void resetActiveWidget(Widget& widget) override;

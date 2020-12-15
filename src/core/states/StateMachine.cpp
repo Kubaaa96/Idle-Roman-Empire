@@ -43,6 +43,11 @@ namespace ire::core::state
         return m_running;
     }
 
+    ire::core::gui::Group* StateMachine::getTopStateGroup()
+    {
+        return m_states.top()->getGroup();
+    }
+
     void StateMachine::quit()
     {
         m_running = false;

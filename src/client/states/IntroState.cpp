@@ -8,15 +8,12 @@ namespace ire::client::state
     IntroState::IntroState(core::state::StateMachine& stateMachine, core::gui::SystemWindow& window, bool replace)
         : State { stateMachine, window, replace}
     {
-        m_window.setRootGroup(*initializeGUI());
+        initializeGUI();
+        m_window.setRootGroup(*m_group.get());
         std::cout << "IntroState Init\n";
     }
 
-    void IntroState::draw()
-    {
-        m_window.draw();
-    }
-    core::gui::Group* IntroState::initializeGUI()
+    void IntroState::initializeGUI()
     {
         auto labelIntroText = ire::core::gui::Label::create("Welcome in Idle Roman Empire");
         
@@ -39,8 +36,7 @@ namespace ire::client::state
         vLayoutMain->setSpaces( 20 );
         vLayoutMain->setLayoutStretch({ 3, 1 });
 
-        group = ire::core::gui::Group::create(currentSizeOfViewPort);
-        group->add(std::move(vLayoutMain), "layoutMain");
-        return group.release();
+        m_group = ire::core::gui::Group::create(currentSizeOfViewPort);
+        m_group->add(std::move(vLayoutMain), "layoutMain");
     }
 }
