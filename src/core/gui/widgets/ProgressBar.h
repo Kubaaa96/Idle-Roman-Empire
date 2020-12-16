@@ -2,6 +2,7 @@
 #define IRE_PROGRESSBAR_H
 
 #include "ClickableWidget.h"
+#include "core/gui/CollectionOfEvents.h"
 
 namespace ire::core::gui
 {
@@ -49,16 +50,22 @@ namespace ire::core::gui
             return m_type;
         }
 
+        void onEvent(EventRoot& sender, KeyDownEvent& ev) override;
+    protected:
+        void onKeyClicked(KeyDownEvent& ev);
+
     private:
         sf::RectangleShape m_rectangleShape;
+        sf::RectangleShape m_progressShape;
         unsigned int m_minimum{ 0 };
-        unsigned int m_maximum{ 100 };
-        unsigned int m_value{ 0 };
+        unsigned int m_maximum{ 110 };
+        unsigned int m_value{ 66 };
+        float m_percent{ 0 };
         std::string m_textString;
         unsigned int m_textSize{ 15 };
         FillDirection m_fillDirection = FillDirection::LeftToRight;
         
     };
-    
+
 }
 #endif //!IRE_PROGRESSBAR_H

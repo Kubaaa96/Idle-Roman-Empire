@@ -1,4 +1,5 @@
 #include "ProgressBar.h"
+#include <iostream>
 
 namespace ire::core::gui
 {
@@ -7,6 +8,9 @@ namespace ire::core::gui
     ProgressBar::ProgressBar()
 	{
 		m_rectangleShape.setFillColor(sf::Color::Blue);
+		m_progressShape.setFillColor(sf::Color::Green);
+		m_percent = static_cast<float>(m_value) / static_cast<float>(m_maximum);
+		std::cout << m_percent << "\n";
 	}
 
 	std::unique_ptr<ProgressBar> ProgressBar::create(const std::string& text)
@@ -19,14 +23,16 @@ namespace ire::core::gui
 	void ProgressBar::draw(sf::RenderTarget& target)
 	{
 		target.draw(m_rectangleShape);
+		target.draw(m_progressShape);
 	}
 
 	void ProgressBar::updateWidget()
 	{
 		m_rectangleShape.setSize(m_size);
-
 		m_rectangleShape.setPosition(m_position);
-
+		m_percent = static_cast<float>(m_value) / static_cast<float>(m_maximum);
+		m_progressShape.setSize({m_size.x * m_percent, m_size.y});
+		m_progressShape.setPosition(m_position);
 	}
 	void ProgressBar::setMinimum(unsigned int minimum)
 	{
@@ -94,4 +100,42 @@ namespace ire::core::gui
 	{
 		return m_fillDirection;
 	}
+	void ProgressBar::onEvent(EventRoot& sender, KeyDownEvent& ev)
+	{
+		switch (ev.key)
+		{
+		case sf::Keyboard::Left:
+			std::cout << "Left\n";
+			if (m_value > 0)
+			{
+				--m_value;
+			}
+			break;
+		case sf::Keyboard::Right:
+			std::cout << "Right\n";
+			if (m_value < m_maximum)
+			{
+				++m_value;
+			}
+			break;
+		default:
+			break;
+		}
+		ev.handled = true;
+		updateWidget();
+		onKeyClicked(ev);
+	}
+
+	void ProgressBar::onKeyClicked(KeyDownEvent& ev)
+	{
+		KeyPressedEvent keyClickedEv{};
+		keyClickedEv.timestamp = ev.timestamp;
+		keyClickedEv.key = ev.key;
+		keyClickedEv.alt = ev.alt;
+		keyClickedEv.control = ev.control;
+		keyClickedEv.shift = ev.control;
+		keyClickedEv.system = ev.system;
+		emitEvent<KeyPressedEvent>(keyClickedEv);
+	}
+
 }
