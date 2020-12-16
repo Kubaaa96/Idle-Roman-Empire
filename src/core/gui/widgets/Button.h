@@ -59,7 +59,7 @@ namespace ire::core::gui
         void setAlignment(VAlign vAlign, HAlign hAlign);
 
     private:
-        void updatePosition();
+        void updateTextPosition();
 
         sf::RectangleShape m_rectangleShape;
         sf::Text m_text;

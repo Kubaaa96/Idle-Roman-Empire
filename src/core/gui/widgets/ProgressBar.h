@@ -2,6 +2,10 @@
 #define IRE_PROGRESSBAR_H
 
 #include "ClickableWidget.h"
+
+#include "core/resource/Resource.h"
+#include "core/resource/FontResourceLoader.h"
+#include "core/resource/ResourceManager.h"
 #include "core/gui/CollectionOfEvents.h"
 
 namespace ire::core::gui
@@ -35,14 +39,23 @@ namespace ire::core::gui
         void setValue(unsigned int value);
         const unsigned int getValue() const;
 
-        void setText(std::string& text);
-        const std::string getText() const;
+        void setTextString(std::string& text);
+        const std::string getTextString() const;
 
         void setTextSize(unsigned int textSize);
         const unsigned int getTextSize() const;
 
+        void setTextFillColor(sf::Color textColor);
+        const sf::Color getTextFillColor() const;
+
+        void setTextStyle(sf::Uint32 textStyle);
+        const sf::Uint32 getTextStyle() const;
+
         void setFillDirection(FillDirection fillDirection);
         const FillDirection getFillDirection() const;
+
+        void setCharacterSize(unsigned int characterSize);
+        const unsigned int getCharacterSize() const;
 
         static const WidgetType m_type;
         const WidgetType getType() const override
@@ -60,9 +73,13 @@ namespace ire::core::gui
         unsigned int m_minimum{ 0 };
         unsigned int m_maximum{ 110 };
         unsigned int m_value{ 66 };
-        float m_percent{ 0 };
+        float calculatedPercent();
         std::string m_textString;
         unsigned int m_textSize{ 15 };
+        sf::Text m_text;
+        ResourcePtr<sf::Font> m_font;
+        void updateTextPosition();
+        void updateTextString();
         FillDirection m_fillDirection = FillDirection::LeftToRight;
         
     };

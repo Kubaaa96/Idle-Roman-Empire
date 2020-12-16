@@ -9,8 +9,13 @@ namespace ire::core::gui
 	{
 		m_rectangleShape.setFillColor(sf::Color::Blue);
 		m_progressShape.setFillColor(sf::Color::Green);
-		m_percent = static_cast<float>(m_value) / static_cast<float>(m_maximum);
-		std::cout << m_percent << "\n";
+
+		m_font = ResourceManager::instance().get<sf::Font>("resource/RomanSD.ttf");
+		m_text.setFont(*m_font);
+		setCharacterSize(15);
+		setTextStyle(sf::Text::Bold);
+		setTextFillColor(sf::Color::White);
+		updateWidget();
 	}
 
 	std::unique_ptr<ProgressBar> ProgressBar::create(const std::string& text)
@@ -24,15 +29,21 @@ namespace ire::core::gui
 	{
 		target.draw(m_rectangleShape);
 		target.draw(m_progressShape);
+		target.draw(m_text);
 	}
 
 	void ProgressBar::updateWidget()
 	{
+		updateTextString();
+		updateTextPosition();
+
 		m_rectangleShape.setSize(m_size);
 		m_rectangleShape.setPosition(m_position);
-		m_percent = static_cast<float>(m_value) / static_cast<float>(m_maximum);
-		m_progressShape.setSize({m_size.x * m_percent, m_size.y});
+
+		m_progressShape.setSize({m_size.x * calculatedPercent(), m_size.y});
 		m_progressShape.setPosition(m_position);
+
+
 	}
 	void ProgressBar::setMinimum(unsigned int minimum)
 	{
@@ -67,14 +78,14 @@ namespace ire::core::gui
 	{
 		return m_value;
 	}
-	void ProgressBar::setText(std::string& text)
+	void ProgressBar::setTextString(std::string& text)
 	{
 		if (m_textString != text)
 		{
 			m_textString = text;
 		}
 	}
-	const std::string ProgressBar::getText() const
+	const std::string ProgressBar::getTextString() const
 	{
 		return m_textString;
 	}
@@ -89,6 +100,28 @@ namespace ire::core::gui
 	{
 		return m_textSize;
 	}
+	void ProgressBar::setTextFillColor(sf::Color textColor)
+	{
+		if (textColor != getTextFillColor())
+		{
+			m_text.setFillColor(textColor);
+		}
+	}
+	const sf::Color ProgressBar::getTextFillColor() const
+	{
+		return m_text.getFillColor();
+	}
+	void ProgressBar::setTextStyle(sf::Uint32 textStyle)
+	{
+		if (textStyle != m_text.getStyle())
+		{
+			m_text.setStyle(textStyle);
+		}
+	}
+	const sf::Uint32 ProgressBar::getTextStyle() const
+	{
+		return m_text.getStyle();
+	}
 	void ProgressBar::setFillDirection(FillDirection fillDirection)
 	{
 		if (m_fillDirection != fillDirection)
@@ -100,6 +133,20 @@ namespace ire::core::gui
 	{
 		return m_fillDirection;
 	}
+
+	void ProgressBar::setCharacterSize(unsigned int characterSize)
+	{
+		if (characterSize != m_text.getCharacterSize())
+		{
+			m_text.setCharacterSize(characterSize);
+		}
+	}
+
+	const unsigned int ProgressBar::getCharacterSize() const
+	{
+		return m_text.getCharacterSize();
+	}
+
 	void ProgressBar::onEvent(EventRoot& sender, KeyDownEvent& ev)
 	{
 		switch (ev.key)
@@ -136,6 +183,26 @@ namespace ire::core::gui
 		keyClickedEv.shift = ev.control;
 		keyClickedEv.system = ev.system;
 		emitEvent<KeyPressedEvent>(keyClickedEv);
+	}
+
+	float ProgressBar::calculatedPercent()
+	{
+		return static_cast<float>(m_value) / static_cast<float>(m_maximum);;
+	}
+
+	void ProgressBar::updateTextPosition()
+	{
+		auto textWidth = m_text.getLocalBounds().width;
+		auto textHeight = m_text.getLocalBounds().height;
+		auto xPosition = m_position.x + (m_size.x / 2 - textWidth / 2);
+		auto yPosition = m_position.y + (m_size.y / 2 - textHeight / 2);
+		m_text.setPosition(xPosition, yPosition);
+	}
+
+	void ProgressBar::updateTextString()
+	{
+		int percent = calculatedPercent() * 100;
+		m_text.setString(std::to_string(percent) + "%");
 	}
 
 }
