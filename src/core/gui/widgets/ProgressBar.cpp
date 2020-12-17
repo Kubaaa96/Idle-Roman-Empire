@@ -11,10 +11,14 @@ namespace ire::core::gui
 		m_progressShape.setFillColor(sf::Color::Green);
 
 		m_font = ResourceManager::instance().get<sf::Font>("resource/RomanSD.ttf");
-		m_text.setFont(*m_font);
-		setCharacterSize(15);
+		m_textMain.setFont(*m_font);
+		setCharacterSize(25);
 		setTextStyle(sf::Text::Bold);
-		setTextFillColor(sf::Color::White);
+		setTextFillColor(sf::Color::Black);
+		if (m_fillDirection == FillDirection::RightToLeft)
+		{
+			invertBarsColors();
+		}
 		updateWidget();
 	}
 
@@ -29,7 +33,7 @@ namespace ire::core::gui
 	{
 		target.draw(m_rectangleShape);
 		target.draw(m_progressShape);
-		target.draw(m_text);
+		target.draw(m_textMain);
 	}
 
 	void ProgressBar::updateWidget()
@@ -40,10 +44,7 @@ namespace ire::core::gui
 		m_rectangleShape.setSize(m_size);
 		m_rectangleShape.setPosition(m_position);
 
-		m_progressShape.setSize({m_size.x * calculatedPercent(), m_size.y});
-		m_progressShape.setPosition(m_position);
-
-
+		updateFillDirection();
 	}
 	void ProgressBar::setMinimum(unsigned int minimum)
 	{
@@ -69,7 +70,7 @@ namespace ire::core::gui
 	}
 	void ProgressBar::setValue(unsigned int value)
 	{
-		if (m_value != value)
+		if (m_value != value && m_value - m_minimum > m_maximum - m_minimum)
 		{
 			m_value = value;
 		}
@@ -104,23 +105,23 @@ namespace ire::core::gui
 	{
 		if (textColor != getTextFillColor())
 		{
-			m_text.setFillColor(textColor);
+			m_textMain.setFillColor(textColor);
 		}
 	}
 	const sf::Color ProgressBar::getTextFillColor() const
 	{
-		return m_text.getFillColor();
+		return m_textMain.getFillColor();
 	}
 	void ProgressBar::setTextStyle(sf::Uint32 textStyle)
 	{
-		if (textStyle != m_text.getStyle())
+		if (textStyle != m_textMain.getStyle())
 		{
-			m_text.setStyle(textStyle);
+			m_textMain.setStyle(textStyle);
 		}
 	}
 	const sf::Uint32 ProgressBar::getTextStyle() const
 	{
-		return m_text.getStyle();
+		return m_textMain.getStyle();
 	}
 	void ProgressBar::setFillDirection(FillDirection fillDirection)
 	{
@@ -136,15 +137,15 @@ namespace ire::core::gui
 
 	void ProgressBar::setCharacterSize(unsigned int characterSize)
 	{
-		if (characterSize != m_text.getCharacterSize())
+		if (characterSize != m_textMain.getCharacterSize())
 		{
-			m_text.setCharacterSize(characterSize);
+			m_textMain.setCharacterSize(characterSize);
 		}
 	}
 
 	const unsigned int ProgressBar::getCharacterSize() const
 	{
-		return m_text.getCharacterSize();
+		return m_textMain.getCharacterSize();
 	}
 
 	void ProgressBar::onEvent(EventRoot& sender, KeyDownEvent& ev)
@@ -153,7 +154,7 @@ namespace ire::core::gui
 		{
 		case sf::Keyboard::Left:
 			std::cout << "Left\n";
-			if (m_value > 0)
+			if (m_value > m_minimum)
 			{
 				--m_value;
 			}
@@ -187,22 +188,57 @@ namespace ire::core::gui
 
 	float ProgressBar::calculatedPercent()
 	{
-		return static_cast<float>(m_value) / static_cast<float>(m_maximum);;
+		if (m_value - m_minimum > m_maximum - m_minimum)
+		{
+			throw std::runtime_error("Value is not beetween minimum and maximum");
+		}
+		return static_cast<float>(m_value - m_minimum) / static_cast<float>(m_maximum - m_minimum);
+
 	}
 
 	void ProgressBar::updateTextPosition()
 	{
-		auto textWidth = m_text.getLocalBounds().width;
-		auto textHeight = m_text.getLocalBounds().height;
+		auto textWidth = m_textMain.getLocalBounds().width;
+		auto textHeight = m_textMain.getLocalBounds().height;
 		auto xPosition = m_position.x + (m_size.x / 2 - textWidth / 2);
 		auto yPosition = m_position.y + (m_size.y / 2 - textHeight / 2);
-		m_text.setPosition(xPosition, yPosition);
+		m_textMain.setPosition(xPosition, yPosition);
 	}
 
 	void ProgressBar::updateTextString()
 	{
 		int percent = calculatedPercent() * 100;
-		m_text.setString(std::to_string(percent) + "%");
+		m_textMain.setString(std::to_string(percent) + "%");
+	}
+
+	void ProgressBar::updateFillDirection()
+	{
+		switch (m_fillDirection)
+		{
+		case FillDirection::LeftToRight:
+			m_progressShape.setSize({ m_size.x * calculatedPercent(), m_size.y });
+			m_progressShape.setPosition(m_position);
+			break;
+		case FillDirection::RightToLeft:
+			m_progressShape.setSize({ m_size.x * (1 - calculatedPercent()), m_size.y });
+			m_progressShape.setPosition(m_position);
+			break;
+		case FillDirection::TopToBottom:
+
+			break;
+		case FillDirection::BottomToTop:
+
+			break;
+		default:
+			break;
+		}
+	}
+
+	void ProgressBar::invertBarsColors()
+	{
+		auto progressBarColor = m_progressShape.getFillColor();
+		m_progressShape.setFillColor(m_rectangleShape.getFillColor());
+		m_rectangleShape.setFillColor(progressBarColor);
 	}
 
 }

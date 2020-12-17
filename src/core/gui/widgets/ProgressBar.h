@@ -70,17 +70,21 @@ namespace ire::core::gui
     private:
         sf::RectangleShape m_rectangleShape;
         sf::RectangleShape m_progressShape;
-        unsigned int m_minimum{ 0 };
-        unsigned int m_maximum{ 110 };
-        unsigned int m_value{ 66 };
+        unsigned int m_minimum{ 200 };
+        unsigned int m_maximum{ 600 };
+        unsigned int m_value{ 400 };
         float calculatedPercent();
         std::string m_textString;
         unsigned int m_textSize{ 15 };
-        sf::Text m_text;
+        sf::Text m_textMain;
+        sf::Text m_textMinimum;
+        sf::Text m_textMaximum;
         ResourcePtr<sf::Font> m_font;
         void updateTextPosition();
         void updateTextString();
-        FillDirection m_fillDirection = FillDirection::LeftToRight;
+        void updateFillDirection();
+        void invertBarsColors();
+        FillDirection m_fillDirection = FillDirection::RightToLeft;
         
     };
 
