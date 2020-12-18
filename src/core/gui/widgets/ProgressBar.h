@@ -70,6 +70,8 @@ namespace ire::core::gui
         void setValueTextFillColor(sf::Color valueTextFillColor);
         const sf::Color getValueTextFillColor() const;
 
+        void setPercentTextString(std::string percentTextString);
+        const std::string getPercentTextString() const;
         void setPercentTextCharacterSize(unsigned int percentTextCharacterSize);
         const unsigned int getPercentTextCharacterSize() const;
         void setPercentTextVerticalAlighnment(VerticalTextAlignment percentTextVerticalAlignment);
@@ -118,8 +120,9 @@ namespace ire::core::gui
             VerticalTextAlignment m_textVerticalAlignement = VerticalTextAlignment::Center;
             bool m_isTextVisible = false;
             sf::Color m_textFillColor = sf::Color::Black;
-        };
 
+            Text();
+        };
         ResourcePtr<sf::Font> m_font;
 
         Text m_maximumText;
@@ -167,10 +170,6 @@ namespace ire::core::gui
         void updateFillDirection();
         void invertBarsColors();
         FillDirection m_fillDirection = FillDirection::LeftToRight;
-        
-
-
     };
-
 }
 #endif //!IRE_PROGRESSBAR_H
