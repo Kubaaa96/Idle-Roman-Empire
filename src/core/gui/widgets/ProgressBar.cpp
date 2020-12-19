@@ -13,8 +13,10 @@ namespace ire::core::gui
 		m_progressShape.setFillColor(m_progressFillColor);
 
 		m_maximumText.m_text.setFont(*m_font);
+		m_maximumText.m_isTextVisible = true;
 
 		m_minimumText.m_text.setFont(*m_font);
+		m_minimumText.m_isTextVisible = true;
 		
 		m_valueText.m_text.setFont(*m_font);
 
@@ -65,6 +67,12 @@ namespace ire::core::gui
 
 	void ProgressBar::updateWidget()
 	{
+		updateMinimumTextString();
+		updateMinimumTextPosition();
+
+		updateMaximumTextString();
+		updateMaximumTextPosition();
+
 		updatePercentTextString();
 		updatePercentTextPosition();
 
@@ -84,6 +92,16 @@ namespace ire::core::gui
 	const unsigned int ProgressBar::getMinimum() const
 	{
 		return m_minimum;
+	}
+
+	void ProgressBar::setMinimumTextString(std::string string)
+	{
+		setTextString(m_minimumText, string);
+	}
+
+	const std::string ProgressBar::getMinimumString() const
+	{
+		return m_minimumText.m_textString;
 	}
 
 	void ProgressBar::setMinimumTextCharacterSize(unsigned int minimumTextCharacterSize)
@@ -139,6 +157,16 @@ namespace ire::core::gui
 		return m_maximum;
 	}
 
+	void ProgressBar::setMaximumTextString(std::string string)
+	{
+		setTextString(m_maximumText, string);
+	}
+
+	const std::string ProgressBar::getMaximumString() const
+	{
+		return m_maximumText.m_textString;
+	}
+
 	void ProgressBar::setMaximumTextCharacterSize(unsigned int maximumTextCharacterSize)
 	{
 		setCharacterSize(m_maximumText, maximumTextCharacterSize);
@@ -192,6 +220,16 @@ namespace ire::core::gui
 		return m_value;
 	}
 
+	void ProgressBar::setValueTextString(std::string string)
+	{
+		setTextString(m_valueText, string);
+	}
+
+	const std::string ProgressBar::getValueString() const
+	{
+		return m_valueText.m_textString;
+	}
+
 	void ProgressBar::setValueTextCharacterSize(unsigned int valueTextCharacterSize)
 	{
 		setCharacterSize(m_valueText, valueTextCharacterSize);
@@ -234,11 +272,7 @@ namespace ire::core::gui
 
 	void ProgressBar::setPercentTextString(std::string percentTextString)
 	{
-		if (m_percentText.m_textString != percentTextString)
-		{
-			m_percentText.m_text.setString(percentTextString + "%");
-			m_percentText.m_textString = percentTextString;
-		}	
+		setTextString(m_percentText, percentTextString + "%");
 	}
 
 	const std::string ProgressBar::getPercentTextString() const
@@ -431,32 +465,61 @@ namespace ire::core::gui
 	void ProgressBar::updateMainTextPosition()
 	{
 		auto textWidth = m_mainText.m_text.getLocalBounds().width;
-		auto textHeight = m_mainText.m_text.getLocalBounds().height;
 		auto xPosition = m_position.x + (m_size.x / 2 - textWidth / 2);
-		auto yPosition = m_position.y + (m_size.y / 2 - textHeight / 2);
-		m_mainText.m_text.setPosition(xPosition, yPosition);
+		updateTextPosition(m_mainText, xPosition);
 	}
 
 	void ProgressBar::updateMaximumTextPosition()
 	{
-
+		auto letterSpacing{ m_maximumText.m_text.getLetterSpacing() };
+		auto textWidth = m_maximumText.m_text.getLocalBounds().width;
+		auto xPosition = m_position.x + m_size.x - textWidth - letterSpacing;
+		updateTextPosition(m_maximumText, xPosition);
 	}
 
 	void ProgressBar::updateMinimumTextPosition()
 	{
+		auto letterSpacing{ m_minimumText.m_text.getLetterSpacing() };
+		auto textWidth = m_minimumText.m_text.getLocalBounds().width;
+		auto xPosition = m_position.x + letterSpacing;
+		updateTextPosition(m_minimumText, xPosition);
 	}
 
 	void ProgressBar::updateValueTextPosition()
 	{
+		auto textWidth = m_valueText.m_text.getLocalBounds().width;
+		auto xPosition = m_position.x + (m_size.x / 2 - textWidth / 2);
+		updateTextPosition(m_valueText, xPosition);
 	}
 
 	void ProgressBar::updatePercentTextPosition()
 	{
 		auto textWidth = m_percentText.m_text.getLocalBounds().width;
-		auto textHeight = m_percentText.m_text.getLocalBounds().height;
 		auto xPosition = m_position.x + (m_size.x / 2 - textWidth / 2);
-		auto yPosition = m_position.y + (m_size.y / 2 - textHeight / 2);
-		m_percentText.m_text.setPosition(xPosition, yPosition);
+		updateTextPosition(m_percentText, xPosition);
+	}
+
+	void ProgressBar::updateTextPosition(Text& text, float xPosition)
+	{
+		auto textWidth = m_percentText.m_text.getLocalBounds().width;
+		auto textHeight = text.m_text.getLocalBounds().height;
+		float yPosition{ 0 };
+		auto letterSpacing{ text.m_text.getLetterSpacing() };
+		switch (text.m_textVerticalAlignement)
+		{
+		case VerticalTextAlignment::Bottom:
+			yPosition = m_position.y + m_size.y - textHeight - letterSpacing;
+			break;
+		case VerticalTextAlignment::Center:
+			yPosition = m_position.y + (m_size.y / 2 - textHeight / 2);
+			break;
+		case VerticalTextAlignment::Top:
+			yPosition = m_position.y + letterSpacing;
+			break;
+		default:
+			break;
+		}
+		text.m_text.setPosition(xPosition, yPosition);
 	}
 
 	void ProgressBar::updateMainTextString()
@@ -466,12 +529,12 @@ namespace ire::core::gui
 
 	void ProgressBar::updateMaximumTextString()
 	{
-
+		setMaximumTextString(std::to_string(m_maximum));
 	}
 
 	void ProgressBar::updateMinimumTextString()
 	{
-
+		setMinimumTextString(std::to_string(m_minimum));
 	}
 
 	void ProgressBar::updateValueTextString()
@@ -514,15 +577,16 @@ namespace ire::core::gui
 		m_backgroundShape.setFillColor(progressBarColor);
 	}
 
-	void ProgressBar::setTextString(Text text, std::string string)
+	void ProgressBar::setTextString(Text& text, std::string string)
 	{
 		if (text.m_textString != string)
 		{
 			text.m_textString = string;
+			text.m_text.setString(string);
 		}
 	}
 
-	void ProgressBar::setCharacterSize(Text text, unsigned int characterSize)
+	void ProgressBar::setCharacterSize(Text& text, unsigned int characterSize)
 	{
 		if (text.m_characterSize != characterSize)
 		{
@@ -535,7 +599,7 @@ namespace ire::core::gui
 		return text.m_characterSize;
 	}
 
-	void ProgressBar::setVerticalAlignment(Text text, VerticalTextAlignment verticalAlignment)
+	void ProgressBar::setVerticalAlignment(Text& text, VerticalTextAlignment verticalAlignment)
 	{
 		if (text.m_textVerticalAlignement != verticalAlignment)
 		{
@@ -558,7 +622,7 @@ namespace ire::core::gui
 		}
 	}
 
-	void ProgressBar::setVisibility(Text text, bool isVisible)
+	void ProgressBar::setVisibility(Text& text, bool isVisible)
 	{
 		if (text.m_isTextVisible != isVisible)
 		{
@@ -571,7 +635,7 @@ namespace ire::core::gui
 		return text.m_isTextVisible;
 	}
 
-	void ProgressBar::setFillColor(Text text, sf::Color color)
+	void ProgressBar::setFillColor(Text& text, sf::Color color)
 	{
 		if (text.m_textFillColor != color)
 		{

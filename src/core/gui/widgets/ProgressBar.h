@@ -39,6 +39,8 @@ namespace ire::core::gui
 
         void setMinimum(unsigned int minimum);
         const unsigned int getMinimum() const;
+        void setMinimumTextString(std::string string);
+        const std::string getMinimumString() const;
         void setMinimumTextCharacterSize(unsigned int minimumTextCharacterSize);
         const unsigned int getMinimumTextCharacterSize() const;
         void setMinimumTextVerticalAlighnment(VerticalTextAlignment minimymTextVerticalAlignment);
@@ -50,6 +52,8 @@ namespace ire::core::gui
 
         void setMaximum(unsigned int maximum);
         const unsigned int getMaximum() const;
+        void setMaximumTextString(std::string string);
+        const std::string getMaximumString() const;
         void setMaximumTextCharacterSize(unsigned int maximumTextCharacterSize);
         const unsigned int getMaximumTextCharacterSize() const;
         void setMaximumTextVerticalAlighnment(VerticalTextAlignment maximumTextVerticalAlignment);
@@ -61,6 +65,8 @@ namespace ire::core::gui
 
         void setValue(unsigned int value);
         const unsigned int getValue() const;
+        void setValueTextString(std::string string);
+        const std::string getValueString() const;
         void setValueTextCharacterSize(unsigned int valueTextCharacterSize);
         const unsigned int getValueTextCharacterSize() const;
         void setValueTextVerticalAlighnment(VerticalTextAlignment valueTextVerticalAlignment);
@@ -145,14 +151,14 @@ namespace ire::core::gui
         sf::RectangleShape m_progressShape;
         sf::Color m_progressFillColor = sf::Color::Green;
 
-        void setTextString(Text text, std::string string);
-        void setCharacterSize(Text text, unsigned int characterSize);
+        void setTextString(Text& text, std::string string);
+        void setCharacterSize(Text& text, unsigned int characterSize);
         const unsigned int getCharacterSize(Text text) const;
-        void setVerticalAlignment(Text text, VerticalTextAlignment verticalAlignment);
+        void setVerticalAlignment(Text& text, VerticalTextAlignment verticalAlignment);
         const std::string getVerticalAlignmentString(Text text) const;
-        void setVisibility(Text text, bool isVisible);
+        void setVisibility(Text& text, bool isVisible);
         const bool isVisible(Text text) const;
-        void setFillColor(Text text, sf::Color color);
+        void setFillColor(Text& text, sf::Color color);
         const sf::Color getFillColor(Text text) const;
 
         void updateMainTextPosition();
@@ -160,6 +166,8 @@ namespace ire::core::gui
         void updateMinimumTextPosition();
         void updateValueTextPosition();
         void updatePercentTextPosition();
+
+        void updateTextPosition(Text& text, float xPosition);
 
         void updateMainTextString();
         void updateMaximumTextString();

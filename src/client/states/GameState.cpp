@@ -141,6 +141,8 @@ namespace ire::client::state
         progressBarExampleVerticalLayout->add(std::move(progressBarExample2), "ProgressBarExample2");
 
         auto progressBarExample3 = ire::core::gui::ProgressBar::create();
+        progressBarExample3->setPercentTextVerticalAlighnment(
+            ire::core::gui::ProgressBar::VerticalTextAlignment::Bottom);
         progressBarExampleVerticalLayout->add(std::move(progressBarExample3), "ProgressBarExample3");
 
         auto progressBarExamplePanel = ire::core::gui::Panel::create({ 300, 250 }, std::move(progressBarExampleVerticalLayout),"ProgressBarExampleVerticalLayout");
