@@ -36,6 +36,7 @@ namespace ire::core::gui
 	std::unique_ptr<ProgressBar> ProgressBar::create(const std::string& text)
 	{
 		auto widget = std::make_unique<ProgressBar>();
+		widget->m_mainText.m_textString = text;
 		return widget;
 	}
 
@@ -162,11 +163,6 @@ namespace ire::core::gui
 		setTextString(m_maximumText, string);
 	}
 
-	const std::string ProgressBar::getMaximumString() const
-	{
-		return m_maximumText.m_textString;
-	}
-
 	void ProgressBar::setMaximumTextCharacterSize(unsigned int maximumTextCharacterSize)
 	{
 		setCharacterSize(m_maximumText, maximumTextCharacterSize);
@@ -207,7 +203,7 @@ namespace ire::core::gui
 		return getFillColor(m_maximumText);
 	}
 
-	void ProgressBar::setValue(unsigned int value)
+	void ProgressBar::setValue(float value)
 	{
 		if (m_value != value && m_value - m_minimum <= m_maximum - m_minimum)
 		{
@@ -223,11 +219,6 @@ namespace ire::core::gui
 	void ProgressBar::setValueTextString(std::string string)
 	{
 		setTextString(m_valueText, string);
-	}
-
-	const std::string ProgressBar::getValueString() const
-	{
-		return m_valueText.m_textString;
 	}
 
 	void ProgressBar::setValueTextCharacterSize(unsigned int valueTextCharacterSize)
@@ -275,9 +266,9 @@ namespace ire::core::gui
 		setTextString(m_percentText, percentTextString + "%");
 	}
 
-	const std::string ProgressBar::getPercentTextString() const
+	const float ProgressBar::getPercent() const
 	{
-		return m_percentText.m_textString;
+		return calculatePercent();
 	}
 
 	void ProgressBar::setPercentTextCharacterSize(unsigned int percentTextCharacterSize)
@@ -320,14 +311,9 @@ namespace ire::core::gui
 		return getFillColor(m_percentText);
 	}
 
-	void ProgressBar::setMainString(std::string string)
+	void ProgressBar::setMainTextString(std::string string)
 	{
-		if (m_mainText.m_textString != string)
-		{
-			m_mainText.m_text.setString(string);
-			m_mainText.m_textString = string;
-		}
-		
+		setTextString(m_mainText, string);
 	}
 
 	const std::string ProgressBar::getMainString() const
@@ -440,6 +426,21 @@ namespace ire::core::gui
 		onKeyClicked(ev);
 	}
 
+	void ProgressBar::onEvent(EventRoot& sender, ProgressBarValueChanged& ev)
+	{
+		if (ev.value <= m_maximum)
+		{
+			setValue(ev.value);
+		}
+		else
+		{
+			std::cout << "Bar Full\n";
+		}
+
+		updateWidget();
+		onValueChanged(ev);
+	}
+
 	void ProgressBar::onKeyClicked(KeyDownEvent& ev)
 	{
 		KeyPressedEvent keyClickedEv{};
@@ -452,14 +453,21 @@ namespace ire::core::gui
 		emitEvent<KeyPressedEvent>(keyClickedEv);
 	}
 
-	float ProgressBar::calculatedPercent()
+	void ProgressBar::onValueChanged(ProgressBarValueChanged& ev)
+	{
+		ValueChanged valueChangedEv{};
+		valueChangedEv.timestamp = ev.timestamp;
+		valueChangedEv.value = ev.value;
+		emitEvent<ValueChanged>(valueChangedEv);
+	}
+
+	const float ProgressBar::calculatePercent() const
 	{
 		if (m_value - m_minimum > m_maximum - m_minimum)
 		{
 			throw std::runtime_error("Value is not beetween minimum and maximum");
 		}
 		return static_cast<float>(m_value - m_minimum) / static_cast<float>(m_maximum - m_minimum);
-
 	}
 
 	void ProgressBar::updateMainTextPosition()
@@ -524,7 +532,7 @@ namespace ire::core::gui
 
 	void ProgressBar::updateMainTextString()
 	{
-
+		setMainTextString(m_mainText.m_textString);
 	}
 
 	void ProgressBar::updateMaximumTextString()
@@ -544,7 +552,7 @@ namespace ire::core::gui
 
 	void ProgressBar::updatePercentTextString()
 	{
-		int percent = calculatedPercent() * 100;
+		int percent = calculatePercent() * 100;
 		setPercentTextString(std::to_string(percent));
 	}
 
@@ -553,16 +561,16 @@ namespace ire::core::gui
 		switch (m_fillDirection)
 		{
 		case FillDirection::LeftToRight:
-			m_progressShape.setSize({ m_size.x * calculatedPercent(), m_size.y });
+			m_progressShape.setSize({ m_size.x * calculatePercent(), m_size.y });
 			break;
 		case FillDirection::RightToLeft:
-			m_progressShape.setSize({ m_size.x * (1 - calculatedPercent()), m_size.y });
+			m_progressShape.setSize({ m_size.x * (1 - calculatePercent()), m_size.y });
 			break;
 		case FillDirection::TopToBottom:
-			m_progressShape.setSize({ m_size.x, m_size.y * calculatedPercent() });
+			m_progressShape.setSize({ m_size.x, m_size.y * calculatePercent() });
 			break;
 		case FillDirection::BottomToTop:
-			m_progressShape.setSize({ m_size.x , m_size.y * (1 - calculatedPercent() )});
+			m_progressShape.setSize({ m_size.x , m_size.y * (1 - calculatePercent() )});
 			break;
 		default:
 			break;

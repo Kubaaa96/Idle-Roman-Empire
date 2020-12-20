@@ -298,6 +298,12 @@ namespace ire::core::gui {
         std::uint32_t finger;
         sf::Vector2f position;
     };
+
+    struct ProgressBarValueChanged : RawEvent
+    {
+        float value;
+    };
+
 }
 
 #endif // !IRE_EVENTS_H

@@ -124,7 +124,6 @@ namespace ire::client::state
         );
         editBoxExampleVerticalLayout->add(std::move(buttonTest), "TestButton");
 
-
         auto editBoxExamplePanel = ire::core::gui::Panel::create({ 300, 250 }, std::move(editBoxExampleVerticalLayout), "EditBoxExampleVerticalLayout");
         editBoxExamplePanel->setPosition({ 650, 50 });
         editBoxExamplePanel->setOutlineColor(sf::Color::Blue);

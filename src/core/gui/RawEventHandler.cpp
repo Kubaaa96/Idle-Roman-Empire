@@ -16,16 +16,24 @@ namespace ire::core::gui {
 	{
 		emitEventIfNotHandled<MouseMovedEvent>(ev);
 	}
+
 	void RawEventHandler::onEvent(EventRoot& sender, TextEnteredEvent& ev)
 	{
 		emitEventIfNotHandled<TextEnteredEvent>(ev);
 	}
+
 	void RawEventHandler::onEvent(EventRoot& sender, KeyDownEvent& ev)
 	{
 		emitEventIfNotHandled<KeyDownEvent>(ev);
 	}
+
 	void RawEventHandler::onEvent(EventRoot& sender, KeyUpEvent& ev)
 	{
 		emitEventIfNotHandled<KeyUpEvent>(ev);
+	}
+
+	void RawEventHandler::onEvent(EventRoot& sender, ProgressBarValueChanged& ev)
+	{
+		emitEventIfNotHandled<ProgressBarValueChanged>(ev);
 	}
 }
