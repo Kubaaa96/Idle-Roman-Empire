@@ -547,7 +547,7 @@ namespace ire::core::gui
 
 	void ProgressBar::updateValueTextString()
 	{
-
+		setValueTextString(std::to_string(m_value));
 	}
 
 	void ProgressBar::updatePercentTextString()

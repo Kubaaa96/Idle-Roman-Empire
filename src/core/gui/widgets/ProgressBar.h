@@ -148,7 +148,6 @@ namespace ire::core::gui
 
         Text m_mainText;
 
-
         sf::RectangleShape m_backgroundShape;
         sf::Color m_backgroundFillColor = sf::Color::Blue;
 
