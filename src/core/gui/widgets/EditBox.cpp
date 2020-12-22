@@ -191,12 +191,16 @@ namespace ire::core::gui
 
     void EditBox::onEvent(EventRoot& sender, TextEnteredEvent& ev)
     {
-
         if (ev.character < 32 || ev.character > 128)
         {
             return;
         }
         std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
+
+        if (m_isSelectingActive)
+        {
+            deleteSelected();
+        }
 
         if (!m_maxChars || m_textString.length() < *m_maxChars)
         {
@@ -204,6 +208,7 @@ namespace ire::core::gui
             ++m_currentCaretPosition;
             m_text.setString(m_textString);
         }
+
         ev.handled = true;
         m_isSelectingActive = false;
         updateWordIndices();
@@ -401,9 +406,8 @@ namespace ire::core::gui
             break;
 
         case sf::Keyboard::Backspace:
-            if (m_currentCaretPosition > 0)
-            {
-                
+            if (m_currentCaretPosition >= 0)
+            {          
                 if (m_isSelectingActive)
                 {
                     deleteSelected();
@@ -411,7 +415,10 @@ namespace ire::core::gui
                 else
                 {
                     deleteCharacterAt(m_currentCaretPosition - 1);
-                    --m_currentCaretPosition;
+                    if (m_currentCaretPosition > 0)
+                    {
+                        --m_currentCaretPosition;
+                    }                  
                 }
                 
                 updateCaretPosition();
@@ -495,8 +502,6 @@ namespace ire::core::gui
             --m_selIndex;
             m_currentCaretPosition = m_selIndex;
         }
-
-
     }
 
     void EditBox::selectToWordStartIndex(std::size_t wordStartingIndex)
@@ -642,23 +647,25 @@ namespace ire::core::gui
 
     void EditBox::onKeyClicked(KeyDownEvent& ev)
     {
-        KeyPressedEvent keyClickedEv{};
+        KeyDownEvent keyClickedEv{};
         keyClickedEv.timestamp = ev.timestamp;
         keyClickedEv.key = ev.key;
         keyClickedEv.alt = ev.alt;
         keyClickedEv.control = ev.control;
         keyClickedEv.shift = ev.control;
         keyClickedEv.system = ev.system;
-        emitEvent<KeyPressedEvent>(keyClickedEv);
+        emitEvent<KeyDownEvent>(keyClickedEv);
     }
 
     void EditBox::deleteCharacterAt(std::size_t indexOfCharacter)
     {
-        m_textString.erase(indexOfCharacter, 1);
+        if (!m_textString.empty())
+        {
+            m_textString.erase(indexOfCharacter, 1);
+        }
         m_text.setString(m_textString);
         updateWordIndices();
         initializeSelection();
-
     }
 
     void EditBox::eraseSelectedFromString()

@@ -110,7 +110,7 @@ namespace ire::client::state
         
         editBoxExampleVerticalLayout->add(std::move(editBoxExample3), "EditBoxExample3");
 
-        auto editBoxExample4 = ire::core::gui::EditBox::create("Example 4");
+        auto editBoxExample4 = ire::core::gui::EditBox::create("15");
         auto& editBoxExample4Ref = *editBoxExample4;
 
         editBoxExampleVerticalLayout->add(std::move(editBoxExample4), "EditBoxExample4");
@@ -137,12 +137,30 @@ namespace ire::client::state
         progressBarExampleVerticalLayout->add(std::move(progressBarExample1), "ProgressBarExample1");
 
         auto progressBarExample2 = ire::core::gui::ProgressBar::create();
+        progressBarExample2->setFillDirection(ire::core::gui::ProgressBar::FillDirection::RightToLeft);
         progressBarExampleVerticalLayout->add(std::move(progressBarExample2), "ProgressBarExample2");
 
         auto progressBarExample3 = ire::core::gui::ProgressBar::create();
-        progressBarExample3->setPercentTextVerticalAlighnment(
+        progressBarExample3->setPercentTextVerticalAlignment(
             ire::core::gui::ProgressBar::VerticalTextAlignment::Bottom);
+        auto& progressBarExample3Ref = *progressBarExample3;
+        progressBarExample3->addEventListener<ire::core::gui::ProgressBarValueChanged>(
+            [&](ire::core::gui::ProgressBarValueChanged& ev)
+            {
+                auto currentValue = progressBarExample3Ref.getValue(); 
+            }
+        );
         progressBarExampleVerticalLayout->add(std::move(progressBarExample3), "ProgressBarExample3");
+
+        auto buttonTest2 = ire::core::gui::Button::create("Test");
+        buttonTest2->addEventListener<ire::core::gui::MouseClickEvent>(
+            [&](ire::core::gui::MouseClickEvent& ev)
+            {
+                progressBarExample3Ref.setValue(std::stoll(editBoxExample4Ref.getTextString()));          
+            }
+        );
+        progressBarExampleVerticalLayout->add(std::move(buttonTest2), "TestButton2");
+
 
         auto progressBarExamplePanel = ire::core::gui::Panel::create({ 300, 250 }, std::move(progressBarExampleVerticalLayout),"ProgressBarExampleVerticalLayout");
         progressBarExamplePanel->setPosition({ 300, 50 });
@@ -150,7 +168,6 @@ namespace ire::client::state
         progressBarExamplePanel->setOutlineThickness(3);
 
         m_group = ire::core::gui::Group::create(static_cast<sf::Vector2f>(m_window.getRenderTarget().getSize()));
-        //m_group->add(std::move(testEditBoxPtr), "TestEditBox");
         m_group->add(std::move(panel), "panel1");
         m_group->add(std::move(panel2), "panel2");
         m_group->add(std::move(editBoxExamplePanel), "EditBoxExamplePanel");

@@ -299,9 +299,9 @@ namespace ire::core::gui {
         sf::Vector2f position;
     };
 
-    struct ProgressBarValueChanged : RawEvent
+    struct ProgressBarValueChanged : TranslatedEvent
     {
-        float value;
+        uint64_t value;
     };
 
 }

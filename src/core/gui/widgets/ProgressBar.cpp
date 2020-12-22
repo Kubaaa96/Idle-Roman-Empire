@@ -82,7 +82,7 @@ namespace ire::core::gui
 
 		updateFillDirection();
 	}
-	void ProgressBar::setMinimum(unsigned int minimum)
+	void ProgressBar::setMinimum(uint64_t minimum)
 	{
 		if (m_minimum != minimum)
 		{
@@ -90,7 +90,7 @@ namespace ire::core::gui
 		}
 	}
 
-	const unsigned int ProgressBar::getMinimum() const
+	const uint64_t ProgressBar::getMinimum() const
 	{
 		return m_minimum;
 	}
@@ -115,7 +115,7 @@ namespace ire::core::gui
 		return getCharacterSize(m_minimumText);
 	}
 
-	void ProgressBar::setMinimumTextVerticalAlighnment(VerticalTextAlignment minimumTextVerticalAlignment)
+	void ProgressBar::setMinimumTextVerticalAlignment(VerticalTextAlignment minimumTextVerticalAlignment)
 	{
 		setVerticalAlignment(m_minimumText, minimumTextVerticalAlignment);
 	}
@@ -145,7 +145,7 @@ namespace ire::core::gui
 		return getFillColor(m_minimumText);
 	}
 
-	void ProgressBar::setMaximum(unsigned int maximum)
+	void ProgressBar::setMaximum(uint64_t maximum)
 	{
 		if (m_maximum != maximum)
 		{
@@ -153,7 +153,7 @@ namespace ire::core::gui
 		}
 	}
 
-	const unsigned int ProgressBar::getMaximum() const
+	const uint64_t ProgressBar::getMaximum() const
 	{
 		return m_maximum;
 	}
@@ -173,7 +173,7 @@ namespace ire::core::gui
 		return getCharacterSize(m_maximumText);
 	}
 
-	void ProgressBar::setMaximumTextVerticalAlighnment(VerticalTextAlignment maximumTextVerticalAlignment)
+	void ProgressBar::setMaximumTextVerticalAlignment(VerticalTextAlignment maximumTextVerticalAlignment)
 	{
 		setVerticalAlignment(m_maximumText, maximumTextVerticalAlignment);
 	}
@@ -203,15 +203,19 @@ namespace ire::core::gui
 		return getFillColor(m_maximumText);
 	}
 
-	void ProgressBar::setValue(float value)
+	void ProgressBar::setValue(uint64_t value)
 	{
 		if (m_value != value && m_value - m_minimum <= m_maximum - m_minimum)
 		{
 			m_value = value;
+			ProgressBarValueChanged ev;
+			ev.value = value;
+			onValueChanged(ev);
 		}
+		updateWidget();
 	}
 
-	const unsigned int ProgressBar::getValue() const
+	const uint64_t ProgressBar::getValue() const
 	{
 		return m_value;
 	}
@@ -231,7 +235,7 @@ namespace ire::core::gui
 		return getCharacterSize(m_valueText);
 	}
 
-	void ProgressBar::setValueTextVerticalAlighnment(VerticalTextAlignment valueTextVerticalAlignment)
+	void ProgressBar::setValueTextVerticalAlignment(VerticalTextAlignment valueTextVerticalAlignment)
 	{
 		setVerticalAlignment(m_valueText, valueTextVerticalAlignment);
 	}
@@ -266,7 +270,7 @@ namespace ire::core::gui
 		setTextString(m_percentText, percentTextString + "%");
 	}
 
-	const float ProgressBar::getPercent() const
+	const uint64_t ProgressBar::getPercent() const
 	{
 		return calculatePercent();
 	}
@@ -281,7 +285,7 @@ namespace ire::core::gui
 		return getCharacterSize(m_percentText);
 	}
 
-	void ProgressBar::setPercentTextVerticalAlighnment(VerticalTextAlignment percentTextVerticalAlignment)
+	void ProgressBar::setPercentTextVerticalAlignment(VerticalTextAlignment percentTextVerticalAlignment)
 	{
 		setVerticalAlignment(m_percentText, percentTextVerticalAlignment);
 	}
@@ -318,7 +322,7 @@ namespace ire::core::gui
 
 	const std::string ProgressBar::getMainString() const
 	{
-		return std::string();
+		return getTextString(m_mainText);
 	}
 
 	void ProgressBar::setMainTextCharacterSize(unsigned int mainTextCharacterSize)
@@ -331,7 +335,7 @@ namespace ire::core::gui
 		return getCharacterSize(m_mainText);
 	}
 
-	void ProgressBar::setMainTextVerticalAlighnment(VerticalTextAlignment mainTextVerticalAlignment)
+	void ProgressBar::setMainTextVerticalAlignment(VerticalTextAlignment mainTextVerticalAlignment)
 	{
 		setVerticalAlignment(m_mainText, mainTextVerticalAlignment);
 	}
@@ -394,6 +398,10 @@ namespace ire::core::gui
 		if (m_fillDirection != fillDirection)
 		{
 			m_fillDirection = fillDirection;
+			if (m_fillDirection == FillDirection::RightToLeft || m_fillDirection == FillDirection::BottomToTop)
+			{
+				invertBarsColors();
+			}
 		}
 	}
 
@@ -402,63 +410,12 @@ namespace ire::core::gui
 		return m_fillDirection;
 	}
 
-	void ProgressBar::onEvent(EventRoot& sender, KeyDownEvent& ev)
-	{
-		switch (ev.key)
-		{
-		case sf::Keyboard::Left:
-			if (m_value > m_minimum)
-			{
-				--m_value;
-			}
-			break;
-		case sf::Keyboard::Right:
-			if (m_value < m_maximum)
-			{
-				++m_value;
-			}
-			break;
-		default:
-			break;
-		}
-		ev.handled = true;
-		updateWidget();
-		onKeyClicked(ev);
-	}
-
-	void ProgressBar::onEvent(EventRoot& sender, ProgressBarValueChanged& ev)
-	{
-		if (ev.value <= m_maximum)
-		{
-			setValue(ev.value);
-		}
-		else
-		{
-			std::cout << "Bar Full\n";
-		}
-
-		updateWidget();
-		onValueChanged(ev);
-	}
-
-	void ProgressBar::onKeyClicked(KeyDownEvent& ev)
-	{
-		KeyPressedEvent keyClickedEv{};
-		keyClickedEv.timestamp = ev.timestamp;
-		keyClickedEv.key = ev.key;
-		keyClickedEv.alt = ev.alt;
-		keyClickedEv.control = ev.control;
-		keyClickedEv.shift = ev.control;
-		keyClickedEv.system = ev.system;
-		emitEvent<KeyPressedEvent>(keyClickedEv);
-	}
-
 	void ProgressBar::onValueChanged(ProgressBarValueChanged& ev)
 	{
-		ValueChanged valueChangedEv{};
+		ProgressBarValueChanged valueChangedEv{};
 		valueChangedEv.timestamp = ev.timestamp;
 		valueChangedEv.value = ev.value;
-		emitEvent<ValueChanged>(valueChangedEv);
+		emitEvent<ProgressBarValueChanged>(valueChangedEv);
 	}
 
 	const float ProgressBar::calculatePercent() const
@@ -592,6 +549,11 @@ namespace ire::core::gui
 			text.m_textString = string;
 			text.m_text.setString(string);
 		}
+	}
+
+	const std::string ProgressBar::getTextString(Text text) const
+	{
+		return text.m_textString;
 	}
 
 	void ProgressBar::setCharacterSize(Text& text, unsigned int characterSize)

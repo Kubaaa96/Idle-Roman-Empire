@@ -31,9 +31,4 @@ namespace ire::core::gui {
 	{
 		emitEventIfNotHandled<KeyUpEvent>(ev);
 	}
-
-	void RawEventHandler::onEvent(EventRoot& sender, ProgressBarValueChanged& ev)
-	{
-		emitEventIfNotHandled<ProgressBarValueChanged>(ev);
-	}
 }

@@ -6,7 +6,6 @@
 #include "core/resource/Resource.h"
 #include "core/resource/FontResourceLoader.h"
 #include "core/resource/ResourceManager.h"
-#include "core/gui/CollectionOfEvents.h"
 
 #include <optional>
 #include <list>
