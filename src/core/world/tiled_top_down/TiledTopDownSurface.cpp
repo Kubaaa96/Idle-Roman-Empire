@@ -1,5 +1,7 @@
 #include "TiledTopDownSurface.h"
 
+#include "core/resource/ResourceManager.h"
+
 #include <SFML/Graphics/RectangleShape.hpp>
 
 #include <cmath>
@@ -16,10 +18,13 @@ namespace ire::core::world
         m_tiles(width, height),
         m_gridPoints(width + 1, height + 1)
     {
+        m_textureAtlas = ResourceManager::instance().get<gfx::TextureAtlas>("resource/gfx/tiles");
+        m_tileSprite = m_textureAtlas->getTextureView(ResourcePath("grass.png"));
+
         generateRandomWorld();
     }
 
-    void TiledTopDownSurface::draw(sf::RenderTarget& target)
+    void TiledTopDownSurface::draw(sf::RenderTarget& target, sf::RenderStates& states)
     {
         constexpr float cameraAngleDeg = 60.0f;
 
@@ -40,7 +45,7 @@ namespace ire::core::world
         surfaceView.zoom(1.0f);
         target.setView(surfaceView);
 
-        drawGround(target);
+        drawGround(target, states);
 
         target.setView(oldView);
     }
@@ -85,7 +90,10 @@ namespace ire::core::world
     {
         const sf::Vector3f groundToSun(-0.3, 0.7, 0.645);
 
-        auto drawTriangle = [&](sf::Vector3f v0, sf::Vector3f v1, sf::Vector3f v2)
+        auto drawTriangle = [&](
+            sf::Vector3f v0, sf::Vector3f v1, sf::Vector3f v2,
+            sf::Vector2f t0, sf::Vector2f t1, sf::Vector2f t2
+            )
         {
             sf::Vector3f a = v1 - v0;
             sf::Vector3f b = v2 - v0;
@@ -97,10 +105,11 @@ namespace ire::core::world
             float mag = std::sqrt(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
             normal /= mag;
             const float dot = normal.x * groundToSun.x + normal.y * groundToSun.y + normal.z * groundToSun.z;
-            const auto color = sf::Color(0, 255 * std::max(0.0f, dot), 0);
-            va.append(sf::Vertex(sf::Vector2f(v0.x, v0.y - v0.z), color));
-            va.append(sf::Vertex(sf::Vector2f(v1.x, v1.y - v1.z), color));
-            va.append(sf::Vertex(sf::Vector2f(v2.x, v2.y - v2.z), color));
+            const float intensity = 255 * std::max(0.0f, dot);
+            const auto color = sf::Color(intensity, intensity, intensity);
+            va.append(sf::Vertex(sf::Vector2f(v0.x, v0.y - v0.z), color, t0));
+            va.append(sf::Vertex(sf::Vector2f(v1.x, v1.y - v1.z), color, t1));
+            va.append(sf::Vertex(sf::Vector2f(v2.x, v2.y - v2.z), color, t2));
         };
 
         const auto topLeftElevation = m_gridPoints(x, y).getElevation();
@@ -119,14 +128,23 @@ namespace ire::core::world
         const auto bottomLeft = sf::Vector3f(x, y + 1, bottomLeftElevation);
         const auto mid = sf::Vector3f(x + 0.5f, y + 0.5f, midElevation);
 
-        drawTriangle(mid, bottomLeft, topLeft);
-        drawTriangle(mid, bottomRight, bottomLeft);
-        drawTriangle(mid, topRight, bottomRight);
-        drawTriangle(mid, topLeft, topRight);
+        const auto& texture = m_tileSprite.getTexture();
+        const auto& texBounds = m_tileSprite.getBounds();
+        const auto topLeftTex = sf::Vector2f(texBounds.left, texBounds.top);
+        const auto topRightTex = sf::Vector2f(texBounds.left + texBounds.width, texBounds.top);
+        const auto bottomRightTex = sf::Vector2f(texBounds.left + texBounds.width, texBounds.top + texBounds.height);
+        const auto bottomLeftTex = sf::Vector2f(texBounds.left, texBounds.top + texBounds.height);
+        const auto midTex = sf::Vector2f(texBounds.left + texBounds.width * 0.5f, texBounds.top + texBounds.height * 0.5f);
+
+        drawTriangle(mid, bottomLeft, topLeft, midTex, bottomLeftTex, topLeftTex);
+        drawTriangle(mid, bottomRight, bottomLeft, midTex, bottomRightTex, bottomLeftTex);
+        drawTriangle(mid, topRight, bottomRight, midTex, topRightTex, bottomRightTex);
+        drawTriangle(mid, topLeft, topRight, midTex, topLeftTex, topRightTex);
     }
 
-    void TiledTopDownSurface::drawGround(sf::RenderTarget& target)
+    void TiledTopDownSurface::drawGround(sf::RenderTarget& target, sf::RenderStates& states)
     {
+        states.texture = &m_tileSprite.getTexture();
         sf::VertexArray va(sf::PrimitiveType::Triangles);
         for (int y = 0; y < m_height; ++y)
         {
@@ -135,7 +153,7 @@ namespace ire::core::world
                 drawGroundTile(va, x, y);
             }
         }
-        target.draw(va);
+        target.draw(va, states);
     }
 
     [[nodiscard]] sf::Vector3f TiledTopDownSurface::getGridPointNormal(int x, int y) const

@@ -3,6 +3,10 @@
 #include "TopDownGroundTile.h"
 #include "TopDownGridPoint.h"
 
+#include "core/resource/Resource.h"
+
+#include "core/gfx/TextureAtlas.h"
+
 #include "core/util/Array2.h"
 
 #include "core/world/Surface.h"
@@ -17,7 +21,7 @@ namespace ire::core::world
     {
         TiledTopDownSurface(int width, int height);
 
-        void draw(sf::RenderTarget& target) override;
+        void draw(sf::RenderTarget& target, sf::RenderStates& states) override;
 
         [[nodiscard]] sf::Vector3f getGridPointNormal(int x, int y) const;
 
@@ -28,10 +32,13 @@ namespace ire::core::world
         util::Array2<TopDownGroundTile> m_tiles;
         util::Array2<TopDownGridPoint> m_gridPoints;
 
+        ResourcePtr<gfx::TextureAtlas> m_textureAtlas;
+        gfx::TextureView m_tileSprite;
+
         void drawGroundTile(sf::VertexArray& va, int x, int y);
         void generateRandomWorld();
 
-        void drawGround(sf::RenderTarget& target);
+        void drawGround(sf::RenderTarget& target, sf::RenderStates& states);
     };
 
 }

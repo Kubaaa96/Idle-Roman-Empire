@@ -22,6 +22,7 @@ namespace ire::client::state
 
         void draw(sf::RenderTarget& target)
         {
+            sf::RenderStates states = sf::RenderStates::Default;
             sf::View view = target.getView();
             view.setViewport(sf::FloatRect(0.1, 0.1, 0.8, 0.8));
             target.setView(view);
@@ -29,7 +30,7 @@ namespace ire::client::state
             s.setFillColor(sf::Color::White);
             s.setSize(sf::Vector2f(1000.0f, 1000.0f));
             target.draw(s);
-            m_world.getMainSurface().draw(target);
+            m_world.getMainSurface().draw(target, states);
         }
 
         void updateWidget() override {}
