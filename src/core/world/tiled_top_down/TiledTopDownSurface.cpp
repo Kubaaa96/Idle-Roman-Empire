@@ -101,23 +101,25 @@ namespace ire::core::world
             sf::Vector2f t0, sf::Vector2f t1, sf::Vector2f t2
             )
         {
-            sf::Vector3f a = v1 - v0;
-            sf::Vector3f b = v2 - v0;
-            sf::Vector3f normal(
-                a.y * b.z - a.z * b.y,
-                a.z * b.x - a.x * b.z,
-                a.x * b.y - a.y * b.x
-            );
-            float mag = std::sqrt(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
-            normal /= mag;
-            const float dot = normal.x * groundToSun.x + normal.y * groundToSun.y + normal.z * groundToSun.z;
-            const float intensity = std::max(0.0f, dot);
-            const float cf = intensity + ambient;
-            const int ci = std::clamp((int)(std::pow(cf, 1.0f / gamma) * 255.0f), 0, 255);
-            const auto color = sf::Color(ci, ci, ci);
-            va.append(sf::Vertex(sf::Vector2f(v0.x, v0.y - v0.z * m_elevationSqueeze), color, t0));
-            va.append(sf::Vertex(sf::Vector2f(v1.x, v1.y - v1.z * m_elevationSqueeze), color, t1));
-            va.append(sf::Vertex(sf::Vector2f(v2.x, v2.y - v2.z * m_elevationSqueeze), color, t2));
+            auto getColor = [&](sf::Vector3f normal)
+            {
+                const float dot = normal.x * groundToSun.x + normal.y * groundToSun.y + normal.z * groundToSun.z;
+                const float intensity = std::max(0.0f, dot);
+                const float cf = intensity + ambient;
+                const int ci = std::clamp((int)(std::pow(cf, 1.0f / gamma) * 255.0f), 0, 255);
+                const auto color = sf::Color(ci, ci, ci);
+                return color;
+            };
+
+            auto n0 = getGroundNormal(v0.x, v0.y);
+            auto n1 = getGroundNormal(v1.x, v1.y);
+            auto n2 = getGroundNormal(v2.x, v2.y);
+            auto c0 = getColor(n0);
+            auto c1 = getColor(n1);
+            auto c2 = getColor(n2);
+            va.append(sf::Vertex(sf::Vector2f(v0.x, v0.y - v0.z * m_elevationSqueeze), c0, t0));
+            va.append(sf::Vertex(sf::Vector2f(v1.x, v1.y - v1.z * m_elevationSqueeze), c1, t1));
+            va.append(sf::Vertex(sf::Vector2f(v2.x, v2.y - v2.z * m_elevationSqueeze), c2, t2));
         };
 
         const auto topLeftElevation = m_gridPoints(x, y).getElevation();
@@ -179,6 +181,28 @@ namespace ire::core::world
         );
         float mag = std::sqrt(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
         return normal / mag;
+    }
+
+    [[nodiscard]] sf::Vector3f TiledTopDownSurface::getGroundNormal(float x, float y) const
+    {
+        int x0 = x;
+        int x1 = x0 + 1;
+        int y0 = y;
+        int y1 = y0 + 1;
+        float dx = x - x0;
+        float dy = y - y0;
+        sf::Vector3f n00 = getGridPointNormal(x0, y0);
+        sf::Vector3f n10 = getGridPointNormal(x1, y0);
+        sf::Vector3f n11 = getGridPointNormal(x1, y1);
+        sf::Vector3f n01 = getGridPointNormal(x0, y1);
+
+        sf::Vector3f nx0 = n00 * dx + n10 * (1.0f - dx);
+        sf::Vector3f nx1 = n01 * dx + n11 * (1.0f - dx);
+        sf::Vector3f n = nx0 * dy + nx1 * (1.0f - dy);
+
+        float mag = std::sqrt(n.x * n.x + n.y * n.y + n.z * n.z);
+
+        return n / mag;
     }
 
 }

@@ -24,6 +24,7 @@ namespace ire::core::world
         void draw(sf::RenderTarget& target, sf::RenderStates& states) override;
 
         [[nodiscard]] sf::Vector3f getGridPointNormal(int x, int y) const;
+        [[nodiscard]] sf::Vector3f getGroundNormal(float x, float y) const;
 
     private:
         int m_width;
