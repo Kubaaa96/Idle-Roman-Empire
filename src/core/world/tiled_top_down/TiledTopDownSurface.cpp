@@ -53,11 +53,28 @@ namespace ire::core::world
             }
         }
 
+        util::Array2<float> elevation(m_width + 3, m_height + 3);
+        for (int x = 0; x < m_width + 3; ++x)
+        {
+            for (int y = 0; y < m_height + 3; ++y)
+            {
+                elevation(x, y) = rand() % 20 / 10.0f;
+            }
+        }
+
         for (int x = 0; x < m_width + 1; ++x)
         {
             for (int y = 0; y < m_height + 1; ++y)
             {
-                m_gridPoints(x, y) = TopDownGridPoint(rand() % 10 / 10.0f);
+                float sum = 0.0f;
+                for (int xx = 0; xx < 2; ++xx)
+                {
+                    for (int yy = 0; yy < 2; ++yy)
+                    {
+                        sum += elevation(x + xx, y + yy);
+                    }
+                }
+                m_gridPoints(x, y) = TopDownGridPoint(sum / 9.0f);
             }
         }
     }
