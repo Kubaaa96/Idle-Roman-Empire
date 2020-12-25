@@ -7,6 +7,8 @@
 
 #include "core/world/Surface.h"
 
+#include <SFML/System/Vector3.hpp>
+
 namespace ire::core::world
 {
 
@@ -15,6 +17,8 @@ namespace ire::core::world
         TiledTopDownSurface(int width, int height);
 
         void draw(sf::RenderTarget& target) override;
+
+        [[nodiscard]] sf::Vector3f getGridPointNormal(int x, int y) const;
 
     private:
         int m_width;

@@ -5,6 +5,8 @@
 #include <cmath>
 #include <cstdlib>
 
+#include <iostream>
+
 namespace ire::core::world
 {
 
@@ -87,18 +89,37 @@ namespace ire::core::world
             for (int y = 0; y < m_height; ++y)
             {
                 const auto position = sf::Vector2f(x, y);
-                const auto color = m_tiles(x, y).getTint();
+                //const auto color = m_tiles(x, y).getTint();
+                const auto normal = getGridPointNormal(x, y);
+                const auto color = sf::Color(normal.x * 127 + 127, normal.y * 127 + 127, normal.z * 127 + 127);
                 const auto topLeftElevation = m_gridPoints(x, y).getElevation();
                 const auto topRightElevation = m_gridPoints(x+1, y).getElevation();
                 const auto bottomRightElevation = m_gridPoints(x+1, y+1).getElevation();
                 const auto bottomLeftElevation = m_gridPoints(x, y+1).getElevation();
-                va.append(sf::Vertex(position + sf::Vector2f(0.0f, 0.0f + topLeftElevation), color));
-                va.append(sf::Vertex(position + sf::Vector2f(1.0f, 0.0f + topRightElevation), color));
-                va.append(sf::Vertex(position + sf::Vector2f(1.0f, 1.0f + bottomRightElevation), color));
-                va.append(sf::Vertex(position + sf::Vector2f(0.0f, 1.0f + bottomLeftElevation), color));
+                va.append(sf::Vertex(position + sf::Vector2f(0.0f, 0.0f - topLeftElevation), color));
+                va.append(sf::Vertex(position + sf::Vector2f(1.0f, 0.0f - topRightElevation), color));
+                va.append(sf::Vertex(position + sf::Vector2f(1.0f, 1.0f - bottomRightElevation), color));
+                va.append(sf::Vertex(position + sf::Vector2f(0.0f, 1.0f - bottomLeftElevation), color));
             }
         }
         target.draw(va);
+    }
+
+    [[nodiscard]] sf::Vector3f TiledTopDownSurface::getGridPointNormal(int x, int y) const
+    {
+        sf::Vector3f x0(std::max(0, x - 1), y, m_gridPoints(std::max(0, x - 1), y).getElevation());
+        sf::Vector3f x1(std::min(m_width, x + 1), y, m_gridPoints(std::min(m_width, x + 1), y).getElevation());
+        sf::Vector3f y0(x, std::max(0, y - 1), m_gridPoints(x, std::max(0, y - 1)).getElevation());
+        sf::Vector3f y1(x, std::min(m_height, y + 1), m_gridPoints(x, std::min(m_height, y + 1)).getElevation());
+        sf::Vector3f a = x1 - x0;
+        sf::Vector3f b = y1 - y0;
+        sf::Vector3f normal(
+            a.y * b.z - a.z * b.y,
+            a.z * b.x - a.x * b.z,
+            a.x * b.y - a.y * b.x
+        );
+        float mag = std::sqrt(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
+        return normal / mag;
     }
 
 }
