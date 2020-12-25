@@ -3,14 +3,18 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 
 #include <cmath>
+#include <cstdlib>
 
 namespace ire::core::world
 {
 
     TiledTopDownSurface::TiledTopDownSurface(int width, int height) :
         m_width(width),
-        m_height(height)
+        m_height(height),
+        m_tiles(width, height),
+        m_gridPoints(width + 1, height + 1)
     {
+        generateRandomWorld();
     }
 
     void TiledTopDownSurface::draw(sf::RenderTarget& target)
@@ -28,19 +32,41 @@ namespace ire::core::world
         const float aspectRatio = oldViewportWidth / oldViewportHeight;
 
         sf::View surfaceView;
-        surfaceView.setCenter(10.0f, 10.0f);
-        surfaceView.setSize(10.0f * aspectRatio, 10.0f / verticalSqueeze);
+        surfaceView.setCenter(m_width/2.0f, m_height/2.0f);
+        surfaceView.setSize(m_height * aspectRatio * verticalSqueeze, m_height);
         surfaceView.setViewport(oldView.getViewport());
         surfaceView.zoom(1.0f);
         target.setView(surfaceView);
 
-        sf::RectangleShape tileMockup;
-        tileMockup.setPosition(sf::Vector2f(10.0f, 10.0f));
-        tileMockup.setSize(sf::Vector2f(1.0f, 1.0f));
-        tileMockup.setFillColor(sf::Color::Green);
-        target.draw(tileMockup);
+        drawGround(target);
 
         target.setView(oldView);
+    }
+
+    void TiledTopDownSurface::generateRandomWorld()
+    {
+        for (int x = 0; x < m_width; ++x)
+        {
+            for (int y = 0; y < m_height; ++y)
+            {
+                m_tiles(x, y) = TopDownGroundTile(sf::Color(rand(), rand(), rand()));
+            }
+        }
+    }
+
+    void TiledTopDownSurface::drawGround(sf::RenderTarget& target)
+    {
+        for (int x = 0; x < m_width; ++x)
+        {
+            for (int y = 0; y < m_height; ++y)
+            {
+                sf::RectangleShape tileMockup;
+                tileMockup.setPosition(sf::Vector2f(x, y));
+                tileMockup.setSize(sf::Vector2f(1.0f, 1.0f));
+                tileMockup.setFillColor(m_tiles(x, y).getTint());
+                target.draw(tileMockup);
+            }
+        }
     }
 
 }

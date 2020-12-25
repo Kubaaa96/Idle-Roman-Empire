@@ -1,5 +1,9 @@
 #pragma once
 
+#include "TopDownGroundTile.h"
+
+#include "core/util/Array2.h"
+
 #include "core/world/Surface.h"
 
 namespace ire::core::world
@@ -14,6 +18,13 @@ namespace ire::core::world
     private:
         int m_width;
         int m_height;
+
+        util::Array2<TopDownGroundTile> m_tiles;
+        util::Array2<float> m_gridPoints;
+
+        void generateRandomWorld();
+
+        void drawGround(sf::RenderTarget& target);
     };
 
 }
