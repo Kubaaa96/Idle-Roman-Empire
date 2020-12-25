@@ -1,6 +1,7 @@
 #pragma once
 
 #include "TopDownGroundTile.h"
+#include "TopDownGridPoint.h"
 
 #include "core/util/Array2.h"
 
@@ -20,7 +21,7 @@ namespace ire::core::world
         int m_height;
 
         util::Array2<TopDownGroundTile> m_tiles;
-        util::Array2<float> m_gridPoints;
+        util::Array2<TopDownGridPoint> m_gridPoints;
 
         void generateRandomWorld();
 
