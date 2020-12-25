@@ -10,7 +10,7 @@ namespace ire::client::state
     struct WorldView : ire::core::gui::ClickableWidget
     {
         WorldView() :
-            m_world(std::make_unique<ire::core::world::TiledTopDownSurface>(16, 16))
+            m_world(std::make_unique<ire::core::world::TiledTopDownSurface>(32, 32))
         {
         }
 
@@ -23,7 +23,7 @@ namespace ire::client::state
         void draw(sf::RenderTarget& target)
         {
             sf::View view = target.getView();
-            view.setViewport(sf::FloatRect(0.1, 0.1, 0.8, 0.5));
+            view.setViewport(sf::FloatRect(0.1, 0.1, 0.8, 0.8));
             target.setView(view);
             sf::RectangleShape s;
             s.setFillColor(sf::Color::White);

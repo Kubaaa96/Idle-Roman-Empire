@@ -60,7 +60,7 @@ namespace ire::core::world
         {
             for (int y = 0; y < m_height + 3; ++y)
             {
-                elevation(x, y) = rand() % 20 / 10.0f;
+                elevation(x, y) = rand() % 100 / 10.0f;
             }
         }
 
@@ -128,9 +128,9 @@ namespace ire::core::world
     void TiledTopDownSurface::drawGround(sf::RenderTarget& target)
     {
         sf::VertexArray va(sf::PrimitiveType::Triangles);
-        for (int x = 0; x < m_width; ++x)
+        for (int y = 0; y < m_height; ++y)
         {
-            for (int y = 0; y < m_height; ++y)
+            for (int x = 0; x < m_width; ++x)
             {
                 drawGroundTile(va, x, y);
             }
