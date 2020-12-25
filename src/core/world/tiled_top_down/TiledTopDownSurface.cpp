@@ -83,6 +83,8 @@ namespace ire::core::world
 
     void TiledTopDownSurface::drawGround(sf::RenderTarget& target)
     {
+        const sf::Vector3f groundToSun(-0.3, 0.7, 0.645);
+
         sf::VertexArray va(sf::PrimitiveType::Quads);
         for (int x = 0; x < m_width; ++x)
         {
@@ -91,7 +93,8 @@ namespace ire::core::world
                 const auto position = sf::Vector2f(x, y);
                 //const auto color = m_tiles(x, y).getTint();
                 const auto normal = getGridPointNormal(x, y);
-                const auto color = sf::Color(normal.x * 127 + 127, normal.y * 127 + 127, normal.z * 127 + 127);
+                const float dot = normal.x * groundToSun.x + normal.y * groundToSun.y + normal.z * groundToSun.z;
+                const auto color = sf::Color(0, 255 * std::max(0.0f, dot), 0);
                 const auto topLeftElevation = m_gridPoints(x, y).getElevation();
                 const auto topRightElevation = m_gridPoints(x+1, y).getElevation();
                 const auto bottomRightElevation = m_gridPoints(x+1, y+1).getElevation();
