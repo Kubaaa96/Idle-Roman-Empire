@@ -32,6 +32,8 @@ namespace ire::core::world
         const float degToRad = (2.0f * pi / 360.0f);
         const float cameraAngleRad = cameraAngleDeg * degToRad;
         const float verticalSqueeze = std::sin(cameraAngleRad);
+        const float elevationSqueeze = std::cos(cameraAngleRad);
+        m_elevationSqueeze = elevationSqueeze;
 
         const auto oldView = target.getView();
         const float oldViewportWidth = target.getViewport(oldView).width;
@@ -88,7 +90,11 @@ namespace ire::core::world
 
     void TiledTopDownSurface::drawGroundTile(sf::VertexArray& va, int x, int y)
     {
-        const sf::Vector3f groundToSun(-0.3, 0.7, 0.645);
+        const float gamma = 2.2f;
+        sf::Vector3f groundToSun(-0.3, 0.6, 0.845);
+        float mag = std::sqrt(groundToSun.x * groundToSun.x + groundToSun.y * groundToSun.y + groundToSun.z * groundToSun.z);
+        groundToSun /= mag;
+        const float ambient = 32.0f / 256.0f;
 
         auto drawTriangle = [&](
             sf::Vector3f v0, sf::Vector3f v1, sf::Vector3f v2,
@@ -105,11 +111,13 @@ namespace ire::core::world
             float mag = std::sqrt(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
             normal /= mag;
             const float dot = normal.x * groundToSun.x + normal.y * groundToSun.y + normal.z * groundToSun.z;
-            const float intensity = 255 * std::max(0.0f, dot);
-            const auto color = sf::Color(intensity, intensity, intensity);
-            va.append(sf::Vertex(sf::Vector2f(v0.x, v0.y - v0.z), color, t0));
-            va.append(sf::Vertex(sf::Vector2f(v1.x, v1.y - v1.z), color, t1));
-            va.append(sf::Vertex(sf::Vector2f(v2.x, v2.y - v2.z), color, t2));
+            const float intensity = std::max(0.0f, dot);
+            const float cf = intensity + ambient;
+            const int ci = std::clamp((int)(std::pow(cf, 1.0f / gamma) * 255.0f), 0, 255);
+            const auto color = sf::Color(ci, ci, ci);
+            va.append(sf::Vertex(sf::Vector2f(v0.x, v0.y - v0.z * m_elevationSqueeze), color, t0));
+            va.append(sf::Vertex(sf::Vector2f(v1.x, v1.y - v1.z * m_elevationSqueeze), color, t1));
+            va.append(sf::Vertex(sf::Vector2f(v2.x, v2.y - v2.z * m_elevationSqueeze), color, t2));
         };
 
         const auto topLeftElevation = m_gridPoints(x, y).getElevation();

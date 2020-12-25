@@ -10,7 +10,7 @@ namespace ire::client::state
     struct WorldView : ire::core::gui::ClickableWidget
     {
         WorldView() :
-            m_world(std::make_unique<ire::core::world::TiledTopDownSurface>(32, 32))
+            m_world(std::make_unique<ire::core::world::TiledTopDownSurface>(24, 24))
         {
         }
 

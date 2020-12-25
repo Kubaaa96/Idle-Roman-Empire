@@ -34,6 +34,7 @@ namespace ire::core::world
 
         ResourcePtr<gfx::TextureAtlas> m_textureAtlas;
         gfx::TextureView m_tileSprite;
+        float m_elevationSqueeze;
 
         void drawGroundTile(sf::VertexArray& va, int x, int y);
         void generateRandomWorld();
