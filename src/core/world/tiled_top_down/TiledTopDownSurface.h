@@ -8,6 +8,7 @@
 #include "core/world/Surface.h"
 
 #include <SFML/System/Vector3.hpp>
+#include <SFML/Graphics/VertexArray.hpp>
 
 namespace ire::core::world
 {
@@ -27,6 +28,7 @@ namespace ire::core::world
         util::Array2<TopDownGroundTile> m_tiles;
         util::Array2<TopDownGridPoint> m_gridPoints;
 
+        void drawGroundTile(sf::VertexArray& va, int x, int y);
         void generateRandomWorld();
 
         void drawGround(sf::RenderTarget& target);

@@ -81,28 +81,58 @@ namespace ire::core::world
         }
     }
 
-    void TiledTopDownSurface::drawGround(sf::RenderTarget& target)
+    void TiledTopDownSurface::drawGroundTile(sf::VertexArray& va, int x, int y)
     {
         const sf::Vector3f groundToSun(-0.3, 0.7, 0.645);
 
-        sf::VertexArray va(sf::PrimitiveType::Quads);
+        auto drawTriangle = [&](sf::Vector3f v0, sf::Vector3f v1, sf::Vector3f v2)
+        {
+            sf::Vector3f a = v1 - v0;
+            sf::Vector3f b = v2 - v0;
+            sf::Vector3f normal(
+                a.y * b.z - a.z * b.y,
+                a.z * b.x - a.x * b.z,
+                a.x * b.y - a.y * b.x
+            );
+            float mag = std::sqrt(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
+            normal /= mag;
+            const float dot = normal.x * groundToSun.x + normal.y * groundToSun.y + normal.z * groundToSun.z;
+            const auto color = sf::Color(0, 255 * std::max(0.0f, dot), 0);
+            va.append(sf::Vertex(sf::Vector2f(v0.x, v0.y - v0.z), color));
+            va.append(sf::Vertex(sf::Vector2f(v1.x, v1.y - v1.z), color));
+            va.append(sf::Vertex(sf::Vector2f(v2.x, v2.y - v2.z), color));
+        };
+
+        const auto topLeftElevation = m_gridPoints(x, y).getElevation();
+        const auto topRightElevation = m_gridPoints(x + 1, y).getElevation();
+        const auto bottomRightElevation = m_gridPoints(x + 1, y + 1).getElevation();
+        const auto bottomLeftElevation = m_gridPoints(x, y + 1).getElevation();
+        const auto midElevation = 
+            (topLeftElevation
+            + topRightElevation
+            + bottomRightElevation
+            + bottomLeftElevation) * 0.25f;
+
+        const auto topLeft = sf::Vector3f(x, y, topLeftElevation);
+        const auto topRight = sf::Vector3f(x + 1, y, topRightElevation);
+        const auto bottomRight = sf::Vector3f(x + 1, y + 1, bottomRightElevation);
+        const auto bottomLeft = sf::Vector3f(x, y + 1, bottomLeftElevation);
+        const auto mid = sf::Vector3f(x + 0.5f, y + 0.5f, midElevation);
+
+        drawTriangle(mid, bottomLeft, topLeft);
+        drawTriangle(mid, bottomRight, bottomLeft);
+        drawTriangle(mid, topRight, bottomRight);
+        drawTriangle(mid, topLeft, topRight);
+    }
+
+    void TiledTopDownSurface::drawGround(sf::RenderTarget& target)
+    {
+        sf::VertexArray va(sf::PrimitiveType::Triangles);
         for (int x = 0; x < m_width; ++x)
         {
             for (int y = 0; y < m_height; ++y)
             {
-                const auto position = sf::Vector2f(x, y);
-                //const auto color = m_tiles(x, y).getTint();
-                const auto normal = getGridPointNormal(x, y);
-                const float dot = normal.x * groundToSun.x + normal.y * groundToSun.y + normal.z * groundToSun.z;
-                const auto color = sf::Color(0, 255 * std::max(0.0f, dot), 0);
-                const auto topLeftElevation = m_gridPoints(x, y).getElevation();
-                const auto topRightElevation = m_gridPoints(x+1, y).getElevation();
-                const auto bottomRightElevation = m_gridPoints(x+1, y+1).getElevation();
-                const auto bottomLeftElevation = m_gridPoints(x, y+1).getElevation();
-                va.append(sf::Vertex(position + sf::Vector2f(0.0f, 0.0f - topLeftElevation), color));
-                va.append(sf::Vertex(position + sf::Vector2f(1.0f, 0.0f - topRightElevation), color));
-                va.append(sf::Vertex(position + sf::Vector2f(1.0f, 1.0f - bottomRightElevation), color));
-                va.append(sf::Vertex(position + sf::Vector2f(0.0f, 1.0f - bottomLeftElevation), color));
+                drawGroundTile(va, x, y);
             }
         }
         target.draw(va);
