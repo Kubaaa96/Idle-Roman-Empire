@@ -74,6 +74,7 @@ namespace ire::core::gui
 	void Button::setCharacterSize(const unsigned int characterSize)
 	{
 		m_text.setCharacterSize(characterSize);
+		updateWidget();
 	}
 
 	const unsigned int Button::getCharacterSize() const

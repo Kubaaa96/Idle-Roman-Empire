@@ -108,9 +108,6 @@ namespace ire::core::gui
             return m_type;
         }
 
-    protected:
-        void onValueChanged(ProgressBarValueChanged& ev);
-
     private:
         struct Text
         {
@@ -144,10 +141,10 @@ namespace ire::core::gui
         Text m_mainText;
 
         sf::RectangleShape m_backgroundShape;
-        sf::Color m_backgroundFillColor = sf::Color::Blue;
+        sf::Color m_backgroundFillColor;
 
         sf::RectangleShape m_progressShape;
-        sf::Color m_progressFillColor = sf::Color::Green;
+        sf::Color m_progressFillColor;
 
         void setTextString(Text& text, std::string string);
         const std::string getTextString(Text text) const;
@@ -166,7 +163,7 @@ namespace ire::core::gui
         void updateValueTextPosition();
         void updatePercentTextPosition();
 
-        void updateTextPosition(Text& text, float xPosition);
+        void updateTextPosition(Text& text, float xPosition, float yPosition = 0);
 
         void updateMainTextString();
         void updateMaximumTextString();

@@ -5,26 +5,28 @@ namespace ire::core::gui
 {
 	WidgetType const ProgressBar::m_type = WidgetType::create<ProgressBar>("ProgressBar");
 
-	ProgressBar::ProgressBar()
+	ProgressBar::ProgressBar() 
 	{
 		m_font = ResourceManager::instance().get<sf::Font>("resource/RomanSD.ttf");
 
-		m_backgroundShape.setFillColor(m_backgroundFillColor);
-		m_progressShape.setFillColor(m_progressFillColor);
+		setBackgroundFillColor(sf::Color::Blue);
+		setProgressFillColor(sf::Color::Green);
 
 		m_maximumText.m_text.setFont(*m_font);
-		m_maximumText.m_isTextVisible = true;
+		setMaximumVisibility(true);
 
 		m_minimumText.m_text.setFont(*m_font);
-		m_minimumText.m_isTextVisible = true;
+		setMinimumVisibility(true);
 		
 		m_valueText.m_text.setFont(*m_font);
+		setValueTextCharacterSize(25);
 
 		m_percentText.m_text.setFont(*m_font);
-		m_percentText.m_isTextVisible = true;
+		setPercentTextCharacterSize(25);
+		setPercentVisibility(true);
 
 		m_mainText.m_text.setFont(*m_font);
-		m_mainText.m_characterSize = 25;
+		//setMainTextCharacterSize(25);
 
 		if (m_fillDirection == FillDirection::RightToLeft || m_fillDirection == FillDirection::BottomToTop)
 		{
@@ -36,7 +38,7 @@ namespace ire::core::gui
 	std::unique_ptr<ProgressBar> ProgressBar::create(const std::string& text)
 	{
 		auto widget = std::make_unique<ProgressBar>();
-		widget->m_mainText.m_textString = text;
+		widget->setMainTextString(text);
 		return widget;
 	}
 
@@ -76,6 +78,12 @@ namespace ire::core::gui
 
 		updatePercentTextString();
 		updatePercentTextPosition();
+
+		updateValueTextString();
+		updateValueTextPosition();
+
+		updateMainTextString();
+		updateMainTextPosition();
 
 		m_backgroundShape.setSize(m_size);
 		m_backgroundShape.setPosition(m_position);
@@ -205,13 +213,25 @@ namespace ire::core::gui
 
 	void ProgressBar::setValue(uint64_t value)
 	{
-		if (m_value != value && m_value - m_minimum <= m_maximum - m_minimum)
+		if (m_value != value)
 		{
-			m_value = value;
+			if (value > m_maximum)
+			{
+				m_value = m_maximum;
+			}
+			else if (value < m_minimum)
+			{
+				m_value = m_minimum;
+			}
+			else
+			{
+				m_value = value;
+			}
 			ProgressBarValueChanged ev;
-			ev.value = value;
-			onValueChanged(ev);
+			ev.value = m_value;
+			emitEvent(ev);
 		}
+
 		updateWidget();
 	}
 
@@ -410,79 +430,117 @@ namespace ire::core::gui
 		return m_fillDirection;
 	}
 
-	void ProgressBar::onValueChanged(ProgressBarValueChanged& ev)
-	{
-		ProgressBarValueChanged valueChangedEv{};
-		valueChangedEv.timestamp = ev.timestamp;
-		valueChangedEv.value = ev.value;
-		emitEvent<ProgressBarValueChanged>(valueChangedEv);
-	}
-
 	const float ProgressBar::calculatePercent() const
 	{
-		if (m_value - m_minimum > m_maximum - m_minimum)
-		{
-			throw std::runtime_error("Value is not beetween minimum and maximum");
-		}
 		return static_cast<float>(m_value - m_minimum) / static_cast<float>(m_maximum - m_minimum);
 	}
 
 	void ProgressBar::updateMainTextPosition()
 	{
 		auto textWidth = m_mainText.m_text.getLocalBounds().width;
+		auto textHeight = m_mainText.m_text.getLocalBounds().height;
 		auto xPosition = m_position.x + (m_size.x / 2 - textWidth / 2);
-		updateTextPosition(m_mainText, xPosition);
+		auto yPosition = m_position.y + (m_size.y / 2 - textHeight / 2);
+		updateTextPosition(m_mainText, xPosition, yPosition);
 	}
 
 	void ProgressBar::updateMaximumTextPosition()
 	{
 		auto letterSpacing{ m_maximumText.m_text.getLetterSpacing() };
 		auto textWidth = m_maximumText.m_text.getLocalBounds().width;
-		auto xPosition = m_position.x + m_size.x - textWidth - letterSpacing;
-		updateTextPosition(m_maximumText, xPosition);
+		auto textHeight = m_minimumText.m_text.getLocalBounds().height;
+		auto xPosition = 0.f;
+		auto yPosition = 0.f;
+		switch (m_fillDirection)
+		{
+		case FillDirection::LeftToRight:
+			xPosition = m_position.x + m_size.x - textWidth - letterSpacing;
+			break;
+		case FillDirection::RightToLeft:
+			xPosition = m_position.x + letterSpacing;
+			break;
+		case FillDirection::BottomToTop:
+			xPosition = m_position.x + (m_size.x / 2 - textWidth / 2);
+			yPosition = m_position.y + letterSpacing;
+			break;
+		case FillDirection::TopToBottom:
+			xPosition = m_position.x + (m_size.x / 2 - textWidth / 2);
+			yPosition = m_position.y + m_size.y - textHeight - letterSpacing * 10;
+			break;
+		default:
+			break;
+		}
+		updateTextPosition(m_maximumText, xPosition, yPosition);
 	}
 
 	void ProgressBar::updateMinimumTextPosition()
 	{
 		auto letterSpacing{ m_minimumText.m_text.getLetterSpacing() };
 		auto textWidth = m_minimumText.m_text.getLocalBounds().width;
-		auto xPosition = m_position.x + letterSpacing;
-		updateTextPosition(m_minimumText, xPosition);
-	}
+		auto textHeight = m_minimumText.m_text.getLocalBounds().height;
+		auto xPosition = 0.f;
+		auto yPosition = 0.f;
+		switch (m_fillDirection)
+		{
+		case FillDirection::LeftToRight:
+			xPosition = m_position.x + letterSpacing;
+			break;
+		case FillDirection::RightToLeft:
+			xPosition = m_position.x + m_size.x - textWidth - letterSpacing;
+			break;
+		case FillDirection::BottomToTop:
+			xPosition = m_position.x + (m_size.x / 2 - textWidth / 2);
+			yPosition = m_position.y + m_size.y - textHeight - letterSpacing * 10;
+			break;
+		case FillDirection::TopToBottom:
+			xPosition = m_position.x + (m_size.x / 2 - textWidth / 2);
+			yPosition = m_position.y + letterSpacing;
+			break;
+		default:
+			break;
+		}
+		updateTextPosition(m_minimumText, xPosition, yPosition);
+	} 
 
 	void ProgressBar::updateValueTextPosition()
 	{
 		auto textWidth = m_valueText.m_text.getLocalBounds().width;
+		auto textHeight = m_valueText.m_text.getLocalBounds().height;
 		auto xPosition = m_position.x + (m_size.x / 2 - textWidth / 2);
-		updateTextPosition(m_valueText, xPosition);
+		auto yPosition = m_position.y + (m_size.y / 2 - textHeight / 2);
+		updateTextPosition(m_valueText, xPosition, yPosition);
 	}
 
 	void ProgressBar::updatePercentTextPosition()
 	{
 		auto textWidth = m_percentText.m_text.getLocalBounds().width;
+		auto textHeight = m_percentText.m_text.getLocalBounds().height;
 		auto xPosition = m_position.x + (m_size.x / 2 - textWidth / 2);
-		updateTextPosition(m_percentText, xPosition);
+		auto yPosition = m_position.y + (m_size.y / 2 - textHeight / 2);
+		updateTextPosition(m_percentText, xPosition, yPosition);
 	}
 
-	void ProgressBar::updateTextPosition(Text& text, float xPosition)
+	void ProgressBar::updateTextPosition(Text& text, float xPosition, float yPosition)
 	{
 		auto textWidth = m_percentText.m_text.getLocalBounds().width;
 		auto textHeight = text.m_text.getLocalBounds().height;
-		float yPosition{ 0 };
 		auto letterSpacing{ text.m_text.getLetterSpacing() };
-		switch (text.m_textVerticalAlignement)
+		if (m_fillDirection == FillDirection::LeftToRight || m_fillDirection == FillDirection::RightToLeft)
 		{
-		case VerticalTextAlignment::Bottom:
-			yPosition = m_position.y + m_size.y - textHeight - letterSpacing;
-			break;
-		case VerticalTextAlignment::Center:
-			yPosition = m_position.y + (m_size.y / 2 - textHeight / 2);
-			break;
-		case VerticalTextAlignment::Top:
-			yPosition = m_position.y + letterSpacing;
-			break;
-		default:
-			break;
+			switch (text.m_textVerticalAlignement)
+			{
+			case VerticalTextAlignment::Bottom:
+				yPosition = m_position.y + m_size.y - textHeight - letterSpacing;
+				break;
+			case VerticalTextAlignment::Center:
+				yPosition = m_position.y + (m_size.y / 2 - textHeight / 2);
+				break;
+			case VerticalTextAlignment::Top:
+				yPosition = m_position.y + letterSpacing;
+				break;
+			default:
+				break;
+			}
 		}
 		text.m_text.setPosition(xPosition, yPosition);
 	}
@@ -561,6 +619,7 @@ namespace ire::core::gui
 		if (text.m_characterSize != characterSize)
 		{
 			text.m_characterSize = characterSize;
+			text.m_text.setCharacterSize(text.m_characterSize);
 		}
 	}
 
@@ -622,6 +681,9 @@ namespace ire::core::gui
 	ProgressBar::Text::Text()
 	{
 		m_text.setFillColor(m_textFillColor);
+		m_text.setOutlineColor(sf::Color::White);
+		m_text.setOutlineThickness(2);
 		m_text.setString(m_textString);
+		m_text.setCharacterSize(m_characterSize);
 	}
 }

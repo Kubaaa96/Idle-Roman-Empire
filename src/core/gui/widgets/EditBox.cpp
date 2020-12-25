@@ -67,11 +67,16 @@ namespace ire::core::gui
 
     void EditBox::updateWidget()
     {
+
         m_rectangleShape.setSize(m_size);
         m_rectangleShape.setPosition(m_position);
 
         m_text.setPosition(m_position.x + 15, m_position.y + 15);
+        m_text.setCharacterSize(m_characterSize);
         m_ghostText.setPosition(m_position.x + 15, m_position.y + 15);
+        m_ghostText.setCharacterSize(m_characterSize);
+
+        m_caret.setSize(sf::Vector2f(2, static_cast<float>(m_characterSize)));
 
         updateSelectionPosition();
         updateCaretPosition();
@@ -105,6 +110,7 @@ namespace ire::core::gui
         if (m_characterSize != characterSize)
         {
             m_characterSize = characterSize;
+            updateWidget();
         }
     }
 
@@ -213,7 +219,8 @@ namespace ire::core::gui
         m_isSelectingActive = false;
         updateWordIndices();
         updateCaretPosition();
-        onTextChanged(ev);
+        //onTextChanged(ev);
+        emitEvent(ev);
     }
     
     void EditBox::onEvent(EventRoot& sender, KeyDownEvent& ev)
@@ -487,7 +494,8 @@ namespace ire::core::gui
         }
         ev.handled = true;
         updateCaretPosition();
-        onKeyClicked(ev);
+        //onKeyClicked(ev);
+        emitEvent(ev);
     }
 
     void EditBox::moveAndSelectOneToLeft()
@@ -568,7 +576,8 @@ namespace ire::core::gui
 
         if (m_state == State::Armed && clientBounds().contains(ev.position))
         {
-            onClick(ev);
+            //onClick(ev);
+            emitEvent(ev);
         }
 
         if (m_selIndex != m_selStarting)
