@@ -1,5 +1,6 @@
 #include "ProgressBar.h"
 #include <iostream>
+#include "..\Text.h"
 
 namespace ire::core::gui
 {
