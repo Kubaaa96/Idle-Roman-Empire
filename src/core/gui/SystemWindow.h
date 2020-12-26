@@ -48,7 +48,7 @@ namespace ire::core::gui {
 
         void draw();
 
-        void setRootGroup(Group& panel);
+        void setRootGroup(Group& group);
 
         void setActiveWidget(Widget& widget) override;
         void resetActiveWidget(Widget& widget) override;
@@ -81,6 +81,8 @@ namespace ire::core::gui {
         void processSfmlTextEnteredEvent(sf::Event& ev, TimePoint timestamp);
         void processSfmlKeybordPressedEvent(sf::Event& ev, TimePoint timestamp);
         void processSfmlKeybordReleasedEvent(sf::Event& ev, TimePoint timestamp);
+
+        void processProgressBarValueChange(ProgressBarValueChanged& ev, TimePoint timestamp);
 
         template <typename EventT>
         void forwardEventWithPosition(EventT& ev)

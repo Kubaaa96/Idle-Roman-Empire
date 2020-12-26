@@ -51,7 +51,7 @@ namespace ire::core::gui
 	void Button::updateWidget()
 	{
 		m_text.setString(m_textString);
-		updatePosition();
+		updateTextPosition();
 
 		m_rectangleShape.setSize(m_size);
 		m_rectangleShape.setPosition(m_position);
@@ -74,6 +74,7 @@ namespace ire::core::gui
 	void Button::setCharacterSize(const unsigned int characterSize)
 	{
 		m_text.setCharacterSize(characterSize);
+		updateWidget();
 	}
 
 	const unsigned int Button::getCharacterSize() const
@@ -132,7 +133,7 @@ namespace ire::core::gui
 	    setVAlignment(vAlign);
 	    setHAlignment(hAlign);
 	}
-	void Button::updatePosition()
+	void Button::updateTextPosition()
 	{
         auto textWidth = m_text.getLocalBounds().width;
         auto textHeight = m_text.getLocalBounds().height;

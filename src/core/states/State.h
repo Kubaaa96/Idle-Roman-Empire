@@ -19,20 +19,22 @@ namespace ire::core::state
 
         State(const State&) = delete;
         State& operator=(const State&) = delete;
-        virtual gui::Group* initializeGUI() = 0;
+        virtual void initializeGUI() = 0;
 
-        virtual void draw() = 0;
+        virtual void draw();
 
         std::unique_ptr<State> next();
 
         bool isReplacing() const;
+
+        ire::core::gui::Group* getGroup();
 
     protected:
         StateMachine& m_stateMachine;
         gui::SystemWindow& m_window;
 
         bool m_replacing;
-
+        std::unique_ptr<ire::core::gui::Group> m_group;
         std::unique_ptr<State> m_next;
     };
 }

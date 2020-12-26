@@ -298,6 +298,12 @@ namespace ire::core::gui {
         std::uint32_t finger;
         sf::Vector2f position;
     };
+
+    struct ProgressBarValueChanged : TranslatedEvent
+    {
+        uint64_t value;
+    };
+
 }
 
 #endif // !IRE_EVENTS_H

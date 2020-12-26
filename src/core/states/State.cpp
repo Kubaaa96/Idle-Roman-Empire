@@ -1,4 +1,5 @@
 #include "State.h"
+#include "core/gui/SystemWindow.h"
 
 namespace ire::core::state
 {
@@ -8,6 +9,16 @@ namespace ire::core::state
         , m_replacing{ replace }
     {
     }
+    void State::draw()
+    {
+        auto& renderTarget = m_window.getRenderTarget();
+        renderTarget.clear();
+
+        if (m_group)
+        {
+            m_group->draw(renderTarget);
+        }
+    }
     std::unique_ptr<State> State::next()
     {
         return std::move(m_next);
@@ -15,5 +26,9 @@ namespace ire::core::state
     bool State::isReplacing() const
     {
         return m_replacing;
+    }
+    ire::core::gui::Group* State::getGroup()
+    {
+        return m_group.get();
     }
 }

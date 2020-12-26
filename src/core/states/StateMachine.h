@@ -24,6 +24,7 @@ namespace ire::core::state
         void draw();
 
         bool running() const;
+        ire::core::gui::Group* getTopStateGroup();
         void quit();
 
     private:

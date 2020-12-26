@@ -19,12 +19,9 @@ namespace ire::client::state
     {
         MenuState(core::state::StateMachine& stateMachine, core::gui::SystemWindow& window, bool replace);
 
-        void draw() override;
-
-        core::gui::Group* initializeGUI() override;
+        void initializeGUI() override;
 
     private:
-        std::unique_ptr<ire::core::gui::Group> group;
     };
 }
 

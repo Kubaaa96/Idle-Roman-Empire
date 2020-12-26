@@ -7,16 +7,13 @@ namespace ire::client::state
 	MenuState::MenuState(core::state::StateMachine& stateMachine, core::gui::SystemWindow& window, bool replace)
 		: State { stateMachine, window, replace}
 	{
-		m_window.setRootGroup(*initializeGUI());
+		initializeGUI();
+		m_window.setRootGroup(*m_group.get());
 		std::cout << "MenuState Init\n";
 	}
 
-	void MenuState::draw()
-	{
-		m_window.draw();
-	}
 
-	core::gui::Group* MenuState::initializeGUI()
+	void MenuState::initializeGUI()
 	{
 		auto buttonStartNewGame = ire::core::gui::Button::create("New Game");
 		buttonStartNewGame->addEventListener<ire::core::gui::MouseClickEvent>(
@@ -52,8 +49,7 @@ namespace ire::client::state
 		vLayoutMain->setMargins({ 50, 50, 50, 50 });
 		vLayoutMain->setSpaces(20);
 
-		group = ire::core::gui::Group::create(currentSizeOfViewPort);
-		group->add(std::move(vLayoutMain), "layoutMain");
-		return group.release();
+		m_group = ire::core::gui::Group::create(currentSizeOfViewPort);
+		m_group->add(std::move(vLayoutMain), "layoutMain");
 	}
 }

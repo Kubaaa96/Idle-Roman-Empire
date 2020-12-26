@@ -94,10 +94,7 @@ namespace ire::core::gui
 
         bool m_readOnly = false;
 
-        // Zero mean no limit
-
         std::optional<unsigned int> m_maxChars;
-
 
         Alignment m_textAlignment{ Alignment::Left };
 
@@ -127,15 +124,6 @@ namespace ire::core::gui
     struct TextChangedEvent : TranslatedEvent
     {
         char32_t character;
-    };
-
-    struct KeyPressedEvent : TranslatedEvent
-    {
-        sf::Keyboard::Key key;
-        bool alt;
-        bool control;
-        bool shift;
-        bool system;
     };
 
 }

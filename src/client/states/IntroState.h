@@ -21,11 +21,8 @@ namespace ire::client::state
     {
         IntroState(core::state::StateMachine& machine, core::gui::SystemWindow& window, bool replace);
 
-        void draw() override;
-
-        core::gui::Group* initializeGUI() override;
+        void initializeGUI() override;
     private:
-        std::unique_ptr<ire::core::gui::Group> group;
     };
 }
 

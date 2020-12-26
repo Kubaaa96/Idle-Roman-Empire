@@ -6,6 +6,7 @@
 #include "core/gui/widgets/Label.h"
 #include "core/gui/widgets/EditBox.h"
 #include "core/gui/widgets/Panel.h"
+#include "core/gui/widgets/ProgressBar.h"
 #include "core/gui/widgets/HorizontalLayout.h"
 #include "core/gui/widgets/VerticalLayout.h"
 
@@ -26,13 +27,10 @@ namespace ire::client::state
     {
         GameState(core::state::StateMachine& stateMachine, core::gui::SystemWindow& window, bool replace);
 
-        void draw() override;
-
-        core::gui::Group* initializeGUI() override;
+        void initializeGUI() override;
 
     private:
 
-        std::unique_ptr<ire::core::gui::Group> group;
     };
 }
 

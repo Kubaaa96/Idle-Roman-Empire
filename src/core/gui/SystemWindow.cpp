@@ -39,14 +39,7 @@ namespace ire::core::gui {
 
     void SystemWindow::draw()
     {
-        auto& renderTarget = getRenderTarget();
-
-        renderTarget.clear();
-
-        if (m_rootGroup)
-        {
-            m_rootGroup->draw(renderTarget);
-        }
+        m_stateMachine.draw();
     }
 
     void SystemWindow::setRootGroup(Group& group)
