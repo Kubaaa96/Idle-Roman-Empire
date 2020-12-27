@@ -5,9 +5,7 @@ namespace ire::core::gui
 	Text::Text(std::string string, sf::Color fillColor,
 		sf::Color outlineColor, unsigned int characterSize)
 	{
-		m_font = ResourceManager::instance().get<sf::Font>("resource/RomanSD.ttf");
-
-		setFont(*m_font);
+		setFont("resource/RomanSD.ttf");
 		setString(string);
 		setFillColor(fillColor);
 		setOutlineColor(outlineColor);
@@ -52,6 +50,11 @@ namespace ire::core::gui
 	const bool Text::getVisibility() const
 	{
 		return m_isVisible;
+	}
+
+	void Text::setFont(const std::string& pathToFont)
+	{
+		sf::Text::setFont(*ResourceManager::instance().get<sf::Font>(pathToFont));
 	}
 
 	void Text::updateTextPosition(float xPosition, float yPosition, sf::Vector2f currentPosition, sf::Vector2f currentSize)

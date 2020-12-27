@@ -4,10 +4,6 @@
 #include "ClickableWidget.h"
 #include "core/gui/Text.h"
 
-#include "core/resource/Resource.h"
-#include "core/resource/FontResourceLoader.h"
-#include "core/resource/ResourceManager.h"
-
 namespace ire::core::gui
 {
     struct ProgressBar : ClickableWidget

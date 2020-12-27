@@ -9,11 +9,10 @@ namespace ire::core::gui
 	Button::Button()
 	{
 		m_rectangleShape.setFillColor(sf::Color::Red);
-
-		m_font = ResourceManager::instance().get<sf::Font>("resource/RomanSD.ttf");
-		m_text.setFont(*m_font);
+		
+		setTextOutlineThickness(0);
 		setCharacterSize(30);
-		setAlignment(VAlign::Center, HAlign::Center);
+		setAlignment(Text::VerticalAlignment::Center, Text::HorizontalAlignment::Center);
 		setTextStyle(sf::Text::Bold);
 		setTextFillColor(sf::Color::White);
 	}
@@ -50,7 +49,7 @@ namespace ire::core::gui
 
 	void Button::updateWidget()
 	{
-		m_text.setString(m_textString);
+		m_text.setString(m_text.getString());
 		updateTextPosition();
 
 		m_rectangleShape.setSize(m_size);
@@ -60,15 +59,15 @@ namespace ire::core::gui
 
 	void Button::setTextString(const std::string& string)
 	{
-		if (m_textString != string)
+		if (m_text.getString() != string)
 		{
-			m_textString = string;
+			m_text.setString(string);
 		}
 	}
 
 	sf::String Button::getTextString()
 	{
-		return m_textString;
+		return m_text.getString();
 	}
 
 	void Button::setCharacterSize(const unsigned int characterSize)
@@ -102,74 +101,67 @@ namespace ire::core::gui
 		return m_text.getFillColor();
 	}
 
-	void Button::setVAlignment(VAlign vAlign)
+	void Button::setTextOutlineColor(const sf::Color textOutlineColor)
 	{
-		if (m_vAlign != vAlign)
+		if (m_text.getOutlineColor() != textOutlineColor)
 		{
-			m_vAlign = vAlign;
+			m_text.setOutlineColor(textOutlineColor);
 		}
 	}
 
-	const VAlign Button::getVAlignment() const
+	const sf::Color Button::getTextOutlineColor() const
 	{
-		return m_vAlign;
+		return m_text.getOutlineColor();
 	}
 
-	void Button::setHAlignment(HAlign hAlign)
+	void Button::setTextOutlineThickness(const float textOutlineThickness)
 	{
-		if (m_hAlign != hAlign)
+		if (m_text.getOutlineThickness() != textOutlineThickness)
 		{
-			m_hAlign = hAlign;
+			m_text.setOutlineThickness(textOutlineThickness);
 		}
 	}
 
-	const HAlign Button::getHAlignment() const
+	const float Button::getTextOutlineThickness() const
 	{
-		return m_hAlign;
+		return m_text.getOutlineThickness();
 	}
 
-	void Button::setAlignment(VAlign vAlign, HAlign hAlign)
+	void Button::setVAlignment(Text::VerticalAlignment vAlign)
+	{
+		if (m_text.getVAlign() != vAlign)
+		{
+			m_text.setVAlign(vAlign);
+		}
+	}
+
+	const Text::VerticalAlignment Button::getVAlignment() const
+	{
+		return m_text.getVAlign();
+	}
+
+	void Button::setHAlignment(Text::HorizontalAlignment hAlign)
+	{
+		if (m_text.getHAlign() != hAlign)
+		{
+			m_text.setHAlign(hAlign);
+		}
+	}
+
+	const Text::HorizontalAlignment Button::getHAlignment() const
+	{
+		return m_text.getHAlign();
+	}
+
+	void Button::setAlignment(Text::VerticalAlignment vAlign, Text::HorizontalAlignment hAlign)
 	{
 	    setVAlignment(vAlign);
 	    setHAlignment(hAlign);
 	}
 	void Button::updateTextPosition()
 	{
-        auto textWidth = m_text.getLocalBounds().width;
-        auto textHeight = m_text.getLocalBounds().height;
-        auto letterSpacing{ m_text.getLetterSpacing() };
         auto xPosition = m_text.getPosition().x;
-
-        switch (m_hAlign)
-        {
-	    case HAlign::Left:
-            xPosition = m_position.x + letterSpacing;
-            break;
-        case HAlign::Right:
-            xPosition = m_position.x + m_size.x - textWidth - letterSpacing;
-            break;
-        case HAlign::Center:
-            xPosition = m_position.x + (m_size.x / 2 - textWidth / 2);
-            break;
-        default:
-            break;
-        }
-	
 		auto yPosition = m_text.getPosition().y;
-		switch (m_vAlign)
-		{
-		case VAlign::Top:
-			yPosition = m_position.y + letterSpacing;
-			break;
-		case VAlign::Bottom:
-			yPosition = m_position.y + m_size.y - textHeight - letterSpacing;
-			break;
-		case VAlign::Center:
-			yPosition = m_position.y + (m_size.y / 2 - textHeight / 2);
-			break;
-		default:
-			break;
-		}
-		m_text.setPosition(xPosition, yPosition);
+		m_text.updateTextPosition(xPosition, yPosition, m_position, m_size);
 	}
 }

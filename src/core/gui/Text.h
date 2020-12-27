@@ -37,6 +37,8 @@ namespace ire::core::gui
         void setVisibility(bool isVisible);
         const bool getVisibility() const;
 
+        void setFont(const std::string& pathToFont);
+
         void updateTextPosition(float xPosition, float yPosition, sf::Vector2f currentPosition, sf::Vector2f currentSize);
 
         bool m_isHAlign = true;

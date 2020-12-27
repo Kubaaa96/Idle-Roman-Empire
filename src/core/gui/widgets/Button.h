@@ -2,6 +2,7 @@
 #define BUTTON_H
 
 #include "ClickableWidget.h"
+#include "core/gui/Text.h"
 
 #include "core/resource/Resource.h"
 #include "core/resource/FontResourceLoader.h"
@@ -9,19 +10,6 @@
 
 namespace ire::core::gui
 {
-    enum struct HAlign
-    {
-        Left,
-        Right,
-        Center,
-    };
-    enum struct VAlign
-    {
-        Top,
-        Bottom,
-        Center,
-    };
-
     struct Button : ClickableWidget
     {
         Button();
@@ -44,29 +32,31 @@ namespace ire::core::gui
         void setTextFillColor(const sf::Color textFillColor);
         const sf::Color getTextFillColor() const;
 
+        void setTextOutlineColor(const sf::Color textOutlineColor);
+        const sf::Color getTextOutlineColor() const;
+
+        void setTextOutlineThickness(const float textOutlineThickness);
+        const float getTextOutlineThickness() const;
+
         static const WidgetType m_type;
         const WidgetType getType() const override
         {
             return m_type;
         }
 
-        void setVAlignment(VAlign vAlign);
-        const VAlign getVAlignment() const;
+        void setVAlignment(Text::VerticalAlignment vAlign);
+        const Text::VerticalAlignment getVAlignment() const;
 
-        void setHAlignment(HAlign hAlign);
-        const HAlign getHAlignment() const;
+        void setHAlignment(Text::HorizontalAlignment hAlign);
+        const Text::HorizontalAlignment getHAlignment() const;
 
-        void setAlignment(VAlign vAlign, HAlign hAlign);
+        void setAlignment(Text::VerticalAlignment vAlign, Text::HorizontalAlignment hAlign);
 
     private:
         void updateTextPosition();
 
         sf::RectangleShape m_rectangleShape;
-        sf::Text m_text;
-        sf::String m_textString;
-        VAlign m_vAlign;
-        HAlign m_hAlign;
-        ResourcePtr<sf::Font> m_font;
+        Text m_text;
     };
 }
 
