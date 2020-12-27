@@ -20,12 +20,12 @@ namespace ire::core::gui
 
         enum struct VerticalAlignment
         {
-            Top,
             Bottom,
+            Top,
             Center,
         };
 
-        Text(sf::String& string, sf::Color fillColor = sf::Color::Black, 
+        Text(std::string string = "", sf::Color fillColor = sf::Color::Black, 
             sf::Color outlineColor = sf::Color::White, unsigned int characterSize = 15);
 
         void setHAlign(HorizontalAlignment horizontalAlignment);
@@ -34,14 +34,23 @@ namespace ire::core::gui
         void setVAlign(VerticalAlignment verticalAlignment);
         const VerticalAlignment getVAlign() const;
 
+        void setVisibility(bool isVisible);
+        const bool getVisibility() const;
+
+        void updateTextPosition(float xPosition, float yPosition, sf::Vector2f currentPosition, sf::Vector2f currentSize);
+
+        bool m_isHAlign = true;
+        bool m_isVAlign = true;
+
     protected:
+
+        ResourcePtr<sf::Font> m_font;
 
         HorizontalAlignment m_horizontalAlignment = HorizontalAlignment::Center;
         VerticalAlignment m_varticalAlignment = VerticalAlignment::Center;
 
         bool m_isVisible = false;
-        bool m_isHAlignAllowed = true;
-        bool m_isVAlignAllowed = true;
+
     };  
 }
 

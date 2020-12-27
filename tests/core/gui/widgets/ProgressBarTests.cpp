@@ -25,7 +25,7 @@ TEST_CASE("[ProgressBar]")
         SECTION("VertocalAlignment")
         {
             REQUIRE(progressBar->getMinimumTextVerticalAlignmentString() == "Center");
-            progressBar->setMinimumTextVerticalAlignment(ire::core::gui::ProgressBar::VerticalTextAlignment::Bottom);
+            progressBar->setMinimumTextVerticalAlignment(ire::core::gui::Text::VerticalAlignment::Bottom);
             REQUIRE(progressBar->getMinimumTextVerticalAlignmentString() == "Bottom");
         }
         SECTION("Visibility")
@@ -57,7 +57,7 @@ TEST_CASE("[ProgressBar]")
         SECTION("VerticalAlignment")
         {
             REQUIRE(progressBar->getMaximumTextVerticalAlignmentString() == "Center");
-            progressBar->setMaximumTextVerticalAlignment(ire::core::gui::ProgressBar::VerticalTextAlignment::Bottom);
+            progressBar->setMaximumTextVerticalAlignment(ire::core::gui::Text::VerticalAlignment::Bottom);
             REQUIRE(progressBar->getMaximumTextVerticalAlignmentString() == "Bottom");
         }
         SECTION("Visibility")
@@ -81,14 +81,14 @@ TEST_CASE("[ProgressBar]")
 
         SECTION("CharacterSize")
         {
-            REQUIRE(progressBar->getValueTextCharacterSize() == 15);
+            REQUIRE(progressBar->getValueTextCharacterSize() == 25);
             progressBar->setValueTextCharacterSize(35);
             REQUIRE(progressBar->getValueTextCharacterSize() == 35);
         }
         SECTION("VerticalAlignment")
         {
             REQUIRE(progressBar->getValueTextVerticalAlignmentString() == "Center");
-            progressBar->setValueTextVerticalAlignment(ire::core::gui::ProgressBar::VerticalTextAlignment::Bottom);
+            progressBar->setValueTextVerticalAlignment(ire::core::gui::Text::VerticalAlignment::Bottom);
             REQUIRE(progressBar->getValueTextVerticalAlignmentString() == "Bottom");
         }
         SECTION("Visibility")
@@ -106,19 +106,20 @@ TEST_CASE("[ProgressBar]")
     }
     SECTION("Percent")
     {
+
         REQUIRE(progressBar->getPercent() == 0.5);
         progressBar->setValue(75);
         REQUIRE(progressBar->getPercent() == 0.75);
         SECTION("CharacterSize")
         {
-            REQUIRE(progressBar->getPercentTextCharacterSize() == 15);
-            progressBar->setPercentTextCharacterSize(25);
             REQUIRE(progressBar->getPercentTextCharacterSize() == 25);
+            progressBar->setPercentTextCharacterSize(15);
+            REQUIRE(progressBar->getPercentTextCharacterSize() == 15);
         }
         SECTION("VerticalAlignment")
         {
             REQUIRE(progressBar->getPercentTextVerticalAlignmentString() == "Center");
-            progressBar->setPercentTextVerticalAlignment(ire::core::gui::ProgressBar::VerticalTextAlignment::Bottom);
+            progressBar->setPercentTextVerticalAlignment(ire::core::gui::Text::VerticalAlignment::Bottom);
             REQUIRE(progressBar->getPercentTextVerticalAlignmentString() == "Bottom");
         }
         SECTION("Visibility")
@@ -149,7 +150,7 @@ TEST_CASE("[ProgressBar]")
         SECTION("VerticalAlignment")
         {
             REQUIRE(progressBar->getMainTextVerticalAlignmentString() == "Center");
-            progressBar->setMainTextVerticalAlignment(ire::core::gui::ProgressBar::VerticalTextAlignment::Bottom);
+            progressBar->setMainTextVerticalAlignment(ire::core::gui::Text::VerticalAlignment::Bottom);
             REQUIRE(progressBar->getMainTextVerticalAlignmentString() == "Bottom");
         }
         SECTION("Visibility")

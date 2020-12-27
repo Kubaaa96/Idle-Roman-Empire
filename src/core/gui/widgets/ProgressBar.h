@@ -2,6 +2,7 @@
 #define IRE_PROGRESSBAR_H
 
 #include "ClickableWidget.h"
+#include "core/gui/Text.h"
 
 #include "core/resource/Resource.h"
 #include "core/resource/FontResourceLoader.h"
@@ -11,7 +12,7 @@ namespace ire::core::gui
 {
     struct ProgressBar : ClickableWidget
     {
-        enum class FillDirection
+        enum struct FillDirection
         {
             LeftToRight,
             RightToLeft,
@@ -21,7 +22,7 @@ namespace ire::core::gui
             // Clockwise
         };
 
-        enum class VerticalTextAlignment
+        enum struct VerticalTextAlignment
         {
             Top,
             Center,
@@ -42,7 +43,7 @@ namespace ire::core::gui
         const std::string getMinimumString() const;
         void setMinimumTextCharacterSize(unsigned int minimumTextCharacterSize);
         const unsigned int getMinimumTextCharacterSize() const;
-        void setMinimumTextVerticalAlignment(VerticalTextAlignment minimymTextVerticalAlignment);
+        void setMinimumTextVerticalAlignment(Text::VerticalAlignment minimymTextVerticalAlignment);
         const std::string getMinimumTextVerticalAlignmentString() const;
         void setMinimumVisibility(bool isMinimumVisible);
         const bool isMinimumVisible() const;
@@ -54,7 +55,7 @@ namespace ire::core::gui
 
         void setMaximumTextCharacterSize(unsigned int maximumTextCharacterSize);
         const unsigned int getMaximumTextCharacterSize() const;
-        void setMaximumTextVerticalAlignment(VerticalTextAlignment maximumTextVerticalAlignment);
+        void setMaximumTextVerticalAlignment(Text::VerticalAlignment maximumTextVerticalAlignment);
         const std::string getMaximumTextVerticalAlignmentString() const;
         void setMaximumVisibility(bool isMaximumVisible);
         const bool isMaximumVisible() const;
@@ -65,17 +66,17 @@ namespace ire::core::gui
         const uint64_t getValue() const;
         void setValueTextCharacterSize(unsigned int valueTextCharacterSize);
         const unsigned int getValueTextCharacterSize() const;
-        void setValueTextVerticalAlignment(VerticalTextAlignment valueTextVerticalAlignment);
+        void setValueTextVerticalAlignment(Text::VerticalAlignment valueTextVerticalAlignment);
         const std::string getValueTextVerticalAlignmentString() const;
         void setValueVisibility(bool isValueVisible);
         const bool isValueVisible() const;
         void setValueTextFillColor(sf::Color valueTextFillColor);
         const sf::Color getValueTextFillColor() const;
 
-        const uint64_t getPercent() const;
+        const float getPercent() const;
         void setPercentTextCharacterSize(unsigned int percentTextCharacterSize);
         const unsigned int getPercentTextCharacterSize() const;
-        void setPercentTextVerticalAlignment(VerticalTextAlignment percentTextVerticalAlignment);
+        void setPercentTextVerticalAlignment(Text::VerticalAlignment percentTextVerticalAlignment);
         const std::string getPercentTextVerticalAlignmentString() const;
         void setPercentVisibility(bool isPercentVisible);
         const bool isPercentVisible() const;
@@ -86,7 +87,7 @@ namespace ire::core::gui
         const std::string getMainString() const;
         void setMainTextCharacterSize(unsigned int mainTextCharacterSize);
         const unsigned int getMainTextCharacterSize() const;
-        void setMainTextVerticalAlignment(VerticalTextAlignment mainTextVerticalAlignment);
+        void setMainTextVerticalAlignment(Text::VerticalAlignment mainTextVerticalAlignment);
         const std::string getMainTextVerticalAlignmentString() const;
         void setMainVisibility(bool isMainVisible);
         const bool isMainVisible() const;
@@ -109,17 +110,7 @@ namespace ire::core::gui
         }
 
     private:
-        struct Text
-        {
-            sf::Text m_text;
-            std::string m_textString;
-            unsigned int m_characterSize{ 15 };
-            VerticalTextAlignment m_textVerticalAlignement = VerticalTextAlignment::Center;
-            bool m_isTextVisible = false;
-            sf::Color m_textFillColor = sf::Color::Black;
 
-            Text();
-        };
         ResourcePtr<sf::Font> m_font;
 
         Text m_maximumText;
@@ -150,7 +141,7 @@ namespace ire::core::gui
         const std::string getTextString(Text text) const;
         void setCharacterSize(Text& text, unsigned int characterSize);
         const unsigned int getCharacterSize(Text text) const;
-        void setVerticalAlignment(Text& text, VerticalTextAlignment verticalAlignment);
+        void setVerticalAlignment(Text& text, Text::VerticalAlignment verticalAlignment);
         const std::string getVerticalAlignmentString(Text text) const;
         void setVisibility(Text& text, bool isVisible);
         const bool isVisible(Text text) const;

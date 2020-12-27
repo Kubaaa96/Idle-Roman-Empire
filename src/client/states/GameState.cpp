@@ -88,7 +88,7 @@ namespace ire::client::state
 
         auto progressBarExample3 = ire::core::gui::ProgressBar::create();
         progressBarExample3->setPercentTextVerticalAlignment(
-            ire::core::gui::ProgressBar::VerticalTextAlignment::Bottom);
+            ire::core::gui::Text::VerticalAlignment::Bottom);
         auto& progressBarExample3Ref = *progressBarExample3;
         progressBarExample3->addEventListener<ire::core::gui::ProgressBarValueChanged>(
             [&](ire::core::gui::ProgressBarValueChanged& ev)
