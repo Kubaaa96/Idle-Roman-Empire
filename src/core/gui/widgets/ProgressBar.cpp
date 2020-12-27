@@ -1,6 +1,5 @@
 #include "ProgressBar.h"
 #include <iostream>
-#include "..\Text.h"
 
 namespace ire::core::gui
 {
@@ -8,8 +7,6 @@ namespace ire::core::gui
 
 	ProgressBar::ProgressBar() 
 	{
-		//m_font = ResourceManager::instance().get<sf::Font>("resource/RomanSD.ttf");
-
 		setBackgroundFillColor(sf::Color::Blue);
 		setProgressFillColor(sf::Color::Green);
 
@@ -84,12 +81,7 @@ namespace ire::core::gui
 		m_backgroundShape.setSize(m_size);
 		m_backgroundShape.setPosition(m_position);
 
-
-
 		updateFillDirection();
-		//std::cout << "Minimum: " << m_minimumText.getString().toAnsiString() << "\n";
-		//std::cout << "X: " << m_minimumText.getPosition().x << " Y: " <<
-		//	m_minimumText.getPosition().x << "\n";
 	}
 	void ProgressBar::setMinimum(uint64_t minimum)
 	{
@@ -626,7 +618,6 @@ namespace ire::core::gui
 	{
 		if (text.getCharacterSize() != characterSize)
 		{
-			//text.m_characterSize = characterSize;
 			text.setCharacterSize(characterSize);
 		}
 	}
@@ -684,5 +675,4 @@ namespace ire::core::gui
 	{
 		return text.getFillColor();
 	}
-
 }
