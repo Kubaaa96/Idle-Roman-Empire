@@ -52,19 +52,19 @@ TEST_CASE("[Button]")
 		{
 			SECTION("Vertical")
 			{
-				REQUIRE(button->getVAlignment() == ire::core::gui::VAlign::Center);
-				button->setVAlignment(ire::core::gui::VAlign::Bottom);
-				REQUIRE(button->getVAlignment() == ire::core::gui::VAlign::Bottom);
+				REQUIRE(button->getVAlignment() == ire::core::gui::Text::VerticalAlignment::Center);
+				button->setVAlignment(ire::core::gui::Text::VerticalAlignment::Bottom);
+				REQUIRE(button->getVAlignment() == ire::core::gui::Text::VerticalAlignment::Bottom);
 			}
 			SECTION("Horizontal")
 			{
-				REQUIRE(button->getHAlignment() == ire::core::gui::HAlign::Center);
-				button->setHAlignment(ire::core::gui::HAlign::Left);
-				REQUIRE(button->getHAlignment() == ire::core::gui::HAlign::Left);
+				REQUIRE(button->getHAlignment() == ire::core::gui::Text::HorizontalAlignment::Center);
+				button->setHAlignment(ire::core::gui::Text::HorizontalAlignment::Left);
+				REQUIRE(button->getHAlignment() == ire::core::gui::Text::HorizontalAlignment::Left);
 			}
-			button->setAlignment(ire::core::gui::VAlign::Top, ire::core::gui::HAlign::Right);
-			REQUIRE(button->getVAlignment() == ire::core::gui::VAlign::Top);
-			REQUIRE(button->getHAlignment() == ire::core::gui::HAlign::Right);
+			button->setAlignment(ire::core::gui::Text::VerticalAlignment::Top, ire::core::gui::Text::HorizontalAlignment::Right);
+			REQUIRE(button->getVAlignment() == ire::core::gui::Text::VerticalAlignment::Top);
+			REQUIRE(button->getHAlignment() == ire::core::gui::Text::HorizontalAlignment::Right);
 		}
 	}
 }
