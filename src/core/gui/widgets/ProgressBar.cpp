@@ -7,26 +7,19 @@ namespace ire::core::gui
 
 	ProgressBar::ProgressBar() 
 	{
-		m_font = ResourceManager::instance().get<sf::Font>("resource/RomanSD.ttf");
-
 		setBackgroundFillColor(sf::Color::Blue);
 		setProgressFillColor(sf::Color::Green);
 
-		m_maximumText.m_text.setFont(*m_font);
 		setMaximumVisibility(true);
 
-		m_minimumText.m_text.setFont(*m_font);
 		setMinimumVisibility(true);
 		
-		m_valueText.m_text.setFont(*m_font);
 		setValueTextCharacterSize(25);
 
-		m_percentText.m_text.setFont(*m_font);
 		setPercentTextCharacterSize(25);
 		setPercentVisibility(true);
 
-		m_mainText.m_text.setFont(*m_font);
-		//setMainTextCharacterSize(25);
+		setMainTextCharacterSize(25);
 
 		if (m_fillDirection == FillDirection::RightToLeft || m_fillDirection == FillDirection::BottomToTop)
 		{
@@ -46,44 +39,45 @@ namespace ire::core::gui
 	{
 		target.draw(m_backgroundShape);
 		target.draw(m_progressShape);
-		if (m_mainText.m_isTextVisible)
+		if (m_mainText.isVisible())
 		{
-			target.draw(m_mainText.m_text);
+			target.draw(m_mainText);
 		}
-		if (m_maximumText.m_isTextVisible)
+		if (m_maximumText.isVisible())
 		{
-			target.draw(m_maximumText.m_text);
+			target.draw(m_maximumText);
 		}
-		if (m_minimumText.m_isTextVisible)
+		if (m_minimumText.isVisible())
 		{
-			target.draw(m_minimumText.m_text);
+			target.draw(m_minimumText);
 		}
-		if (m_valueText.m_isTextVisible)
+		if (m_valueText.isVisible())
 		{
-			target.draw(m_valueText.m_text);
+			target.draw(m_valueText);
 		}
-		if (m_percentText.m_isTextVisible)
+		if (m_percentText.isVisible())
 		{
-			target.draw(m_percentText.m_text);
+			target.draw(m_percentText);
 		}	
 	}
 
 	void ProgressBar::updateWidget()
 	{
-		updateMinimumTextString();
+		setTextString(m_minimumText, std::to_string(m_minimum));
 		updateMinimumTextPosition();
-
-		updateMaximumTextString();
+		
+		setTextString(m_maximumText, std::to_string(m_maximum));
 		updateMaximumTextPosition();
 
-		updatePercentTextString();
-		updatePercentTextPosition();
+		int percent = calculatePercent() * 100;
+		setTextString(m_percentText, std::to_string(percent) + "%");
+		updateTextPosition(m_percentText);
 
-		updateValueTextString();
-		updateValueTextPosition();
+		setTextString(m_valueText, std::to_string(m_value));
+		updateTextPosition(m_valueText);
 
-		updateMainTextString();
-		updateMainTextPosition();
+		setTextString(m_mainText, m_mainText.getString());
+		updateTextPosition(m_mainText);
 
 		m_backgroundShape.setSize(m_size);
 		m_backgroundShape.setPosition(m_position);
@@ -103,14 +97,9 @@ namespace ire::core::gui
 		return m_minimum;
 	}
 
-	void ProgressBar::setMinimumTextString(std::string string)
-	{
-		setTextString(m_minimumText, string);
-	}
-
 	const std::string ProgressBar::getMinimumString() const
 	{
-		return m_minimumText.m_textString;
+		return m_minimumText.getString();
 	}
 
 	void ProgressBar::setMinimumTextCharacterSize(unsigned int minimumTextCharacterSize)
@@ -123,7 +112,7 @@ namespace ire::core::gui
 		return getCharacterSize(m_minimumText);
 	}
 
-	void ProgressBar::setMinimumTextVerticalAlignment(VerticalTextAlignment minimumTextVerticalAlignment)
+	void ProgressBar::setMinimumTextVerticalAlignment(Text::VerticalAlignment minimumTextVerticalAlignment)
 	{
 		setVerticalAlignment(m_minimumText, minimumTextVerticalAlignment);
 	}
@@ -135,7 +124,7 @@ namespace ire::core::gui
 
 	void ProgressBar::setMinimumVisibility(bool isMinimumVisible)
 	{
-		setVisibility(m_minimumText, isMinimumVisible);
+		setVisible(m_minimumText, isMinimumVisible);
 	}
 
 	const bool ProgressBar::isMinimumVisible() const
@@ -166,11 +155,6 @@ namespace ire::core::gui
 		return m_maximum;
 	}
 
-	void ProgressBar::setMaximumTextString(std::string string)
-	{
-		setTextString(m_maximumText, string);
-	}
-
 	void ProgressBar::setMaximumTextCharacterSize(unsigned int maximumTextCharacterSize)
 	{
 		setCharacterSize(m_maximumText, maximumTextCharacterSize);
@@ -181,7 +165,7 @@ namespace ire::core::gui
 		return getCharacterSize(m_maximumText);
 	}
 
-	void ProgressBar::setMaximumTextVerticalAlignment(VerticalTextAlignment maximumTextVerticalAlignment)
+	void ProgressBar::setMaximumTextVerticalAlignment(Text::VerticalAlignment maximumTextVerticalAlignment)
 	{
 		setVerticalAlignment(m_maximumText, maximumTextVerticalAlignment);
 	}
@@ -193,7 +177,7 @@ namespace ire::core::gui
 
 	void ProgressBar::setMaximumVisibility(bool isMaximumVisible)
 	{
-		setVisibility(m_maximumText, isMaximumVisible);
+		setVisible(m_maximumText, isMaximumVisible);
 	}
 
 	const bool ProgressBar::isMaximumVisible() const
@@ -240,11 +224,6 @@ namespace ire::core::gui
 		return m_value;
 	}
 
-	void ProgressBar::setValueTextString(std::string string)
-	{
-		setTextString(m_valueText, string);
-	}
-
 	void ProgressBar::setValueTextCharacterSize(unsigned int valueTextCharacterSize)
 	{
 		setCharacterSize(m_valueText, valueTextCharacterSize);
@@ -255,7 +234,7 @@ namespace ire::core::gui
 		return getCharacterSize(m_valueText);
 	}
 
-	void ProgressBar::setValueTextVerticalAlignment(VerticalTextAlignment valueTextVerticalAlignment)
+	void ProgressBar::setValueTextVerticalAlignment(Text::VerticalAlignment valueTextVerticalAlignment)
 	{
 		setVerticalAlignment(m_valueText, valueTextVerticalAlignment);
 	}
@@ -267,7 +246,7 @@ namespace ire::core::gui
 
 	void ProgressBar::setValueVisibility(bool isValueVisible)
 	{
-		setVisibility(m_valueText, isValueVisible);
+		setVisible(m_valueText, isValueVisible);
 	}
 
 	const bool ProgressBar::isValueVisible() const
@@ -285,12 +264,7 @@ namespace ire::core::gui
 		return getFillColor(m_valueText);
 	}
 
-	void ProgressBar::setPercentTextString(std::string percentTextString)
-	{
-		setTextString(m_percentText, percentTextString + "%");
-	}
-
-	const uint64_t ProgressBar::getPercent() const
+	const float ProgressBar::getPercent() const
 	{
 		return calculatePercent();
 	}
@@ -305,7 +279,7 @@ namespace ire::core::gui
 		return getCharacterSize(m_percentText);
 	}
 
-	void ProgressBar::setPercentTextVerticalAlignment(VerticalTextAlignment percentTextVerticalAlignment)
+	void ProgressBar::setPercentTextVerticalAlignment(Text::VerticalAlignment percentTextVerticalAlignment)
 	{
 		setVerticalAlignment(m_percentText, percentTextVerticalAlignment);
 	}
@@ -317,7 +291,7 @@ namespace ire::core::gui
 
 	void ProgressBar::setPercentVisibility(bool isPercentVisible)
 	{
-		setVisibility(m_percentText, isPercentVisible);
+		setVisible(m_percentText, isPercentVisible);
 	}
 
 	const bool ProgressBar::isPercentVisible() const
@@ -337,7 +311,7 @@ namespace ire::core::gui
 
 	void ProgressBar::setMainTextString(std::string string)
 	{
-		setTextString(m_mainText, string);
+		m_mainText.setString(string);
 	}
 
 	const std::string ProgressBar::getMainString() const
@@ -355,7 +329,7 @@ namespace ire::core::gui
 		return getCharacterSize(m_mainText);
 	}
 
-	void ProgressBar::setMainTextVerticalAlignment(VerticalTextAlignment mainTextVerticalAlignment)
+	void ProgressBar::setMainTextVerticalAlignment(Text::VerticalAlignment mainTextVerticalAlignment)
 	{
 		setVerticalAlignment(m_mainText, mainTextVerticalAlignment);
 	}
@@ -367,7 +341,7 @@ namespace ire::core::gui
 
 	void ProgressBar::setMainVisibility(bool isMainVisible)
 	{
-		setVisibility(m_mainText, isMainVisible);
+		setVisible(m_mainText, isMainVisible);
 	}
 
 	const bool ProgressBar::isMainVisible() const
@@ -435,144 +409,62 @@ namespace ire::core::gui
 		return static_cast<float>(m_value - m_minimum) / static_cast<float>(m_maximum - m_minimum);
 	}
 
-	void ProgressBar::updateMainTextPosition()
-	{
-		auto textWidth = m_mainText.m_text.getLocalBounds().width;
-		auto textHeight = m_mainText.m_text.getLocalBounds().height;
-		auto xPosition = m_position.x + (m_size.x / 2 - textWidth / 2);
-		auto yPosition = m_position.y + (m_size.y / 2 - textHeight / 2);
-		updateTextPosition(m_mainText, xPosition, yPosition);
-	}
-
 	void ProgressBar::updateMaximumTextPosition()
 	{
-		auto letterSpacing{ m_maximumText.m_text.getLetterSpacing() };
-		auto textWidth = m_maximumText.m_text.getLocalBounds().width;
-		auto textHeight = m_minimumText.m_text.getLocalBounds().height;
-		auto xPosition = 0.f;
-		auto yPosition = 0.f;
 		switch (m_fillDirection)
 		{
 		case FillDirection::LeftToRight:
-			xPosition = m_position.x + m_size.x - textWidth - letterSpacing;
+			m_maximumText.setHorizontalAlign(Text::HorizontalAlignment::Right);
 			break;
 		case FillDirection::RightToLeft:
-			xPosition = m_position.x + letterSpacing;
+			m_maximumText.setHorizontalAlign(Text::HorizontalAlignment::Left);
 			break;
 		case FillDirection::BottomToTop:
-			xPosition = m_position.x + (m_size.x / 2 - textWidth / 2);
-			yPosition = m_position.y + letterSpacing;
+			m_maximumText.setHorizontalAlign(Text::HorizontalAlignment::Center);
+			m_maximumText.setVerticalAlign(Text::VerticalAlignment::Top);
 			break;
 		case FillDirection::TopToBottom:
-			xPosition = m_position.x + (m_size.x / 2 - textWidth / 2);
-			yPosition = m_position.y + m_size.y - textHeight - letterSpacing * 10;
+			m_maximumText.setHorizontalAlign(Text::HorizontalAlignment::Center);
+			m_maximumText.setVerticalAlign(Text::VerticalAlignment::Bottom);
 			break;
 		default:
 			break;
 		}
-		updateTextPosition(m_maximumText, xPosition, yPosition);
+		updateTextPosition(m_maximumText);
 	}
 
 	void ProgressBar::updateMinimumTextPosition()
 	{
-		auto letterSpacing{ m_minimumText.m_text.getLetterSpacing() };
-		auto textWidth = m_minimumText.m_text.getLocalBounds().width;
-		auto textHeight = m_minimumText.m_text.getLocalBounds().height;
-		auto xPosition = 0.f;
-		auto yPosition = 0.f;
 		switch (m_fillDirection)
 		{
 		case FillDirection::LeftToRight:
-			xPosition = m_position.x + letterSpacing;
+			m_minimumText.setHorizontalAlign(Text::HorizontalAlignment::Left);
 			break;
 		case FillDirection::RightToLeft:
-			xPosition = m_position.x + m_size.x - textWidth - letterSpacing;
+			m_minimumText.setHorizontalAlign(Text::HorizontalAlignment::Right);
 			break;
 		case FillDirection::BottomToTop:
-			xPosition = m_position.x + (m_size.x / 2 - textWidth / 2);
-			yPosition = m_position.y + m_size.y - textHeight - letterSpacing * 10;
+			m_minimumText.setHorizontalAlign(Text::HorizontalAlignment::Center);
+			m_minimumText.setVerticalAlign(Text::VerticalAlignment::Bottom);
 			break;
 		case FillDirection::TopToBottom:
-			xPosition = m_position.x + (m_size.x / 2 - textWidth / 2);
-			yPosition = m_position.y + letterSpacing;
+			m_minimumText.setHorizontalAlign(Text::HorizontalAlignment::Center);
+			m_minimumText.setVerticalAlign(Text::VerticalAlignment::Top);
 			break;
 		default:
 			break;
 		}
-		updateTextPosition(m_minimumText, xPosition, yPosition);
+		updateTextPosition(m_minimumText);
 	} 
 
-	void ProgressBar::updateValueTextPosition()
+	void ProgressBar::updateTextPosition(Text& text)
 	{
-		auto textWidth = m_valueText.m_text.getLocalBounds().width;
-		auto textHeight = m_valueText.m_text.getLocalBounds().height;
-		auto xPosition = m_position.x + (m_size.x / 2 - textWidth / 2);
-		auto yPosition = m_position.y + (m_size.y / 2 - textHeight / 2);
-		updateTextPosition(m_valueText, xPosition, yPosition);
-	}
+		text.setTextPosition(m_position, m_size);
 
-	void ProgressBar::updatePercentTextPosition()
-	{
-		auto textWidth = m_percentText.m_text.getLocalBounds().width;
-		auto textHeight = m_percentText.m_text.getLocalBounds().height;
-		auto xPosition = m_position.x + (m_size.x / 2 - textWidth / 2);
-		auto yPosition = m_position.y + (m_size.y / 2 - textHeight / 2);
-		updateTextPosition(m_percentText, xPosition, yPosition);
-	}
-
-	void ProgressBar::updateTextPosition(Text& text, float xPosition, float yPosition)
-	{
-		auto textWidth = m_percentText.m_text.getLocalBounds().width;
-		auto textHeight = text.m_text.getLocalBounds().height;
-		auto letterSpacing{ text.m_text.getLetterSpacing() };
-		if (m_fillDirection == FillDirection::LeftToRight || m_fillDirection == FillDirection::RightToLeft)
-		{
-			switch (text.m_textVerticalAlignement)
-			{
-			case VerticalTextAlignment::Bottom:
-				yPosition = m_position.y + m_size.y - textHeight - letterSpacing;
-				break;
-			case VerticalTextAlignment::Center:
-				yPosition = m_position.y + (m_size.y / 2 - textHeight / 2);
-				break;
-			case VerticalTextAlignment::Top:
-				yPosition = m_position.y + letterSpacing;
-				break;
-			default:
-				break;
-			}
-		}
-		text.m_text.setPosition(xPosition, yPosition);
-	}
-
-	void ProgressBar::updateMainTextString()
-	{
-		setMainTextString(m_mainText.m_textString);
-	}
-
-	void ProgressBar::updateMaximumTextString()
-	{
-		setMaximumTextString(std::to_string(m_maximum));
-	}
-
-	void ProgressBar::updateMinimumTextString()
-	{
-		setMinimumTextString(std::to_string(m_minimum));
-	}
-
-	void ProgressBar::updateValueTextString()
-	{
-		setValueTextString(std::to_string(m_value));
-	}
-
-	void ProgressBar::updatePercentTextString()
-	{
-		int percent = calculatePercent() * 100;
-		setPercentTextString(std::to_string(percent));
 	}
 
 	void ProgressBar::updateFillDirection()
-	{
+	{ 
 		switch (m_fillDirection)
 		{
 		case FillDirection::LeftToRight:
@@ -602,88 +494,76 @@ namespace ire::core::gui
 
 	void ProgressBar::setTextString(Text& text, std::string string)
 	{
-		if (text.m_textString != string)
+		if (text.getString() != string)
 		{
-			text.m_textString = string;
-			text.m_text.setString(string);
+			text.setString(string);
 		}
 	}
 
 	const std::string ProgressBar::getTextString(Text text) const
 	{
-		return text.m_textString;
+		return text.getString();
 	}
 
 	void ProgressBar::setCharacterSize(Text& text, unsigned int characterSize)
 	{
-		if (text.m_characterSize != characterSize)
+		if (text.getCharacterSize() != characterSize)
 		{
-			text.m_characterSize = characterSize;
-			text.m_text.setCharacterSize(text.m_characterSize);
+			text.setCharacterSize(characterSize);
 		}
 	}
 
 	const unsigned int ProgressBar::getCharacterSize(Text text) const
 	{
-		return text.m_characterSize;
+		return text.getCharacterSize();
 	}
 
-	void ProgressBar::setVerticalAlignment(Text& text, VerticalTextAlignment verticalAlignment)
+	void ProgressBar::setVerticalAlignment(Text& text, Text::VerticalAlignment verticalAlignment)
 	{
-		if (text.m_textVerticalAlignement != verticalAlignment)
+		if (text.getVerticalAlign() != verticalAlignment)
 		{
-			text.m_textVerticalAlignement = verticalAlignment;
+			text.setVerticalAlign(verticalAlignment);
 		}
 	}
 
 	const std::string ProgressBar::getVerticalAlignmentString(Text text) const
 	{
-		switch (text.m_textVerticalAlignement)
+		switch (text.getVerticalAlign())
 		{
-		case VerticalTextAlignment::Bottom:
+		case Text::VerticalAlignment::Bottom:
 			return "Bottom";
-		case VerticalTextAlignment::Center:
+		case Text::VerticalAlignment::Center:
 			return "Center";
-		case VerticalTextAlignment::Top:
+		case Text::VerticalAlignment::Top:
 			return "Top";
 		default:
 			break;
 		}
 	}
 
-	void ProgressBar::setVisibility(Text& text, bool isVisible)
+	void ProgressBar::setVisible(Text& text, bool isVisible)
 	{
-		if (text.m_isTextVisible != isVisible)
+		if (text.isVisible() != isVisible)
 		{
-			text.m_isTextVisible = isVisible;
+			text.setVisible(isVisible);
 		}
 	}
 
 	const bool ProgressBar::isVisible(Text text) const
 	{
-		return text.m_isTextVisible;
+		return text.isVisible();
 	}
 
 	void ProgressBar::setFillColor(Text& text, sf::Color color)
 	{
-		if (text.m_textFillColor != color)
+		if (text.getFillColor() != color)
 		{
-			text.m_textFillColor = color;
-			text.m_text.setFillColor(color);
+			text.setFillColor(color);
 		}
 	}
 
 	const sf::Color ProgressBar::getFillColor(Text text) const
 	{
-		return text.m_textFillColor;
-	}
-
-	ProgressBar::Text::Text()
-	{
-		m_text.setFillColor(m_textFillColor);
-		m_text.setOutlineColor(sf::Color::White);
-		m_text.setOutlineThickness(2);
-		m_text.setString(m_textString);
-		m_text.setCharacterSize(m_characterSize);
+		return text.getFillColor();
 	}
 }

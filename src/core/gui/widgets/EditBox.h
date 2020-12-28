@@ -125,7 +125,6 @@ namespace ire::core::gui
     {
         char32_t character;
     };
-
 }
 
 #endif // !EDITBOX_H

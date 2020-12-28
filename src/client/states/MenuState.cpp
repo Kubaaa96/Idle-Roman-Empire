@@ -24,7 +24,7 @@ namespace ire::client::state
 			});
 
 		auto buttonOptions = ire::core::gui::Button::create("Options");
-		buttonOptions->setHAlignment(ire::core::gui::HAlign::Left);
+		buttonOptions->setHAlignment(ire::core::gui::Text::HorizontalAlignment::Left);
 		buttonOptions->addEventListener<ire::core::gui::MouseClickEvent>(
 			[=](ire::core::gui::MouseClickEvent& ev)
 			{
