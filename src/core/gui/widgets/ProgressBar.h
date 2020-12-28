@@ -111,19 +111,15 @@ namespace ire::core::gui
 
         Text m_maximumText;
         uint64_t m_minimum{ 0 };
-        void setMaximumTextString(std::string string);
 
         Text m_minimumText;
         uint64_t m_maximum{ 100 };
-        void setMinimumTextString(std::string string);
 
         Text m_valueText;
         uint64_t m_value{ 50 };
-        void setValueTextString(std::string string);
 
         Text m_percentText;
         const float calculatePercent() const;
-        void setPercentTextString(std::string percentTextString);
 
         Text m_mainText;
 
@@ -139,24 +135,15 @@ namespace ire::core::gui
         const unsigned int getCharacterSize(Text text) const;
         void setVerticalAlignment(Text& text, Text::VerticalAlignment verticalAlignment);
         const std::string getVerticalAlignmentString(Text text) const;
-        void setVisibility(Text& text, bool isVisible);
+        void setVisible(Text& text, bool isVisible);
         const bool isVisible(Text text) const;
         void setFillColor(Text& text, sf::Color color);
         const sf::Color getFillColor(Text text) const;
 
-        void updateMainTextPosition();
         void updateMaximumTextPosition();
         void updateMinimumTextPosition();
-        void updateValueTextPosition();
-        void updatePercentTextPosition();
 
-        void updateTextPosition(Text& text, float xPosition, float yPosition = 0);
-
-        void updateMainTextString();
-        void updateMaximumTextString();
-        void updateMinimumTextString();
-        void updateValueTextString();
-        void updatePercentTextString();
+        void updateTextPosition(Text& text);
 
         void updateFillDirection();
         void invertBarsColors();

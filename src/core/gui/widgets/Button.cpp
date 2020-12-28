@@ -129,28 +129,28 @@ namespace ire::core::gui
 
 	void Button::setVAlignment(Text::VerticalAlignment vAlign)
 	{
-		if (m_text.getVAlign() != vAlign)
+		if (m_text.getVerticalAlign() != vAlign)
 		{
-			m_text.setVAlign(vAlign);
+			m_text.setVerticalAlign(vAlign);
 		}
 	}
 
 	const Text::VerticalAlignment Button::getVAlignment() const
 	{
-		return m_text.getVAlign();
+		return m_text.getVerticalAlign();
 	}
 
 	void Button::setHAlignment(Text::HorizontalAlignment hAlign)
 	{
-		if (m_text.getHAlign() != hAlign)
+		if (m_text.getHorizontalAlign() != hAlign)
 		{
-			m_text.setHAlign(hAlign);
+			m_text.setHorizontalAlign(hAlign);
 		}
 	}
 
 	const Text::HorizontalAlignment Button::getHAlignment() const
 	{
-		return m_text.getHAlign();
+		return m_text.getHorizontalAlign();
 	}
 
 	void Button::setAlignment(Text::VerticalAlignment vAlign, Text::HorizontalAlignment hAlign)
@@ -160,8 +160,6 @@ namespace ire::core::gui
 	}
 	void Button::updateTextPosition()
 	{
-        auto xPosition = m_text.getPosition().x;
-		auto yPosition = m_text.getPosition().y;
-		m_text.updateTextPosition(xPosition, yPosition, m_position, m_size);
+		m_text.setTextPosition(m_position, m_size);
 	}
 }

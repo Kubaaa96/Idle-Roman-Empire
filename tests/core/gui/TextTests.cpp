@@ -6,27 +6,20 @@ TEST_CASE("[Text]")
     ire::core::gui::Text text;
     SECTION("HorizontalAlignment")
     {
-        REQUIRE(text.getHAlign() == ire::core::gui::Text::HorizontalAlignment::Center);
-        text.setHAlign(ire::core::gui::Text::HorizontalAlignment::Left);
-        REQUIRE(text.getHAlign() == ire::core::gui::Text::HorizontalAlignment::Left);
-
-        REQUIRE(text.m_isHAlign == true);
-        text.m_isHAlign = false;
-        REQUIRE(text.m_isHAlign == false);
+        REQUIRE(text.getHorizontalAlign() == ire::core::gui::Text::HorizontalAlignment::Center);
+        text.setHorizontalAlign(ire::core::gui::Text::HorizontalAlignment::Left);
+        REQUIRE(text.getHorizontalAlign() == ire::core::gui::Text::HorizontalAlignment::Left);
     }
     SECTION("VerticalAlignment")
     {
-        REQUIRE(text.getVAlign() == ire::core::gui::Text::VerticalAlignment::Center);
-        text.setVAlign(ire::core::gui::Text::VerticalAlignment::Bottom);
-        REQUIRE(text.getVAlign() == ire::core::gui::Text::VerticalAlignment::Bottom);
-        REQUIRE(text.m_isVAlign == true);
-        text.m_isVAlign = false;
-        REQUIRE(text.m_isVAlign == false);
+        REQUIRE(text.getVerticalAlign() == ire::core::gui::Text::VerticalAlignment::Center);
+        text.setVerticalAlign(ire::core::gui::Text::VerticalAlignment::Bottom);
+        REQUIRE(text.getVerticalAlign() == ire::core::gui::Text::VerticalAlignment::Bottom);
     }
     SECTION("Visibilitty")
     {
-        REQUIRE(text.getVisibility() == false);
-        text.setVisibility(true);
-        REQUIRE(text.getVisibility() == true);
+        REQUIRE(text.isVisible() == false);
+        text.setVisible(true);
+        REQUIRE(text.isVisible() == true);
     }
 }

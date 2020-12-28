@@ -28,22 +28,18 @@ namespace ire::core::gui
         Text(std::string string = "", sf::Color fillColor = sf::Color::Black, 
             sf::Color outlineColor = sf::Color::White, unsigned int characterSize = 15);
 
-        void setHAlign(HorizontalAlignment horizontalAlignment);
-        const HorizontalAlignment getHAlign() const;
+        void setHorizontalAlign(HorizontalAlignment horizontalAlignment);
+        const HorizontalAlignment getHorizontalAlign() const;
 
-        void setVAlign(VerticalAlignment verticalAlignment);
-        const VerticalAlignment getVAlign() const;
+        void setVerticalAlign(VerticalAlignment verticalAlignment);
+        const VerticalAlignment getVerticalAlign() const;
 
-        void setVisibility(bool isVisible);
-        const bool getVisibility() const;
+        void setVisible(bool isVisible);
+        const bool isVisible() const;
 
         void setFont(const std::string& pathToFont);
 
-        void updateTextPosition(float xPosition, float yPosition, sf::Vector2f currentPosition, sf::Vector2f currentSize);
-
-        bool m_isHAlign = true;
-        bool m_isVAlign = true;
-
+        void setTextPosition(sf::Vector2f positionOfWidget, sf::Vector2f sizeOfWidget);
     protected:
 
         ResourcePtr<sf::Font> m_font;
