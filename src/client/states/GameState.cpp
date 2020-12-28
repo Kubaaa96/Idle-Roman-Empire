@@ -23,7 +23,12 @@ namespace ire::client::state
 
         auto btn10Ptr = ire::core::gui::Button::create("elo");
         btn10Ptr->addEventListener<ire::core::gui::MouseClickEvent>(
-            [](ire::core::gui::MouseClickEvent& ev) { std::cout << "Clicked btn10Ptr button\n"; });
+            [](ire::core::gui::MouseClickEvent& ev) 
+            { 
+                std::cout << "Clicked btn10Ptr button\n"; 
+                auto messageBox = ire::core::gui::MessageBox::create("Hello");
+                messageBox->processMessageBox();
+            });
         verticalLayout2->add(std::move(btn10Ptr), "Button10");
 
         auto btn11Ptr = ire::core::gui::Button::create("elo2");

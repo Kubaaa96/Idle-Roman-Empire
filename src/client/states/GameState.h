@@ -9,6 +9,7 @@
 #include "core/gui/widgets/ProgressBar.h"
 #include "core/gui/widgets/HorizontalLayout.h"
 #include "core/gui/widgets/VerticalLayout.h"
+#include "core/gui/widgets/MessageBox.h"
 
 namespace ire::core::gui
 {
