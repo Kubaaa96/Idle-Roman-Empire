@@ -1,7 +1,6 @@
 #include "GameState.h"
 #include "client/Game/GameWindow.h"
 #include "MenuState.h"
-#include <iostream>
 
 namespace ire::client::state
 {
@@ -10,13 +9,10 @@ namespace ire::client::state
     {
         initializeGUI();
         m_window.setRootGroup(*m_group.get());
-        std::cout << "GameState Init\n";
     }
 
     void GameState::initializeGUI()
     {        
-        
-
         auto verticalLayout2 = ire::core::gui::VerticalLayout::create({ 100, 200 });
         verticalLayout2->setSpaces(5);
         verticalLayout2->setMargins({ 5, 5, 5, 5 });
@@ -25,7 +21,8 @@ namespace ire::client::state
         auto& editBoxRef = *editBoxPtr;
         verticalLayout2->add(std::move(editBoxPtr), "EditBoxNice");
 
-        auto btn10Ptr = ire::core::gui::Button::create("elo");
+        auto btn10Ptr = ire::core::gui::Button::create("Show Message Box");
+        btn10Ptr->setCharacterSize(20);
         btn10Ptr->addEventListener<ire::core::gui::MouseClickEvent>(
             [&](ire::core::gui::MouseClickEvent& ev) 
             { 
@@ -49,9 +46,13 @@ namespace ire::client::state
                         messageBox->close();
                     });
                 messageBoxHorizontalLayout->add(std::move(messageBoxButton), "MessageBoxButton");
+                messageBoxHorizontalLayout->setMargins({ 75, 75, 50 ,25 });
+                messageBoxHorizontalLayout->setSpaces(175);
                 verticalMessageBoxLayout->add(std::move(messageBoxHorizontalLayout), "MessageBoxHorizontalLayout");
 
                 auto messageBoxGroup = ire::core::gui::Group::create({ 0,0 });
+                verticalMessageBoxLayout->setMargins({ 5, 5, 5, 5 });
+                verticalMessageBoxLayout->setSpaces(5);
                 messageBoxGroup->add(std::move(verticalMessageBoxLayout), "VerticalMessageBoxLayout");
 
                 messageBox->initializeUI(std::move(messageBoxGroup));
@@ -61,13 +62,7 @@ namespace ire::client::state
             });
         verticalLayout2->add(std::move(btn10Ptr), "Button10");
 
-        auto btn11Ptr = ire::core::gui::Button::create("elo2");
-        btn11Ptr->addEventListener<ire::core::gui::MouseClickEvent>(
-            [](ire::core::gui::MouseClickEvent& ev) { std::cout << "Clicked btn11Ptr button\n"; });
-
-        verticalLayout2->add(std::move(btn11Ptr), "Button11");
-
-        auto panel2 = ire::core::gui::Panel::create({ 100, 300 }, std::move(verticalLayout2), "VerticalLayout2");
+        auto panel2 = ire::core::gui::Panel::create({ 300, 200 }, std::move(verticalLayout2), "VerticalLayout2");
         panel2->setPosition({ 100, 100 });
         panel2->setOutlineColor(sf::Color::Red);
         panel2->setOutlineThickness(7);
@@ -107,48 +102,6 @@ namespace ire::client::state
         editBoxExamplePanel->setPosition({ 650, 50 });
         editBoxExamplePanel->setOutlineColor(sf::Color::Blue);
         editBoxExamplePanel->setOutlineThickness(3);
-
-        auto progressBarExampleVerticalLayout = ire::core::gui::VerticalLayout::create({ 100,200 });
-        progressBarExampleVerticalLayout->setSpaces(5);
-        progressBarExampleVerticalLayout->setMargins({ 5, 5, 5, 5 });
-
-        auto progressBarExample1 = ire::core::gui::ProgressBar::create();
-        progressBarExampleVerticalLayout->add(std::move(progressBarExample1), "ProgressBarExample1");
-
-        auto progressBarExample2 = ire::core::gui::ProgressBar::create();
-        progressBarExample2->setFillDirection(ire::core::gui::ProgressBar::FillDirection::RightToLeft);
-        progressBarExample2->setMaximum(120);
-        progressBarExample2->setValue(115);
-        progressBarExampleVerticalLayout->add(std::move(progressBarExample2), "ProgressBarExample2");
-
-        auto progressBarExample3 = ire::core::gui::ProgressBar::create();
-        progressBarExample3->setPercentTextVerticalAlignment(
-            ire::core::gui::Text::VerticalAlignment::Bottom);
-        auto& progressBarExample3Ref = *progressBarExample3;
-        progressBarExample3->addEventListener<ire::core::gui::ProgressBarValueChanged>(
-            [&](ire::core::gui::ProgressBarValueChanged& ev)
-            {
-                auto currentValue = progressBarExample3Ref.getValue(); 
-                std::cout << "value Changes\n";
-            }
-        );
-        progressBarExampleVerticalLayout->add(std::move(progressBarExample3), "ProgressBarExample3");
-
-        auto buttonTest2 = ire::core::gui::Button::create("Test");
-        buttonTest2->addEventListener<ire::core::gui::MouseClickEvent>(
-            [&](ire::core::gui::MouseClickEvent& ev)
-            {
-                progressBarExample3Ref.setValue(std::stoll(editBoxExample4Ref.getTextString()));          
-            }
-        );
-        progressBarExampleVerticalLayout->add(std::move(buttonTest2), "TestButton2");
-
-
-        auto progressBarExamplePanel = ire::core::gui::Panel::create({ 300, 250 }, std::move(progressBarExampleVerticalLayout),"ProgressBarExampleVerticalLayout");
-        progressBarExamplePanel->setPosition({ 300, 50 });
-        progressBarExamplePanel->setOutlineColor(sf::Color::Green);
-        progressBarExamplePanel->setOutlineThickness(3);
-
 
         auto progressBarTestingMainHLayout = ire::core::gui::HorizontalLayout::create({ 0, 0 });
         progressBarTestingMainHLayout->setSpaces(15);
@@ -335,6 +288,5 @@ namespace ire::client::state
         m_group->add(std::move(progressBarTestingPanel), "ProgressBarTestingPanel");
         m_group->add(std::move(panel2), "panel2");
         m_group->add(std::move(editBoxExamplePanel), "EditBoxExamplePanel");
-        m_group->add(std::move(progressBarExamplePanel), "ProgressBarExamplePanel");
     }
 }

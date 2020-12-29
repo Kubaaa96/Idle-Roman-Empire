@@ -1,7 +1,6 @@
 #include "IntroState.h"
 #include "client/Game/GameWindow.h"
 #include "MenuState.h"
-#include <iostream>
 
 namespace ire::client::state
 {
@@ -10,7 +9,6 @@ namespace ire::client::state
     {
         initializeGUI();
         m_window.setRootGroup(*m_group.get());
-        std::cout << "IntroState Init\n";
     }
 
     void IntroState::initializeGUI()
