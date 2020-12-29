@@ -1,9 +1,11 @@
-
-#include "Container.h"
+#include "Group.h"
+#include "core/gui/SystemWindow.h"
+#include "VerticalLayout.h"
+#include "HorizontalLayout.h"
 
 namespace ire::core::gui
 {
-    struct MessageBox : Container
+    struct MessageBox : SystemWindow
     {
         MessageBox();
 
@@ -14,13 +16,17 @@ namespace ire::core::gui
         void setTitle(const std::string& title);
         const std::string getTitle() const;
 
+        void initializeUI(std::unique_ptr<Group> group);
+
         static const WidgetType m_type;
-        const WidgetType getType() const override
+        const WidgetType getType() const 
         {
             return m_type;
         }
+
     protected:
+
         std::string m_title;
-        sf::Window m_window;
+        std::unique_ptr<Group> m_group;
     };
 }

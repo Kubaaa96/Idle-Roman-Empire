@@ -48,6 +48,15 @@ namespace ire::core::gui
 		}
 	}
 
+	void Group::fitInSize()
+	{
+		if (m_widgets.size() == 1)
+		{
+			m_widgets[0]->setSize(m_size);
+			m_widgets[0]->setPosition(m_position);
+		}
+	}
+
 	void Group::updateWidgets()
 	{
 		for (auto& widget : m_widgets) 

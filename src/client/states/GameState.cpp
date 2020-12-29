@@ -26,7 +26,20 @@ namespace ire::client::state
             [](ire::core::gui::MouseClickEvent& ev) 
             { 
                 std::cout << "Clicked btn10Ptr button\n"; 
+
+                auto verticalMessageBoxLayout = ire::core::gui::VerticalLayout::create({ 0,0 });
+                auto messageBoxButton = ire::core::gui::Button::create("test");
+                messageBoxButton->addEventListener<ire::core::gui::MouseClickEvent>(
+                    [](ire::core::gui::MouseClickEvent& ev)
+                    {
+                        std::cout << "Clicked Button in MessageBox\n";
+                    });
+                verticalMessageBoxLayout->add(std::move(messageBoxButton), "MessageBoxButton");
+                auto messageBoxGroup = ire::core::gui::Group::create({ 0,0 });
+                messageBoxGroup->add(std::move(verticalMessageBoxLayout), "VerticalMessageBoxLayout");
+
                 auto messageBox = ire::core::gui::MessageBox::create("Hello");
+                messageBox->initializeUI(std::move(messageBoxGroup));
                 messageBox->processMessageBox();
             });
         verticalLayout2->add(std::move(btn10Ptr), "Button10");
