@@ -18,16 +18,13 @@ namespace ire::core::gui
 
     void MessageBox::processMessageBox()
     {
-       // std::string test = "TestMessageBox\n";
         while (m_window.isOpen())
         {
-            //std::cout << test;
             m_group->draw(m_window);
             display();
 
             processEvents();
         }
-        //return std::string();
     }
 
     void MessageBox::setTitle(const std::string& title)

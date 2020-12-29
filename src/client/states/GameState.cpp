@@ -21,26 +21,43 @@ namespace ire::client::state
         verticalLayout2->setSpaces(5);
         verticalLayout2->setMargins({ 5, 5, 5, 5 });
 
+        auto editBoxPtr = ire::core::gui::EditBox::create("");
+        auto& editBoxRef = *editBoxPtr;
+        verticalLayout2->add(std::move(editBoxPtr), "EditBoxNice");
+
         auto btn10Ptr = ire::core::gui::Button::create("elo");
         btn10Ptr->addEventListener<ire::core::gui::MouseClickEvent>(
-            [](ire::core::gui::MouseClickEvent& ev) 
+            [&](ire::core::gui::MouseClickEvent& ev) 
             { 
-                std::cout << "Clicked btn10Ptr button\n"; 
-
+                auto messageBox = ire::core::gui::MessageBox::create("Hello");
                 auto verticalMessageBoxLayout = ire::core::gui::VerticalLayout::create({ 0,0 });
+                auto messageBoxLabel = ire::core::gui::Label::create("Insert Value");
+                verticalMessageBoxLayout->add(std::move(messageBoxLabel), "MessageBoxLabel");
+
+                auto messageBoxHorizontalLayout = ire::core::gui::HorizontalLayout::create({ 0,0 });
+
+                auto messageBoxEditBox = ire::core::gui::EditBox::create("");
+                auto& messageBoxEditBoxRef = *messageBoxEditBox;
+                std::string editBoxValue;
+                messageBoxHorizontalLayout->add(std::move(messageBoxEditBox), "MessageBoxEditBox");
+
                 auto messageBoxButton = ire::core::gui::Button::create("test");
                 messageBoxButton->addEventListener<ire::core::gui::MouseClickEvent>(
-                    [](ire::core::gui::MouseClickEvent& ev)
+                    [&](ire::core::gui::MouseClickEvent& ev)
                     {
-                        std::cout << "Clicked Button in MessageBox\n";
+                        editBoxValue = messageBoxEditBoxRef.getTextString();
+                        messageBox->close();
                     });
-                verticalMessageBoxLayout->add(std::move(messageBoxButton), "MessageBoxButton");
+                messageBoxHorizontalLayout->add(std::move(messageBoxButton), "MessageBoxButton");
+                verticalMessageBoxLayout->add(std::move(messageBoxHorizontalLayout), "MessageBoxHorizontalLayout");
+
                 auto messageBoxGroup = ire::core::gui::Group::create({ 0,0 });
                 messageBoxGroup->add(std::move(verticalMessageBoxLayout), "VerticalMessageBoxLayout");
 
-                auto messageBox = ire::core::gui::MessageBox::create("Hello");
                 messageBox->initializeUI(std::move(messageBoxGroup));
                 messageBox->processMessageBox();
+
+                editBoxRef.setTextString(editBoxValue);
             });
         verticalLayout2->add(std::move(btn10Ptr), "Button10");
 
@@ -50,7 +67,7 @@ namespace ire::client::state
 
         verticalLayout2->add(std::move(btn11Ptr), "Button11");
 
-        auto panel2 = ire::core::gui::Panel::create({ 100, 200 }, std::move(verticalLayout2), "VerticalLayout2");
+        auto panel2 = ire::core::gui::Panel::create({ 100, 300 }, std::move(verticalLayout2), "VerticalLayout2");
         panel2->setPosition({ 100, 100 });
         panel2->setOutlineColor(sf::Color::Red);
         panel2->setOutlineThickness(7);
