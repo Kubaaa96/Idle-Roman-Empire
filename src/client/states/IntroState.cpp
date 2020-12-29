@@ -13,9 +13,12 @@ namespace ire::client::state
 
     void IntroState::initializeGUI()
     {
-        auto labelIntroText = ire::core::gui::Label::create("Welcome in Idle Roman Empire");
+        auto labelIntroText = ire::core::gui::Label::create("Idle Roman Empire\n Next generation\n of Idle Gaming");
+        labelIntroText->setTextLineSpacing(2);
+        labelIntroText->setCharacterSize(65);
         
-        auto buttonContinue = ire::core::gui::Button::create("Continue");
+        auto buttonContinue = ire::core::gui::Button::create("Let's Go");
+        buttonContinue->setCharacterSize(40);
         buttonContinue->addEventListener<ire::core::gui::MouseClickEvent>(
             [=](ire::core::gui::MouseClickEvent& ev)
             {
