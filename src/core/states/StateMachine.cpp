@@ -5,7 +5,6 @@ namespace ire::core::state
     StateMachine::StateMachine()
         : m_running{ false }
     {
-        std::cout << "StateMachine Init\n";
     }
 
     void StateMachine::run(std::unique_ptr<State> state)

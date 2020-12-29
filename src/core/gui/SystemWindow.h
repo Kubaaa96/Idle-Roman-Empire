@@ -55,9 +55,9 @@ namespace ire::core::gui {
 
     protected:
         state::StateMachine m_stateMachine;
-
-    private:
         sf::RenderWindow m_window;
+    private:
+
         Group* m_rootGroup;
 
         // The currently active widget receives all events regardless

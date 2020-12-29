@@ -9,7 +9,6 @@ namespace ire::client::state
 	{
 		initializeGUI();
 		m_window.setRootGroup(*m_group.get());
-		std::cout << "MenuState Init\n";
 	}
 
 

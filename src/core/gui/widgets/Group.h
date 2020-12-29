@@ -23,6 +23,8 @@ namespace ire::core::gui
 
 		void draw(sf::RenderTarget& target) override;
 
+		void fitInSize();
+
 		void updateWidgets();
 		static const WidgetType m_type;
 		const WidgetType getType() const override
