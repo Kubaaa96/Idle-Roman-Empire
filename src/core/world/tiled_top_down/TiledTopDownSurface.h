@@ -67,6 +67,11 @@ namespace ire::core::world
         sf::Vector2f m_cameraCenter;
         float m_zoom;
 
+        sf::Vector3f m_lightDirection;
+        float m_gamma;
+        sf::Vector3f m_ambientLight;
+        sf::Vector3f m_sunLight;
+
         util::Array2<TopDownGroundTile> m_tiles;
         util::Array2<TopDownGridPoint> m_gridPoints;
 

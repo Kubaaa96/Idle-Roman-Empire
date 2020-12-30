@@ -1,5 +1,7 @@
 #include "TiledTopDownSurface.h"
 
+#include "core/util/Math.h"
+
 #include "core/resource/ResourceManager.h"
 
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -24,6 +26,12 @@ namespace ire::core::world
         
         m_cameraCenter = sf::Vector2f(m_width / 2.0f, m_height / 2.0f);
         m_zoom = 32.0f;
+
+        m_lightDirection = sf::Vector3f(0.3, -0.6, -0.845);
+
+        m_gamma = 2.2f;
+        m_ambientLight = sf::Vector3f(0.05f, 0.05f, 0.05f);
+        m_sunLight = sf::Vector3f(1.0f, 1.0f, 1.0f);
 
         generateRandomWorld();
     }
@@ -105,24 +113,26 @@ namespace ire::core::world
 
     void TiledTopDownSurface::appendGroundTileGeometry(std::vector<sf::Vertex>& va, int x, int y)
     {
-        const float gamma = 2.2f;
-        sf::Vector3f groundToSun(-0.3, 0.6, 0.845);
-        float mag = std::sqrt(groundToSun.x * groundToSun.x + groundToSun.y * groundToSun.y + groundToSun.z * groundToSun.z);
-        groundToSun /= mag;
-        const float ambient = 32.0f / 256.0f;
+        const auto groundToSun = util::normalized(-m_lightDirection);
 
         auto appendTriangle = [&](
             sf::Vector3f v0, sf::Vector3f v1, sf::Vector3f v2,
             sf::Vector2f t0, sf::Vector2f t1, sf::Vector2f t2
             )
         {
+            auto applyGamma = [this](const sf::Vector3f& c) {
+                return sf::Color(
+                    std::clamp((int)(std::pow(c.x, 1.0f / m_gamma) * 255.0f), 0, 255),
+                    std::clamp((int)(std::pow(c.y, 1.0f / m_gamma) * 255.0f), 0, 255),
+                    std::clamp((int)(std::pow(c.z, 1.0f / m_gamma) * 255.0f), 0, 255)
+                );
+            };
+
             auto getColor = [&](sf::Vector3f normal)
             {
-                const float dot = normal.x * groundToSun.x + normal.y * groundToSun.y + normal.z * groundToSun.z;
-                const float intensity = std::max(0.0f, dot);
-                const float cf = intensity + ambient;
-                const int ci = std::clamp((int)(std::pow(cf, 1.0f / gamma) * 255.0f), 0, 255);
-                const auto color = sf::Color(ci, ci, ci);
+                const float sunLightIntensity = std::max(0.0f, util::dot(normal, groundToSun));
+                const auto colorLin = m_sunLight * sunLightIntensity + m_ambientLight;
+                const auto color = applyGamma(colorLin);
                 return color;
             };
 
@@ -190,41 +200,46 @@ namespace ire::core::world
 
     [[nodiscard]] sf::Vector3f TiledTopDownSurface::getGridPointNormal(int x, int y) const
     {
-        sf::Vector3f x0(std::max(0, x - 1), y, m_gridPoints(std::max(0, x - 1), y).getElevation());
-        sf::Vector3f x1(std::min(m_width, x + 1), y, m_gridPoints(std::min(m_width, x + 1), y).getElevation());
-        sf::Vector3f y0(x, std::max(0, y - 1), m_gridPoints(x, std::max(0, y - 1)).getElevation());
-        sf::Vector3f y1(x, std::min(m_height, y + 1), m_gridPoints(x, std::min(m_height, y + 1)).getElevation());
-        sf::Vector3f a = x1 - x0;
-        sf::Vector3f b = y1 - y0;
-        sf::Vector3f normal(
-            a.y * b.z - a.z * b.y,
-            a.z * b.x - a.x * b.z,
-            a.x * b.y - a.y * b.x
-        );
-        float mag = std::sqrt(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
-        return normal / mag;
+        // Probe elevations at neighbour points.
+        const sf::Vector3f x0(std::max(0, x - 1), y, m_gridPoints(std::max(0, x - 1), y).getElevation());
+        const sf::Vector3f x1(std::min(m_width, x + 1), y, m_gridPoints(std::min(m_width, x + 1), y).getElevation());
+        const sf::Vector3f y0(x, std::max(0, y - 1), m_gridPoints(x, std::max(0, y - 1)).getElevation());
+        const sf::Vector3f y1(x, std::min(m_height, y + 1), m_gridPoints(x, std::min(m_height, y + 1)).getElevation());
+
+        // Compute gradients.
+        const sf::Vector3f a = x1 - x0;
+        const sf::Vector3f b = y1 - y0;
+
+        // Get normal of the triangle formed by the gradients.
+        const sf::Vector3f normal = util::normalized(util::cross(a, b));
+
+        return normal;
     }
 
     [[nodiscard]] sf::Vector3f TiledTopDownSurface::getGroundNormal(float x, float y) const
     {
-        int x0 = x;
-        int x1 = x0 + 1;
-        int y0 = y;
-        int y1 = y0 + 1;
-        float dx = x - x0;
-        float dy = y - y0;
-        sf::Vector3f n00 = getGridPointNormal(x0, y0);
-        sf::Vector3f n10 = getGridPointNormal(x1, y0);
-        sf::Vector3f n11 = getGridPointNormal(x1, y1);
-        sf::Vector3f n01 = getGridPointNormal(x0, y1);
+        // Get neighbouring grid coords.
+        const int x0 = x;
+        const int x1 = x0 + 1;
+        const int y0 = y;
+        const int y1 = y0 + 1;
 
-        sf::Vector3f nx0 = n00 * dx + n10 * (1.0f - dx);
-        sf::Vector3f nx1 = n01 * dx + n11 * (1.0f - dx);
-        sf::Vector3f n = nx0 * dy + nx1 * (1.0f - dy);
+        // Get interpolation factors.
+        const float dx = x - x0;
+        const float dy = y - y0;
 
-        float mag = std::sqrt(n.x * n.x + n.y * n.y + n.z * n.z);
+        // Get grid point normals.
+        const sf::Vector3f n00 = getGridPointNormal(x0, y0);
+        const sf::Vector3f n10 = getGridPointNormal(x1, y0);
+        const sf::Vector3f n11 = getGridPointNormal(x1, y1);
+        const sf::Vector3f n01 = getGridPointNormal(x0, y1);
 
-        return n / mag;
+        // Interpolate bilinearly
+        const sf::Vector3f nx0 = n00 * dx + n10 * (1.0f - dx);
+        const sf::Vector3f nx1 = n01 * dx + n11 * (1.0f - dx);
+        const sf::Vector3f n = nx0 * dy + nx1 * (1.0f - dy);
+
+        return util::normalized(n);
     }
 
     TiledTopDownSurface::GroundChunkCache& TiledTopDownSurface::updateChunkCacheIfRequired(int cx, int cy)
@@ -254,6 +269,7 @@ namespace ire::core::world
         }
 
         std::vector<sf::Vertex> vertices;
+        // Each ground tile now uses 4 triangles.
         vertices.reserve(4 * 3 * chunkSize * chunkSize);
         for (int y = cy * chunkSize; y < cy * chunkSize + chunkSize && y < m_height; ++y)
         {
