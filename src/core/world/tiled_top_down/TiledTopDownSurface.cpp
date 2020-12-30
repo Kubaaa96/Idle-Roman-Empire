@@ -16,7 +16,8 @@ namespace ire::core::world
         m_width(width),
         m_height(height),
         m_tiles(width, height),
-        m_gridPoints(width + 1, height + 1)
+        m_gridPoints(width + 1, height + 1),
+        m_groundChunkCache((width + (chunkSize - 1)) / chunkSize, (height + (chunkSize - 1)) / chunkSize)
     {
         m_textureAtlas = ResourceManager::instance().get<gfx::TextureAtlas>("resource/gfx/tiles");
         m_tileSprite = m_textureAtlas->getTextureView(ResourcePath("grass.png"));
@@ -88,7 +89,7 @@ namespace ire::core::world
         }
     }
 
-    void TiledTopDownSurface::drawGroundTile(sf::VertexArray& va, int x, int y)
+    void TiledTopDownSurface::appendGroundTileGeometry(std::vector<sf::Vertex>& va, int x, int y)
     {
         const float gamma = 2.2f;
         sf::Vector3f groundToSun(-0.3, 0.6, 0.845);
@@ -96,7 +97,7 @@ namespace ire::core::world
         groundToSun /= mag;
         const float ambient = 32.0f / 256.0f;
 
-        auto drawTriangle = [&](
+        auto appendTriangle = [&](
             sf::Vector3f v0, sf::Vector3f v1, sf::Vector3f v2,
             sf::Vector2f t0, sf::Vector2f t1, sf::Vector2f t2
             )
@@ -117,9 +118,9 @@ namespace ire::core::world
             auto c0 = getColor(n0);
             auto c1 = getColor(n1);
             auto c2 = getColor(n2);
-            va.append(sf::Vertex(sf::Vector2f(v0.x, v0.y - v0.z * m_elevationSqueeze), c0, t0));
-            va.append(sf::Vertex(sf::Vector2f(v1.x, v1.y - v1.z * m_elevationSqueeze), c1, t1));
-            va.append(sf::Vertex(sf::Vector2f(v2.x, v2.y - v2.z * m_elevationSqueeze), c2, t2));
+            va.emplace_back(sf::Vector2f(v0.x, v0.y - v0.z * m_elevationSqueeze), c0, t0);
+            va.emplace_back(sf::Vector2f(v1.x, v1.y - v1.z * m_elevationSqueeze), c1, t1);
+            va.emplace_back(sf::Vector2f(v2.x, v2.y - v2.z * m_elevationSqueeze), c2, t2);
         };
 
         const auto topLeftElevation = m_gridPoints(x, y).getElevation();
@@ -146,24 +147,26 @@ namespace ire::core::world
         const auto bottomLeftTex = sf::Vector2f(texBounds.left, texBounds.top + texBounds.height);
         const auto midTex = sf::Vector2f(texBounds.left + texBounds.width * 0.5f, texBounds.top + texBounds.height * 0.5f);
 
-        drawTriangle(mid, bottomLeft, topLeft, midTex, bottomLeftTex, topLeftTex);
-        drawTriangle(mid, bottomRight, bottomLeft, midTex, bottomRightTex, bottomLeftTex);
-        drawTriangle(mid, topRight, bottomRight, midTex, topRightTex, bottomRightTex);
-        drawTriangle(mid, topLeft, topRight, midTex, topLeftTex, topRightTex);
+        appendTriangle(mid, bottomLeft, topLeft, midTex, bottomLeftTex, topLeftTex);
+        appendTriangle(mid, bottomRight, bottomLeft, midTex, bottomRightTex, bottomLeftTex);
+        appendTriangle(mid, topRight, bottomRight, midTex, topRightTex, bottomRightTex);
+        appendTriangle(mid, topLeft, topRight, midTex, topLeftTex, topRightTex);
     }
 
     void TiledTopDownSurface::drawGround(sf::RenderTarget& target, sf::RenderStates& states)
     {
+        const int wc = (m_width + (chunkSize - 1)) / chunkSize;
+        const int hc = (m_height + (chunkSize - 1)) / chunkSize;
+
         states.texture = &m_tileSprite.getTexture();
-        sf::VertexArray va(sf::PrimitiveType::Triangles);
-        for (int y = 0; y < m_height; ++y)
+        for (int cy = 0; cy < hc; ++cy)
         {
-            for (int x = 0; x < m_width; ++x)
+            for (int cx = 0; cx < wc; ++cx)
             {
-                drawGroundTile(va, x, y);
+                auto& chunk = updateChunkCacheIfRequired(cx, cy);
+                target.draw(chunk.vbo, 0, chunk.vertexCount, states);
             }
         }
-        target.draw(va, states);
     }
 
     [[nodiscard]] sf::Vector3f TiledTopDownSurface::getGridPointNormal(int x, int y) const
@@ -203,6 +206,31 @@ namespace ire::core::world
         float mag = std::sqrt(n.x * n.x + n.y * n.y + n.z * n.z);
 
         return n / mag;
+    }
+
+    TiledTopDownSurface::GroundChunkCache& TiledTopDownSurface::updateChunkCacheIfRequired(int cx, int cy)
+    {
+        auto& chunk = m_groundChunkCache(cx, cy);
+        if (!chunk.isDirty)
+        {
+            return chunk;
+        }
+
+        std::vector<sf::Vertex> vertices;
+        vertices.reserve(4 * 3 * chunkSize * chunkSize);
+        for (int y = cy * chunkSize; y < cy * chunkSize + chunkSize && y < m_height; ++y)
+        {
+            for (int x = cx * chunkSize; x < cx * chunkSize + chunkSize && x < m_width; ++x)
+            {
+                appendGroundTileGeometry(vertices, x, y);
+            }
+        }
+
+        chunk.isDirty = false;
+        chunk.vbo.update(vertices.data(), vertices.size(), 0);
+        chunk.vertexCount = vertices.size();
+
+        return chunk;
     }
 
 }

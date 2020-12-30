@@ -13,6 +13,7 @@
 
 #include <SFML/System/Vector3.hpp>
 #include <SFML/Graphics/VertexArray.hpp>
+#include <SFML/Graphics/VertexBuffer.hpp>
 
 namespace ire::core::world
 {
@@ -27,6 +28,20 @@ namespace ire::core::world
         [[nodiscard]] sf::Vector3f getGroundNormal(float x, float y) const;
 
     private:
+        struct GroundChunkCache
+        {
+            GroundChunkCache()
+            {
+                vbo.create(1);
+            }
+
+            sf::VertexBuffer vbo = sf::VertexBuffer(sf::PrimitiveType::Triangles, sf::VertexBuffer::Usage::Static);
+            unsigned vertexCount = 0;
+            bool isDirty = true;
+        };
+
+        static constexpr int chunkSize = 16;
+
         int m_width;
         int m_height;
 
@@ -37,10 +52,14 @@ namespace ire::core::world
         gfx::TextureView m_tileSprite;
         float m_elevationSqueeze;
 
-        void drawGroundTile(sf::VertexArray& va, int x, int y);
+        util::Array2<GroundChunkCache> m_groundChunkCache;
+
+        void appendGroundTileGeometry(std::vector<sf::Vertex>& va, int x, int y);
         void generateRandomWorld();
 
         void drawGround(sf::RenderTarget& target, sf::RenderStates& states);
+
+        GroundChunkCache& updateChunkCacheIfRequired(int cx, int cy);
     };
 
 }
