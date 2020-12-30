@@ -215,15 +215,18 @@ namespace ire::core::world
 
     [[nodiscard]] sf::Vector3f TiledTopDownSurface::getGridPointNormal(int x, int y) const
     {
-        // Probe elevations at neighbour points.
+        // Probe elevations at 3 nearby points in each axis.
         const sf::Vector3f x0(std::max(0, x - 1), y, m_gridPoints(std::max(0, x - 1), y).getElevation());
-        const sf::Vector3f x1(std::min(m_width, x + 1), y, m_gridPoints(std::min(m_width, x + 1), y).getElevation());
+        const sf::Vector3f x1(x, y, m_gridPoints(x, y).getElevation());
+        const sf::Vector3f x2(std::min(m_width, x + 1), y, m_gridPoints(std::min(m_width, x + 1), y).getElevation());
         const sf::Vector3f y0(x, std::max(0, y - 1), m_gridPoints(x, std::max(0, y - 1)).getElevation());
-        const sf::Vector3f y1(x, std::min(m_height, y + 1), m_gridPoints(x, std::min(m_height, y + 1)).getElevation());
+        const sf::Vector3f y1(x, y, m_gridPoints(x, y).getElevation());
+        const sf::Vector3f y2(x, std::min(m_height, y + 1), m_gridPoints(x, std::min(m_height, y + 1)).getElevation());
 
-        // Compute gradients.
-        const sf::Vector3f a = x1 - x0;
-        const sf::Vector3f b = y1 - y0;
+        // Compute gradients. For points A, B, C lying on the same axis
+        // we use a gradient between the midpoints of AB and BC.
+        const sf::Vector3f a = (x1 + x0) * 0.5f - (x2 + x1) * 0.5f;
+        const sf::Vector3f b = (y1 + y0) * 0.5f - (y2 + y1) * 0.5f;
 
         // Get normal of the triangle formed by the gradients.
         const sf::Vector3f normal = util::normalized(util::cross(a, b));
