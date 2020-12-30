@@ -32,6 +32,11 @@ namespace ire::core::world
         [[nodiscard]] sf::FloatRect getCameraBounds(sf::RenderTarget& target) const;
         [[nodiscard]] sf::View getCameraView(sf::RenderTarget& target) const;
 
+        void changeZoom(float multiplier);
+        void moveCamera(sf::Vector2f diff);
+
+        [[nodiscard]] float getZoom() const;
+
     private:
         struct GroundChunkCache
         {

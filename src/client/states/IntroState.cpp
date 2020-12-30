@@ -5,12 +5,24 @@
 #include "core/world/tiled_top_down/TiledTopDownSurface.h"
 #include "core/world/World.h"
 
+#include "core/gui/Events.h"
+
 namespace ire::client::state
 {
     struct WorldView : ire::core::gui::ClickableWidget
     {
+    private:
+        enum struct State
+        {
+            Inactive,
+            Active
+        };
+
+    public:
+
         WorldView() :
-            m_world(std::make_unique<ire::core::world::TiledTopDownSurface>(512, 512))
+            m_world(std::make_unique<ire::core::world::TiledTopDownSurface>(512, 512)),
+            m_state(State::Inactive)
         {
         }
 
@@ -22,6 +34,8 @@ namespace ire::client::state
 
         void draw(sf::RenderTarget& target)
         {
+            updateCamera();
+
             sf::RenderStates states = sf::RenderStates::Default;
             sf::View view = target.getView();
             view.setViewport(sf::FloatRect(0.1, 0.1, 0.8, 0.8));
@@ -33,15 +47,66 @@ namespace ire::client::state
             m_world.getMainSurface().draw(target, states);
         }
 
-        void updateWidget() override {}
-
         static const WidgetType m_type;
         const WidgetType getType() const override
         {
             return m_type;
         }
+
+        // Why the hell is this virtual?
+        void updateWidget() override {}
+
+        void onEvent(core::gui::EventRoot& sender, core::gui::MouseButtonDownEvent& ev)
+        {
+            m_state = State::Active;
+            sender.setActiveWidget(*this);
+            ev.handled = true;
+        }
+
     private:
         ire::core::world::World m_world;
+        State m_state;
+
+        void updateCamera()
+        {
+            if (m_state != State::Active)
+                return;
+
+            // TODO: replace later with event based and framerate agnostic implementation.
+
+            auto& mainSurface = static_cast<ire::core::world::TiledTopDownSurface&>(m_world.getMainSurface());
+            auto zoom = mainSurface.getZoom();
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+            {
+                mainSurface.moveCamera(sf::Vector2f(-1.0f, 0.0f) / zoom);
+            }
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+            {
+                mainSurface.moveCamera(sf::Vector2f(1.0f, 0.0f) / zoom);
+            }
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+            {
+                mainSurface.moveCamera(sf::Vector2f(0.0f, -1.0f) / zoom);
+            }
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+            {
+                mainSurface.moveCamera(sf::Vector2f(0.0f, 1.0f) / zoom);
+            }
+            
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add))
+            {
+                mainSurface.changeZoom(1.01f);
+            }
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Subtract))
+            {
+                mainSurface.changeZoom(1 / 1.01f);
+            }
+        }
     };
 
     const WidgetType WorldView::m_type = WidgetType::create<WorldView>("WorldView");

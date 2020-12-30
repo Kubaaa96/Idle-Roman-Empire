@@ -62,6 +62,21 @@ namespace ire::core::world
         return surfaceView;
     }
 
+    void TiledTopDownSurface::changeZoom(float multiplier) 
+    {
+        m_zoom *= multiplier;
+    }
+
+    void TiledTopDownSurface::moveCamera(sf::Vector2f diff)
+    {
+        m_cameraCenter += diff;
+    }
+
+    [[nodiscard]] float TiledTopDownSurface::getZoom() const
+    {
+        return m_zoom;
+    }
+
     void TiledTopDownSurface::draw(sf::RenderTarget& target, sf::RenderStates& states)
     {
         constexpr float cameraAngleDeg = 60.0f;
