@@ -46,7 +46,7 @@ namespace ire::core::gui
 			return;
 		}
 
-		if (m_state == State::Armed && clientBounds().contains(ev.position))
+		if (m_state == State::Armed && getClientBounds().contains(ev.position))
 		{
 			onClick(ev);
 		}
@@ -59,7 +59,7 @@ namespace ire::core::gui
 
 	void ClickableWidget::onEvent(EventRoot& sender, MouseMovedEvent& ev)
 	{
-		if (clientBounds().contains(ev.position))
+		if (getClientBounds().contains(ev.position))
 		{
 			m_state = (
 				(m_state == State::Idle || m_state == State::Hover) 

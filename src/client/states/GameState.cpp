@@ -1,11 +1,18 @@
 #include "GameState.h"
-#include "client/Game/GameWindow.h"
+
 #include "MenuState.h"
+
+#include "client/Game/GameWindow.h"
+
+#include "core/world/tiled_top_down/TiledTopDownSurface.h"
 
 namespace ire::client::state
 {
     GameState::GameState(core::state::StateMachine& stateMachine, core::gui::SystemWindow& window, bool replace)
-        : State{ stateMachine, window, replace}
+        : State{ stateMachine, window, replace },
+        m_world(std::make_unique<core::world::World>(
+            std::make_unique<core::world::TiledTopDownSurface>(512, 512))
+        )
     {
         initializeGUI();
         m_window.setRootGroup(*m_group.get());
@@ -17,96 +24,10 @@ namespace ire::client::state
         verticalLayout2->setSpaces(5);
         verticalLayout2->setMargins({ 5, 5, 5, 5 });
 
-        auto editBoxPtr = ire::core::gui::EditBox::create("");
-        auto& editBoxRef = *editBoxPtr;
-        verticalLayout2->add(std::move(editBoxPtr), "EditBoxNice");
-
-        auto btn10Ptr = ire::core::gui::Button::create("Show Message Box");
-        btn10Ptr->setCharacterSize(20);
-        btn10Ptr->addEventListener<ire::core::gui::MouseClickEvent>(
-            [&](ire::core::gui::MouseClickEvent& ev) 
-            { 
-                auto messageBox = ire::core::gui::MessageBox::create("Hello");
-                auto verticalMessageBoxLayout = ire::core::gui::VerticalLayout::create({ 0,0 });
-                auto messageBoxLabel = ire::core::gui::Label::create("Insert Value");
-                verticalMessageBoxLayout->add(std::move(messageBoxLabel), "MessageBoxLabel");
-
-                auto messageBoxHorizontalLayout = ire::core::gui::HorizontalLayout::create({ 0,0 });
-
-                auto messageBoxEditBox = ire::core::gui::EditBox::create("");
-                auto& messageBoxEditBoxRef = *messageBoxEditBox;
-                std::string editBoxValue;
-                messageBoxHorizontalLayout->add(std::move(messageBoxEditBox), "MessageBoxEditBox");
-
-                auto messageBoxButton = ire::core::gui::Button::create("test");
-                messageBoxButton->addEventListener<ire::core::gui::MouseClickEvent>(
-                    [&](ire::core::gui::MouseClickEvent& ev)
-                    {
-                        editBoxValue = messageBoxEditBoxRef.getTextString();
-                        messageBox->close();
-                    });
-                messageBoxHorizontalLayout->add(std::move(messageBoxButton), "MessageBoxButton");
-                messageBoxHorizontalLayout->setMargins({ 75, 75, 50 ,25 });
-                messageBoxHorizontalLayout->setSpaces(175);
-                verticalMessageBoxLayout->add(std::move(messageBoxHorizontalLayout), "MessageBoxHorizontalLayout");
-
-                auto messageBoxGroup = ire::core::gui::Group::create({ 0,0 });
-                verticalMessageBoxLayout->setMargins({ 5, 5, 5, 5 });
-                verticalMessageBoxLayout->setSpaces(5);
-                messageBoxGroup->add(std::move(verticalMessageBoxLayout), "VerticalMessageBoxLayout");
-
-                messageBox->initializeUI(std::move(messageBoxGroup));
-                messageBox->processMessageBox();
-
-                editBoxRef.setTextString(editBoxValue);
-            });
-        verticalLayout2->add(std::move(btn10Ptr), "Button10");
-
-        auto panel2 = ire::core::gui::Panel::create({ 300, 200 }, std::move(verticalLayout2), "VerticalLayout2");
-        panel2->setPosition({ 100, 100 });
-        panel2->setOutlineColor(sf::Color::Red);
-        panel2->setOutlineThickness(7);
-
-
-        auto editBoxExampleVerticalLayout = ire::core::gui::VerticalLayout::create({ 100, 200 });
-        editBoxExampleVerticalLayout->setSpaces(5);
-        editBoxExampleVerticalLayout->setMargins({ 5, 5, 5, 5 });
-
-        auto editBoxExample1 = ire::core::gui::EditBox::create("Example 1");
-        editBoxExampleVerticalLayout->add(std::move(editBoxExample1), "EditBoxExample1");
-
-        auto editBoxExample2 = ire::core::gui::EditBox::create("12345678901234567890");
-        editBoxExampleVerticalLayout->add(std::move(editBoxExample2), "EditBoxExample2");
-
-        auto editBoxExample3 = ire::core::gui::EditBox::create("12345678901234567890");
-
-        editBoxExample3->setMaximumCharacters(10);
-        
-        editBoxExampleVerticalLayout->add(std::move(editBoxExample3), "EditBoxExample3");
-
-        auto editBoxExample4 = ire::core::gui::EditBox::create("15");
-        auto& editBoxExample4Ref = *editBoxExample4;
-
-        editBoxExampleVerticalLayout->add(std::move(editBoxExample4), "EditBoxExample4");
-
-        auto buttonTest = ire::core::gui::Button::create("Test");
-        buttonTest->addEventListener<ire::core::gui::MouseClickEvent>(
-            [&](ire::core::gui::MouseClickEvent& ev)
-            {        
-                std::cout << editBoxExample4Ref.getTextString() << "\n";
-            }
-        );
-        editBoxExampleVerticalLayout->add(std::move(buttonTest), "TestButton");
-
-        auto editBoxExamplePanel = ire::core::gui::Panel::create({ 300, 250 }, std::move(editBoxExampleVerticalLayout), "EditBoxExampleVerticalLayout");
-        editBoxExamplePanel->setPosition({ 650, 50 });
-        editBoxExamplePanel->setOutlineColor(sf::Color::Blue);
-        editBoxExamplePanel->setOutlineThickness(3);
 
         auto progressBarTestingMainHLayout = ire::core::gui::HorizontalLayout::create({ 0, 0 });
         progressBarTestingMainHLayout->setSpaces(15);
         progressBarTestingMainHLayout->setMargins({ 5, 5, 5, 5 });
-
 
         auto progressBarTestingVLayout1 = ire::core::gui::VerticalLayout::create({ 0, 0 });
         progressBarTestingVLayout1->setSpaces(15);
@@ -279,14 +200,18 @@ namespace ire::client::state
 
         progressBarTestingMainHLayout->add(std::move(progressBarTestingVLayout3), "ProgressBartTestingVLayout3");
 
-        auto progressBarTestingPanel = ire::core::gui::Panel::create({ 950, 400 }, std::move(progressBarTestingMainHLayout), "ProgressBarTestingMainHLayout");
-        progressBarTestingPanel->setPosition({ 50, 350 });
+        auto progressBarTestingPanel = ire::core::gui::Panel::create({ 950, 200 }, std::move(progressBarTestingMainHLayout), "ProgressBarTestingMainHLayout");
+        progressBarTestingPanel->setPosition({ 50, 550 });
         progressBarTestingPanel->setOutlineColor(sf::Color::Green);
         progressBarTestingPanel->setOutlineThickness(3);
 
-        m_group = ire::core::gui::Group::create(static_cast<sf::Vector2f>(m_window.getRenderTarget().getSize()));
-        m_group->add(std::move(progressBarTestingPanel), "ProgressBarTestingPanel");
-        m_group->add(std::move(panel2), "panel2");
-        m_group->add(std::move(editBoxExamplePanel), "EditBoxExamplePanel");
+        auto worldView = gui::WorldView::create(*m_world);
+
+        auto finalLayout = ire::core::gui::VerticalLayout::create(static_cast<sf::Vector2f>(m_window.getRenderTarget().getSize()));
+        finalLayout->add(std::move(worldView), "WorldView");
+        finalLayout->add(std::move(progressBarTestingPanel), "ProgressBarTestingPanel");
+        finalLayout->setLayoutStretch({ 4.0f, 1.0f });
+
+        m_group = std::move(finalLayout);
     }
 }

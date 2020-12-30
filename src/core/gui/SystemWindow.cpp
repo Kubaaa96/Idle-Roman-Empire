@@ -137,7 +137,7 @@ namespace ire::core::gui {
 
     void SystemWindow::setActiveWidget(Widget& widget)
     {
-        if (m_activeWidget != nullptr)
+        if (m_activeWidget != nullptr && m_activeWidget != &widget)
         {
             m_activeWidget->onStoppedBeingActive();
         }

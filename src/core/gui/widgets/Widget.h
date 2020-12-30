@@ -46,7 +46,8 @@ namespace ire::core::gui
         
         virtual const WidgetType getType() const = 0;
 
-        [[nodiscard]] sf::FloatRect clientBounds() const;
+        [[nodiscard]] sf::FloatRect getClientBounds() const;
+        [[nodiscard]] sf::FloatRect getClientViewport(sf::RenderTarget& target) const;
 
         virtual void onStoppedBeingActive();
 

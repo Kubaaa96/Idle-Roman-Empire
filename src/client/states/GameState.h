@@ -1,6 +1,8 @@
 #ifndef IRE_GAMESTATE_H
 #define IRE_GAMESTATE_H
 
+#include "client/gui/widgets/WorldView.h"
+
 #include "core/states/State.h"
 #include "core/gui/widgets/Button.h"
 #include "core/gui/widgets/Label.h"
@@ -10,6 +12,8 @@
 #include "core/gui/widgets/HorizontalLayout.h"
 #include "core/gui/widgets/VerticalLayout.h"
 #include "core/gui/widgets/MessageBox.h"
+
+#include "core/world/World.h"
 
 namespace ire::core::gui
 {
@@ -31,7 +35,7 @@ namespace ire::client::state
         void initializeGUI() override;
 
     private:
-
+        std::unique_ptr<core::world::World> m_world;
     };
 }
 
