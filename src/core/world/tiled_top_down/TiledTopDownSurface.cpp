@@ -21,31 +21,45 @@ namespace ire::core::world
     {
         m_textureAtlas = ResourceManager::instance().get<gfx::TextureAtlas>("resource/gfx/tiles");
         m_tileSprite = m_textureAtlas->getTextureView(ResourcePath("grass.png"));
+        
+        m_cameraCenter = sf::Vector2f(m_width / 2.0f, m_height / 2.0f);
+        m_zoom = 32.0f;
 
         generateRandomWorld();
+    }
+
+    [[nodiscard]] sf::FloatRect TiledTopDownSurface::getCameraBounds(sf::RenderTarget& target) const
+    {
+        const auto oldView = target.getView();
+        const float oldViewportWidth = target.getViewport(oldView).width;
+        const float oldViewportHeight = target.getViewport(oldView).height;
+        const float aspectRatio = oldViewportWidth / oldViewportHeight;
+
+        const float viewHeight = oldViewportHeight / m_zoom;
+        const float viewWidth = viewHeight * aspectRatio * verticalSqueeze;
+
+        return sf::FloatRect(m_cameraCenter.x - viewWidth / 2.0, m_cameraCenter.y - viewHeight / 2.0, viewWidth, viewHeight);
+    }
+
+    [[nodiscard]] sf::View TiledTopDownSurface::getCameraView(sf::RenderTarget& target) const
+    {
+        auto bounds = getCameraBounds(target);
+
+        sf::View surfaceView;
+        surfaceView.setCenter(bounds.left + bounds.width / 2.0f, bounds.top + bounds.height / 2.0f);
+        surfaceView.setSize(bounds.width, bounds.height);
+        surfaceView.setViewport(target.getView().getViewport());
+        surfaceView.zoom(1.0f);
+
+        return surfaceView;
     }
 
     void TiledTopDownSurface::draw(sf::RenderTarget& target, sf::RenderStates& states)
     {
         constexpr float cameraAngleDeg = 60.0f;
 
-        const float pi = 3.14159265358979323846f;
-        const float degToRad = (2.0f * pi / 360.0f);
-        const float cameraAngleRad = cameraAngleDeg * degToRad;
-        const float verticalSqueeze = std::sin(cameraAngleRad);
-        const float elevationSqueeze = std::cos(cameraAngleRad);
-        m_elevationSqueeze = elevationSqueeze;
-
-        const auto oldView = target.getView();
-        const float oldViewportWidth = target.getViewport(oldView).width;
-        const float oldViewportHeight = target.getViewport(oldView).height;
-        const float aspectRatio = oldViewportWidth / oldViewportHeight;
-
-        sf::View surfaceView;
-        surfaceView.setCenter(m_width/2.0f, m_height/2.0f);
-        surfaceView.setSize(m_height * aspectRatio * verticalSqueeze, m_height);
-        surfaceView.setViewport(oldView.getViewport());
-        surfaceView.zoom(1.0f);
+        auto oldView = target.getView();
+        auto surfaceView = getCameraView(target);
         target.setView(surfaceView);
 
         drawGround(target, states);
@@ -118,9 +132,9 @@ namespace ire::core::world
             auto c0 = getColor(n0);
             auto c1 = getColor(n1);
             auto c2 = getColor(n2);
-            va.emplace_back(sf::Vector2f(v0.x, v0.y - v0.z * m_elevationSqueeze), c0, t0);
-            va.emplace_back(sf::Vector2f(v1.x, v1.y - v1.z * m_elevationSqueeze), c1, t1);
-            va.emplace_back(sf::Vector2f(v2.x, v2.y - v2.z * m_elevationSqueeze), c2, t2);
+            va.emplace_back(sf::Vector2f(v0.x, v0.y - v0.z * elevationSqueeze), c0, t0);
+            va.emplace_back(sf::Vector2f(v1.x, v1.y - v1.z * elevationSqueeze), c1, t1);
+            va.emplace_back(sf::Vector2f(v2.x, v2.y - v2.z * elevationSqueeze), c2, t2);
         };
 
         const auto topLeftElevation = m_gridPoints(x, y).getElevation();
@@ -158,13 +172,18 @@ namespace ire::core::world
         const int wc = (m_width + (chunkSize - 1)) / chunkSize;
         const int hc = (m_height + (chunkSize - 1)) / chunkSize;
 
+        auto cameraBounds = getCameraBounds(target);
+
         states.texture = &m_tileSprite.getTexture();
         for (int cy = 0; cy < hc; ++cy)
         {
             for (int cx = 0; cx < wc; ++cx)
             {
                 auto& chunk = updateChunkCacheIfRequired(cx, cy);
-                target.draw(chunk.vbo, 0, chunk.vertexCount, states);
+                if (chunk.bounds.intersects(cameraBounds))
+                {
+                    target.draw(chunk.vbo, 0, chunk.vertexCount, states);
+                }
             }
         }
     }
@@ -210,6 +229,24 @@ namespace ire::core::world
 
     TiledTopDownSurface::GroundChunkCache& TiledTopDownSurface::updateChunkCacheIfRequired(int cx, int cy)
     {
+        auto computeBounds = [](const std::vector<sf::Vertex>& vertices) {
+            float xmin = std::numeric_limits<float>::max();
+            float ymin = std::numeric_limits<float>::max();
+            float xmax = std::numeric_limits<float>::lowest();
+            float ymax = std::numeric_limits<float>::lowest();
+
+            for (auto& v : vertices)
+            {
+                xmin = std::min(xmin, v.position.x);
+                xmax = std::max(xmax, v.position.x);
+
+                ymin = std::min(ymin, v.position.y);
+                ymax = std::max(ymax, v.position.y);
+            }
+
+            return sf::FloatRect(xmin, ymin, xmax - xmin, ymax - ymin);
+        };
+
         auto& chunk = m_groundChunkCache(cx, cy);
         if (!chunk.isDirty)
         {
@@ -229,6 +266,7 @@ namespace ire::core::world
         chunk.isDirty = false;
         chunk.vbo.update(vertices.data(), vertices.size(), 0);
         chunk.vertexCount = vertices.size();
+        chunk.bounds = computeBounds(vertices);
 
         return chunk;
     }
