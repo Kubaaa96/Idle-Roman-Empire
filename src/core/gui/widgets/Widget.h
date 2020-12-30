@@ -48,6 +48,8 @@ namespace ire::core::gui
 
         [[nodiscard]] sf::FloatRect clientBounds() const;
 
+        virtual void onStoppedBeingActive();
+
     protected:
         std::string m_name;
 

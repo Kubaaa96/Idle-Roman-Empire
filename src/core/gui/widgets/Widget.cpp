@@ -84,4 +84,8 @@ namespace ire::core::gui
 	{
 		return sf::FloatRect(m_position, m_size);
 	}
+
+	void Widget::onStoppedBeingActive()
+	{
+	}
 }

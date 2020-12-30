@@ -63,15 +63,17 @@ namespace ire::client::state
             ev.handled = true;
         }
 
+        void onStoppedBeingActive() override
+        {
+            m_state = State::Inactive;
+        }
+
     private:
         ire::core::world::World m_world;
         State m_state;
 
         void updateCamera()
         {
-            if (m_state != State::Active)
-                return;
-
             // TODO: replace later with event based and framerate agnostic implementation.
 
             auto& mainSurface = static_cast<ire::core::world::TiledTopDownSurface&>(m_world.getMainSurface());
