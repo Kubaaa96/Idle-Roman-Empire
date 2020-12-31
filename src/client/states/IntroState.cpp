@@ -2,6 +2,11 @@
 #include "client/Game/GameWindow.h"
 #include "MenuState.h"
 
+#include "core/world/tiled_top_down/TiledTopDownSurface.h"
+#include "core/world/World.h"
+
+#include "core/gui/Events.h"
+
 namespace ire::client::state
 {
     IntroState::IntroState(core::state::StateMachine& stateMachine, core::gui::SystemWindow& window, bool replace)

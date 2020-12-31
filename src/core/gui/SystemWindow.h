@@ -98,7 +98,7 @@ namespace ire::core::gui {
                     }
                 }
 
-                if (m_rootGroup->clientBounds().contains(ev.position))
+                if (m_rootGroup->getClientBounds().contains(ev.position))
                 {
                     m_rootGroup->onEvent(*this, ev);
                 }

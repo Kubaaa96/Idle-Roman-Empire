@@ -80,8 +80,22 @@ namespace ire::core::gui
 
 	}
 
-	[[nodiscard]] sf::FloatRect Widget::clientBounds() const 
+	[[nodiscard]] sf::FloatRect Widget::getClientBounds() const 
 	{
 		return sf::FloatRect(m_position, m_size);
+	}
+
+	[[nodiscard]] sf::FloatRect Widget::getClientViewport(sf::RenderTarget& target) const
+	{
+		const auto size = target.getSize();
+		const float left = m_position.x / size.x;
+		const float top = m_position.y / size.y;
+		const float width = m_size.x / size.x;
+		const float height = m_size.y / size.y;
+		return sf::FloatRect(left, top, width, height);
+	}
+
+	void Widget::onStoppedBeingActive()
+	{
 	}
 }

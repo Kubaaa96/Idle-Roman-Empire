@@ -65,7 +65,7 @@ namespace ire::core::gui
         {
             for (auto& widget : m_widgets)
             {
-                if (widget->clientBounds().contains(ev.position))
+                if (widget->getClientBounds().contains(ev.position))
                 {
                     widget->onEvent(sender, ev);
 
