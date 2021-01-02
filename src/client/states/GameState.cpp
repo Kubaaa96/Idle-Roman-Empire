@@ -38,6 +38,7 @@ namespace ire::client::state
         progressBarTestingVLayout1->add(std::move(progressBarTestingLTR1), "ProgressBarTestingLTR1");
         
         auto progressBarTestingRTL1 = ire::core::gui::ProgressBar::create();
+
         auto& progressBarTestingRTL1Ref = *progressBarTestingRTL1;
         progressBarTestingRTL1->setFillDirection(ire::core::gui::ProgressBar::FillDirection::RightToLeft);
         progressBarTestingVLayout1->add(std::move(progressBarTestingRTL1), "ProgressBarTestingRTL1");
