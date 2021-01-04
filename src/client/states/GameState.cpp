@@ -24,6 +24,8 @@ namespace ire::client::state
         auto buildingControlingVerticalLayout = ire::core::gui::VerticalLayout::create({ 0,0 });
 
         auto buildingApplyingButton = ire::core::gui::Button::create("Apply");
+        auto& buildingApplyingButtonRef = *buildingApplyingButton;
+
         buildingApplyingButton->addEventListener<ire::core::gui::MouseClickEvent>(
             [](ire::core::gui::MouseClickEvent& ev)
             {
@@ -37,6 +39,17 @@ namespace ire::client::state
 
         auto worldView = gui::WorldView::create(*m_world);
 
+        worldView->addEventListener<ire::core::gui::MouseClickEvent>(
+            [&](ire::core::gui::MouseClickEvent& ev)
+            {
+
+                if (buildingApplyingButtonRef.getClientBounds().contains(ev.position))
+                {
+                    std::cout << "Inside Button\n";
+                    m_window.setActiveWidget(buildingApplyingButtonRef);
+                }
+            }
+        );
         auto finalLayout = ire::core::gui::VerticalLayout::create(static_cast<sf::Vector2f>(m_window.getRenderTarget().getSize()));
         finalLayout->add(std::move(worldView), "WorldView");
         m_group = ire::core::gui::Group::create(static_cast<sf::Vector2f>(m_window.getRenderTarget().getSize()));
