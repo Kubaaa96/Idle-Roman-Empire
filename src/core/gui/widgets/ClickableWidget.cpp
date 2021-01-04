@@ -54,6 +54,7 @@ namespace ire::core::gui
 		m_state = State::Idle;
 		ev.handled = true;
 
+		//sender.setActiveWidget(*this);
 		sender.resetActiveWidget(*this);
 	}
 

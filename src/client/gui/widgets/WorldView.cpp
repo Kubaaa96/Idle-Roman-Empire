@@ -79,8 +79,10 @@ namespace ire::client::gui
 
     void WorldView::onEvent(core::gui::EventRoot& sender, core::gui::MouseButtonDownEvent& ev)
     {
+
         m_state = State::Active;
         sender.setActiveWidget(*this);
+        
         ev.handled = true;
     }
 

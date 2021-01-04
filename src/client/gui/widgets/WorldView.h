@@ -40,6 +40,8 @@ namespace ire::client::gui
 
         void onStoppedBeingActive() override;
 
+        bool isMouseOnOverlappingWidget = false;
+
     protected:
         void onClick(core::gui::MouseButtonUpEvent& ev);
 

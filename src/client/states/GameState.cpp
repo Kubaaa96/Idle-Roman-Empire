@@ -46,32 +46,32 @@ namespace ire::client::state
 
         buildingControlingVerticalLayout->add(std::move(buildingApplyingButton2), "BuildingApplyingButton2");
 
-        auto buildingControlingPanel = ire::core::gui::Panel::create({ 200, 200 }, std::move(buildingControlingVerticalLayout), "BuildingControlingVerticalLayout");
+        auto buildingEditBox = ire::core::gui::EditBox::create("Hi");
+
+
+
+        auto buildingControlingPanel = ire::core::gui::Panel::create({ 200, 600 }, std::move(buildingControlingVerticalLayout), "BuildingControlingVerticalLayout");
 
         auto worldView = gui::WorldView::create(*m_world);
+        auto& worldViewRef = *worldView;
 
         worldView->addEventListener<ire::core::gui::MouseMovedEvent>(
             [&](ire::core::gui::MouseMovedEvent& ev)
             {
-
                 if (buildingApplyingButtonRef.getClientBounds().contains(ev.position))
                 {
-                    std::cout << "Inside Button\n";
-                    m_window.setActiveWidget(buildingApplyingButtonRef);
+                    std::cout << "Inside Button1\n";
+                    m_window.setActiveWidget(buildingApplyingButtonRef);              
                 }
-            }
-        );
-        worldView->addEventListener<ire::core::gui::MouseMovedEvent>(
-            [&](ire::core::gui::MouseMovedEvent& ev)
-            {
-
-                if (buildingApplyingButton2Ref.getClientBounds().contains(ev.position))
+                else if (buildingApplyingButton2Ref.getClientBounds().contains(ev.position))
                 {
                     std::cout << "Inside Button2\n";
                     m_window.setActiveWidget(buildingApplyingButton2Ref);
-                }
+                }    
+                std::cout << "Mouse Moved\n";
             }
         );
+
         auto finalLayout = ire::core::gui::VerticalLayout::create(static_cast<sf::Vector2f>(m_window.getRenderTarget().getSize()));
         finalLayout->add(std::move(worldView), "WorldView");
         m_group = ire::core::gui::Group::create(static_cast<sf::Vector2f>(m_window.getRenderTarget().getSize()));
