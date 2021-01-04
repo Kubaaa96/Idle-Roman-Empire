@@ -1,6 +1,7 @@
 #include "WorldView.h"
 
 #include "core/world/tiled_top_down/TiledTopDownSurface.h"
+#include "core/world/tiled_top_down/TileOverlay.h"
 
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
@@ -35,6 +36,25 @@ namespace ire::client::gui
         view.setViewport(getClientViewport(target));
         target.setView(view);
 
+        // TODO: Move this to some place where this actually should be managed from.
+        //       Right now it's here for demo purposes.
+        if (m_mousePos.has_value())
+        {
+            auto& mainSurface = static_cast<ire::core::world::TiledTopDownSurface&>(m_world->getMainSurface());
+            auto pointedTilePos = mainSurface.mapClientToTilePosition(target, *m_mousePos);
+            if (pointedTilePos.has_value())
+            {
+                core::world::TileOverlay overlay;
+                overlay.position = *pointedTilePos;
+                overlay.border = core::world::TileOverlayBorder{};
+                overlay.border->color = sf::Color::Cyan;
+                overlay.border->thickness = 0.1f;
+                overlay.border->visible = { true, true, true, true };
+                mainSurface.setTileOverlays({ overlay });
+            }
+        }
+        //
+
         sf::RectangleShape s;
         s.setFillColor(sf::Color::White);
         s.setSize(sf::Vector2f(10000.0f, 10000.0f));
@@ -58,6 +78,18 @@ namespace ire::client::gui
         m_state = State::Active;
         sender.setActiveWidget(*this);
         ev.handled = true;
+    }
+
+    void WorldView::onEvent(core::gui::EventRoot& sender, core::gui::MouseMovedEvent& ev)
+    {
+        if (getClientBounds().contains(ev.position))
+        {
+            m_mousePos = ev.position;
+        }
+        else
+        {
+            m_mousePos.reset();
+        }
     }
 
     void WorldView::onStoppedBeingActive()

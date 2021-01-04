@@ -18,6 +18,7 @@
 #include <SFML/Graphics/VertexBuffer.hpp>
 
 #include <cmath>
+#include <optional>
 
 namespace ire::core::world
 {
@@ -40,6 +41,9 @@ namespace ire::core::world
         void setTileOverlays(std::vector<TileOverlay>&& overlays);
         void resetTileOverlays();
         [[nodiscard]] std::vector<TileOverlay> getSpriteOverlays() const;
+
+        [[nodiscard]] sf::Vector2f mapClientToWorldPosition(sf::RenderTarget& target, sf::Vector2f clientPos) const;
+        [[nodiscard]] std::optional<sf::Vector2i> mapClientToTilePosition(sf::RenderTarget& target, sf::Vector2f clientPos) const;
 
         [[nodiscard]] float getZoom() const;
 

@@ -82,6 +82,29 @@ namespace ire::core::world
         m_tileOverlays.clear();
     }
 
+    [[nodiscard]] sf::Vector2f TiledTopDownSurface::mapClientToWorldPosition(sf::RenderTarget& target, sf::Vector2f clientPos) const
+    {
+        // TODO: do this more efficiently
+        // TODO: do a proper raycast
+        auto cameraView = getCameraView(target);
+        return target.mapPixelToCoords(sf::Vector2i(clientPos), cameraView);
+    }
+
+    [[nodiscard]] std::optional<sf::Vector2i> TiledTopDownSurface::mapClientToTilePosition(sf::RenderTarget& target, sf::Vector2f clientPos) const
+    {
+        auto worldPos = sf::Vector2i(mapClientToWorldPosition(target, clientPos));
+        if (
+            worldPos.x < 0
+            || worldPos.y < 0
+            || worldPos.x >= m_width
+            || worldPos.y >= m_height)
+        {
+            return std::nullopt;
+        }
+
+        return worldPos;
+    }
+
     [[nodiscard]] std::vector<TileOverlay> TiledTopDownSurface::getSpriteOverlays() const
     {
         return m_tileOverlays;
