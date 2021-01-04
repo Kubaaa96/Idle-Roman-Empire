@@ -3,6 +3,8 @@
 #include "TopDownGroundTile.h"
 #include "TopDownGridPoint.h"
 
+#include "TileOverlay.h"
+
 #include "core/resource/Resource.h"
 
 #include "core/gfx/TextureAtlas.h"
@@ -34,6 +36,10 @@ namespace ire::core::world
 
         void changeZoom(float multiplier);
         void moveCamera(sf::Vector2f diff);
+
+        void setTileOverlays(std::vector<TileOverlay>&& overlays);
+        void resetTileOverlays();
+        [[nodiscard]] std::vector<TileOverlay> getSpriteOverlays() const;
 
         [[nodiscard]] float getZoom() const;
 
@@ -85,10 +91,17 @@ namespace ire::core::world
 
         util::Array2<GroundChunkCache> m_groundChunkCache;
 
+        std::vector<TileOverlay> m_tileOverlays;
+
         void appendGroundTileGeometry(std::vector<sf::Vertex>& va, int x, int y);
         void generateRandomWorld();
 
         void drawGround(sf::RenderTarget& target, sf::RenderStates& states);
+
+        void drawTileOverlays(sf::RenderTarget& target, sf::RenderStates& states);
+        void drawTileOverlay(sf::RenderTarget& target, sf::RenderStates& states, const TileOverlay& overlay);
+        void drawTileOverlayBorder(sf::RenderTarget& target, sf::RenderStates& states, const TileOverlayBorder& overlay, const sf::Vector2i& position);
+        void drawTileOverlaySprite(sf::RenderTarget& target, sf::RenderStates& states, const TileOverlaySprite& overlay, const sf::Vector2i& position);
 
         GroundChunkCache& updateChunkCacheIfRequired(int cx, int cy);
     };
