@@ -32,21 +32,43 @@ namespace ire::client::state
                 std::cout << "Apply\n";
             }
         );
-
         buildingControlingVerticalLayout->add(std::move(buildingApplyingButton), "BuildingApplyingButton");
+
+        auto buildingApplyingButton2 = ire::core::gui::Button::create("Apply2");
+        auto& buildingApplyingButton2Ref = *buildingApplyingButton2;
+
+        buildingApplyingButton2->addEventListener<ire::core::gui::MouseClickEvent>(
+            [](ire::core::gui::MouseClickEvent& ev)
+            {
+                std::cout << "Apply2\n";
+            }
+        );
+
+        buildingControlingVerticalLayout->add(std::move(buildingApplyingButton2), "BuildingApplyingButton2");
 
         auto buildingControlingPanel = ire::core::gui::Panel::create({ 200, 200 }, std::move(buildingControlingVerticalLayout), "BuildingControlingVerticalLayout");
 
         auto worldView = gui::WorldView::create(*m_world);
 
-        worldView->addEventListener<ire::core::gui::MouseClickEvent>(
-            [&](ire::core::gui::MouseClickEvent& ev)
+        worldView->addEventListener<ire::core::gui::MouseMovedEvent>(
+            [&](ire::core::gui::MouseMovedEvent& ev)
             {
 
                 if (buildingApplyingButtonRef.getClientBounds().contains(ev.position))
                 {
                     std::cout << "Inside Button\n";
                     m_window.setActiveWidget(buildingApplyingButtonRef);
+                }
+            }
+        );
+        worldView->addEventListener<ire::core::gui::MouseMovedEvent>(
+            [&](ire::core::gui::MouseMovedEvent& ev)
+            {
+
+                if (buildingApplyingButton2Ref.getClientBounds().contains(ev.position))
+                {
+                    std::cout << "Inside Button2\n";
+                    m_window.setActiveWidget(buildingApplyingButton2Ref);
                 }
             }
         );

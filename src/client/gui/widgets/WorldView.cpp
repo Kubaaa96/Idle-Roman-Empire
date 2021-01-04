@@ -96,6 +96,12 @@ namespace ire::client::gui
         }
     }
 
+    void WorldView::onEvent(core::gui::EventRoot& sender, core::gui::MouseMovedEvent& ev)
+    {
+        emitEvent(ev);
+        ev.handled = true;
+    }
+
     void WorldView::onStoppedBeingActive()
     {
         m_state = State::Inactive;

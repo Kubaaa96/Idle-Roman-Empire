@@ -51,6 +51,8 @@ namespace ire::core::gui {
         void setRootGroup(Group& group);
 
         void setActiveWidget(Widget& widget) override;
+        const Widget* getActiveWidget() const;
+
         void resetActiveWidget(Widget& widget) override;
 
     protected:
