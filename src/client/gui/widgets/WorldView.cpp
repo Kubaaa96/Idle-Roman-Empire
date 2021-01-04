@@ -52,6 +52,10 @@ namespace ire::client::gui
                 overlay.border->visible = { true, true, true, true };
                 mainSurface.setTileOverlays({ overlay });
             }
+            else
+            {
+                mainSurface.resetTileOverlays();
+            }
         }
         //
 
