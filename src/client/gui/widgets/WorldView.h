@@ -4,7 +4,7 @@
 #include "core/gui/widgets/ClickableWidget.h"
 
 #include "core/world/World.h"
-
+#include <optional>
 #include <memory>
 
 namespace ire::client::gui
@@ -50,6 +50,8 @@ namespace ire::client::gui
         State m_state;
 
         void updateCamera();
+
+        std::optional<sf::Vector2f> m_mousePos;
     };
 
 }

@@ -50,7 +50,15 @@ namespace ire::client::gui
                 overlay.border->color = sf::Color::Cyan;
                 overlay.border->thickness = 0.1f;
                 overlay.border->visible = { true, true, true, true };
-                mainSurface.setTileOverlays({ overlay });
+
+                core::world::TileOverlay overlay2;
+                overlay2.position = *pointedTilePos + sf::Vector2i(1,0);
+                overlay2.border = core::world::TileOverlayBorder{};
+                overlay2.border->color = sf::Color::Cyan;
+                overlay2.border->thickness = 0.1f;
+                overlay2.border->visible = { true, true, true, true };
+
+                mainSurface.setTileOverlays({ overlay, overlay2 });
             }
             else
             {
@@ -86,6 +94,15 @@ namespace ire::client::gui
         ev.handled = true;
     }
 
+    void WorldView::onEvent(core::gui::EventRoot& sender, core::gui::MouseButtonUpEvent& ev)
+    {
+        if (m_state == State::Active && getClientBounds().contains(ev.position))
+        {
+            onClick(ev);
+        }
+        ev.handled = true;
+    }
+
     void WorldView::onEvent(core::gui::EventRoot& sender, core::gui::MouseMovedEvent& ev)
     {
         if (getClientBounds().contains(ev.position))
@@ -96,10 +113,6 @@ namespace ire::client::gui
         {
             m_mousePos.reset();
         }
-    }
-
-    void WorldView::onEvent(core::gui::EventRoot& sender, core::gui::MouseMovedEvent& ev)
-    {
         emitEvent(ev);
         ev.handled = true;
     }
@@ -107,6 +120,15 @@ namespace ire::client::gui
     void WorldView::onStoppedBeingActive()
     {
         m_state = State::Inactive;
+    }
+
+    void WorldView::onClick(core::gui::MouseButtonUpEvent& ev)
+    {
+        core::gui::MouseClickEvent clickEv{};
+        clickEv.timestamp = ev.timestamp;
+        clickEv.button = ev.button;
+        clickEv.position = ev.position;
+        emitEvent<core::gui::MouseClickEvent>(clickEv);
     }
 
     void WorldView::updateCamera()
