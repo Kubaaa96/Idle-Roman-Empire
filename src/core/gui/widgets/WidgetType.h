@@ -12,8 +12,7 @@ struct WidgetType
 	template <typename T>
 	static WidgetType create(std::string_view name)
 	{
-		static std::atomic<uint64_t> nextId{ 0 };
-		return { nextId.fetch_add(1), name };
+		return { makeNextId(), name };
 	}
 
 private:
@@ -24,6 +23,16 @@ private:
 
 	friend bool operator<(const WidgetType& lhs, const WidgetType& rhs);
 	friend bool operator==(const WidgetType& lhs, const WidgetType& rhs);
+
+	// The counter is meant to works as an "RTTI"-like type_index.
+	// Therefore it has to be unique for each widget type.
+	// That's why we make non-templated method to contain the counter
+	// as a static variable.
+	[[nodiscard]] static uint64_t makeNextId()
+	{
+		static std::atomic<uint64_t> nextId{ 0 };
+		return nextId.fetch_add(1);
+	}
 };
 
 inline bool operator<(const WidgetType& lhs, const WidgetType& rhs)
