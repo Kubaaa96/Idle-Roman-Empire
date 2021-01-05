@@ -6,6 +6,7 @@
 #include "core/world/World.h"
 
 #include <memory>
+#include <optional>
 
 namespace ire::client::gui
 {
@@ -34,13 +35,15 @@ namespace ire::client::gui
         // Why the hell is this virtual?
         void updateWidget() override;
 
-        void onEvent(core::gui::EventRoot& sender, core::gui::MouseButtonDownEvent& ev);
+        void onEvent(core::gui::EventRoot& sender, core::gui::MouseButtonDownEvent& ev) override;
+        void onEvent(core::gui::EventRoot& sender, core::gui::MouseMovedEvent& ev) override;
 
         void onStoppedBeingActive() override;
 
     private:
         ire::core::world::World* m_world;
         State m_state;
+        std::optional<sf::Vector2f> m_mousePos;
 
         void updateCamera();
     };

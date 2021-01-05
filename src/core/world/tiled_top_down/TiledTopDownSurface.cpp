@@ -72,6 +72,44 @@ namespace ire::core::world
         m_cameraCenter += diff;
     }
 
+    void TiledTopDownSurface::setTileOverlays(std::vector<TileOverlay>&& overlays)
+    {
+        m_tileOverlays = std::move(overlays);
+    }
+
+    void TiledTopDownSurface::resetTileOverlays()
+    {
+        m_tileOverlays.clear();
+    }
+
+    [[nodiscard]] sf::Vector2f TiledTopDownSurface::mapClientToWorldPosition(sf::RenderTarget& target, sf::Vector2f clientPos) const
+    {
+        // TODO: do this more efficiently
+        // TODO: do a proper raycast
+        auto cameraView = getCameraView(target);
+        return target.mapPixelToCoords(sf::Vector2i(clientPos), cameraView);
+    }
+
+    [[nodiscard]] std::optional<sf::Vector2i> TiledTopDownSurface::mapClientToTilePosition(sf::RenderTarget& target, sf::Vector2f clientPos) const
+    {
+        auto worldPos = sf::Vector2i(mapClientToWorldPosition(target, clientPos));
+        if (
+            worldPos.x < 0
+            || worldPos.y < 0
+            || worldPos.x >= m_width
+            || worldPos.y >= m_height)
+        {
+            return std::nullopt;
+        }
+
+        return worldPos;
+    }
+
+    [[nodiscard]] std::vector<TileOverlay> TiledTopDownSurface::getSpriteOverlays() const
+    {
+        return m_tileOverlays;
+    }
+
     [[nodiscard]] float TiledTopDownSurface::getZoom() const
     {
         return m_zoom;
@@ -86,6 +124,7 @@ namespace ire::core::world
         target.setView(surfaceView);
 
         drawGround(target, states);
+        drawTileOverlays(target, states);
 
         target.setView(oldView);
     }
@@ -211,6 +250,152 @@ namespace ire::core::world
                 }
             }
         }
+    }
+
+    void TiledTopDownSurface::drawTileOverlays(sf::RenderTarget& target, sf::RenderStates& states)
+    {
+        for (auto& overlay : m_tileOverlays)
+        {
+            drawTileOverlay(target, states, overlay);
+        }
+    }
+
+    void TiledTopDownSurface::drawTileOverlay(sf::RenderTarget& target, sf::RenderStates& states, const TileOverlay& overlay)
+    {
+        if (overlay.border.has_value())
+        {
+            drawTileOverlayBorder(target, states, *(overlay.border), overlay.position);
+        }
+
+        if (overlay.sprite.has_value())
+        {
+            drawTileOverlaySprite(target, states, *(overlay.sprite), overlay.position);
+        }
+    }
+
+    void TiledTopDownSurface::drawTileOverlayBorder(sf::RenderTarget& target, sf::RenderStates& states, const TileOverlayBorder& overlay, const sf::Vector2i& position)
+    {
+        sf::VertexArray va(sf::Triangles);
+        
+        const auto x = position.x;
+        const auto y = position.y;
+
+        const auto topLeftElevation = m_gridPoints(x, y).getElevation();
+        const auto topRightElevation = m_gridPoints(x + 1, y).getElevation();
+        const auto bottomRightElevation = m_gridPoints(x + 1, y + 1).getElevation();
+        const auto bottomLeftElevation = m_gridPoints(x, y + 1).getElevation();
+        const auto midElevation =
+            (topLeftElevation
+            + topRightElevation
+            + bottomRightElevation
+            + bottomLeftElevation) * 0.25f;
+
+        const auto topLeft = sf::Vector2f(x, y - topLeftElevation * elevationSqueeze);
+        const auto topRight = sf::Vector2f(x + 1, y - topRightElevation * elevationSqueeze);
+        const auto bottomRight = sf::Vector2f(x + 1, y + 1 - bottomRightElevation * elevationSqueeze);
+        const auto bottomLeft = sf::Vector2f(x, y + 1 - bottomLeftElevation * elevationSqueeze);
+        const auto mid = sf::Vector2f(x + 0.5f, y + 0.5f - midElevation * elevationSqueeze);
+
+        const auto color = overlay.color;
+        const auto thickness = overlay.thickness;
+        const auto halfThickness = thickness * 0.5f;
+
+        const auto outwardTopLeft = (topLeft - mid) * halfThickness;
+        const auto outwardTopRight = (topRight - mid) * halfThickness;
+        const auto outwardBottomRight = (bottomRight - mid) * halfThickness;
+        const auto outwardBottomLeft = (bottomLeft - mid) * halfThickness;
+
+        const auto vTopLeftOuter = sf::Vertex(topLeft + outwardTopLeft, color);
+        const auto vTopLeftInner = sf::Vertex(topLeft - outwardTopLeft, color);
+        const auto vTopRightOuter = sf::Vertex(topRight + outwardTopRight, color);
+        const auto vTopRightInner = sf::Vertex(topRight - outwardTopRight, color);
+        const auto vBottomRightOuter = sf::Vertex(bottomRight + outwardBottomRight, color);
+        const auto vBottomRightInner = sf::Vertex(bottomRight - outwardBottomRight, color);
+        const auto vBottomLeftOuter = sf::Vertex(bottomLeft + outwardBottomLeft, color);
+        const auto vBottomLeftInner = sf::Vertex(bottomLeft - outwardBottomLeft, color);
+
+        if (overlay.visible.top)
+        {
+            va.append(vTopLeftOuter);
+            va.append(vTopLeftInner);
+            va.append(vTopRightOuter);
+
+            va.append(vTopLeftInner);
+            va.append(vTopRightOuter);
+            va.append(vTopRightInner);
+        }
+
+        if (overlay.visible.right && bottomRight.y > topRight.y)
+        {
+            va.append(vTopRightOuter);
+            va.append(vTopRightInner);
+            va.append(vBottomRightOuter);
+
+            va.append(vTopRightInner);
+            va.append(vBottomRightOuter);
+            va.append(vBottomRightInner);
+        }
+
+        if (overlay.visible.bottom)
+        {
+            va.append(vBottomRightOuter);
+            va.append(vBottomRightInner);
+            va.append(vBottomLeftOuter);
+
+            va.append(vBottomRightInner);
+            va.append(vBottomLeftOuter);
+            va.append(vBottomLeftInner);
+        }
+
+        if (overlay.visible.left && bottomLeft.y > topLeft.y)
+        {
+            va.append(vBottomLeftOuter);
+            va.append(vBottomLeftInner);
+            va.append(vTopLeftOuter);
+
+            va.append(vBottomLeftInner);
+            va.append(vTopLeftOuter);
+            va.append(vTopLeftInner);
+        }
+
+        target.draw(va);
+    }
+
+    void TiledTopDownSurface::drawTileOverlaySprite(sf::RenderTarget& target, sf::RenderStates& states, const TileOverlaySprite& overlay, const sf::Vector2i& position)
+    {
+        const auto x = position.x;
+        const auto y = position.y;
+
+        const auto topLeftElevation = m_gridPoints(x, y).getElevation();
+        const auto topRightElevation = m_gridPoints(x + 1, y).getElevation();
+        const auto bottomRightElevation = m_gridPoints(x + 1, y + 1).getElevation();
+        const auto bottomLeftElevation = m_gridPoints(x, y + 1).getElevation();
+        const auto midElevation =
+            (topLeftElevation
+            + topRightElevation
+            + bottomRightElevation
+            + bottomLeftElevation) * 0.25f;
+
+        const auto mid = sf::Vector2f(x + 0.5f, y + 0.5f - midElevation * elevationSqueeze);
+
+        const auto halfSize = sf::Vector2f(overlay.size.x * 0.5f, overlay.size.y * 0.5f * verticalSqueeze);
+
+        const auto& texBounds = overlay.sprite.getBounds();
+        const auto& texture = overlay.sprite.getTexture();
+
+        const auto topLeftTex = sf::Vector2f(texBounds.left, texBounds.top);
+        const auto topRightTex = sf::Vector2f(texBounds.left + texBounds.width, texBounds.top);
+        const auto bottomRightTex = sf::Vector2f(texBounds.left + texBounds.width, texBounds.top + texBounds.height);
+        const auto bottomLeftTex = sf::Vector2f(texBounds.left, texBounds.top + texBounds.height);
+
+        sf::RectangleShape sprite;
+        sprite.setPosition(mid - halfSize);
+        sprite.setSize(halfSize * 2.0f);
+        sprite.setFillColor(sf::Color::Cyan);
+        sprite.setTexture(&texture);
+        sprite.setTextureRect(sf::IntRect(texBounds));
+
+        target.draw(sprite);
     }
 
     [[nodiscard]] sf::Vector3f TiledTopDownSurface::getGridPointNormal(int x, int y) const
