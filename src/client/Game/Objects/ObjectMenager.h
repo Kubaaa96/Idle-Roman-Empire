@@ -5,7 +5,11 @@ namespace ire::client::objects
 {
     struct ObjectMenager
     {
-
+        enum struct States
+        {
+            Planning,
+            Building
+        };
     };
 }
 

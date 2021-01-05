@@ -8,14 +8,13 @@ namespace ire::client::objects
 {
     struct Object
     {
-        
-        void updateObject();
+        void setName(std::string& name);
+        const std::string getName() const;
 
-        //void setCurrentPosition()
+        void setPosition(sf::Vector2i pos);
+        const sf::Vector2i getPosition() const;
 
     protected:
-        void updatePosition();
-        void updateRotation();
 
         std::uint64_t m_Id;
         // Faction
