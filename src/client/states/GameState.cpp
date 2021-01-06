@@ -48,27 +48,41 @@ namespace ire::client::state
 
         auto buildingEditBox = ire::core::gui::EditBox::create("Hi");
 
-
-
         auto buildingControlingPanel = ire::core::gui::Panel::create({ 200, 600 }, std::move(buildingControlingVerticalLayout), "BuildingControlingVerticalLayout");
 
         auto worldView = gui::WorldView::create(*m_world);
         auto& worldViewRef = *worldView;
+
+        worldView->addEventListener<ire::core::gui::MouseClickEvent>(
+            [&](ire::core::gui::MouseClickEvent& ev)
+            {
+                core::world::TileOverlay overlay3;
+                auto& mainSurface = static_cast<ire::core::world::TiledTopDownSurface&>(m_world->getMainSurface());
+                auto pointedTilePos = mainSurface.mapClientToTilePosition(m_window.getRenderTarget(), *worldViewRef.getMousePos());
+                overlay3.position = sf::Vector2i(*pointedTilePos);
+                overlay3.border = core::world::TileOverlayBorder{};
+                overlay3.border->color = sf::Color::Blue;
+                overlay3.border->thickness = 0.1f;
+                overlay3.border->visible = { true, true, true, true };
+                static_cast<ire::core::world::TiledTopDownSurface&>(m_world->getMainSurface()).pushBackTileOverlay(overlay3);
+                std::cout << "Add Overlay\n";
+            }
+        );
 
         worldView->addEventListener<ire::core::gui::MouseMovedEvent>(
             [&](ire::core::gui::MouseMovedEvent& ev)
             {
                 if (buildingApplyingButtonRef.getClientBounds().contains(ev.position))
                 {
-                    std::cout << "Inside Button1\n";
                     m_window.setActiveWidget(buildingApplyingButtonRef);              
                 }
                 else if (buildingApplyingButton2Ref.getClientBounds().contains(ev.position))
                 {
-                    std::cout << "Inside Button2\n";
                     m_window.setActiveWidget(buildingApplyingButton2Ref);
                 }    
-                std::cout << "Mouse Moved\n";
+                /*
+             std::cout << pointedTilePos.value().x << ", " << pointedTilePos.value().y << "\n";
+                */
             }
         );
 

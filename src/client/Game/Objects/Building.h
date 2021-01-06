@@ -18,6 +18,11 @@ namespace ire::client::objects
             Full,
             Demaged
         };
+
+        virtual void initializeOverlay();
+
+        void draw(sf::RenderTarget& target) override;
+
     protected:
         // Needed Workers
         // Curent Workers

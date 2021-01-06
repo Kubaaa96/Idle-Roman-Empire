@@ -38,6 +38,8 @@ namespace ire::client::gui
         void onEvent(core::gui::EventRoot& sender, core::gui::MouseButtonUpEvent& ev) override;
         void onEvent(core::gui::EventRoot& sender, core::gui::MouseMovedEvent& ev) override;
 
+        const std::optional<sf::Vector2f> getMousePos() const;
+
         void onStoppedBeingActive() override;
 
         bool isMouseOnOverlappingWidget = false;

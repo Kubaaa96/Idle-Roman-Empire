@@ -12,7 +12,7 @@ namespace ire::core::gui
         void setSize(const sf::Vector2f& size) override;
         void setPosition(const sf::Vector2f& position) override;
 
-        void draw(sf::RenderTarget& target)override;
+        void draw(sf::RenderTarget& target) override;
 
         virtual void updateWidget() = 0;
 

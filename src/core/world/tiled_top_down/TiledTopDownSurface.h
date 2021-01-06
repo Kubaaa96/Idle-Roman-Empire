@@ -39,6 +39,7 @@ namespace ire::core::world
         void moveCamera(sf::Vector2f diff);
 
         void setTileOverlays(std::vector<TileOverlay>&& overlays);
+        void pushBackTileOverlay(TileOverlay& overlay);
         void resetTileOverlays();
         [[nodiscard]] std::vector<TileOverlay> getSpriteOverlays() const;
 

@@ -51,14 +51,7 @@ namespace ire::client::gui
                 overlay.border->thickness = 0.1f;
                 overlay.border->visible = { true, true, true, true };
 
-                core::world::TileOverlay overlay2;
-                overlay2.position = *pointedTilePos + sf::Vector2i(1,0);
-                overlay2.border = core::world::TileOverlayBorder{};
-                overlay2.border->color = sf::Color::Cyan;
-                overlay2.border->thickness = 0.1f;
-                overlay2.border->visible = { true, true, true, true };
-
-                mainSurface.setTileOverlays({ overlay, overlay2 });
+                mainSurface.setTileOverlays({ overlay });
             }
             else
             {
@@ -115,6 +108,11 @@ namespace ire::client::gui
         }
         emitEvent(ev);
         ev.handled = true;
+    }
+
+    const std::optional<sf::Vector2f> WorldView::getMousePos() const
+    {
+        return m_mousePos;
     }
 
     void WorldView::onStoppedBeingActive()

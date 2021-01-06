@@ -8,11 +8,14 @@ namespace ire::client::objects
 {
     struct Object
     {
+        virtual void draw(sf::RenderTarget& target) = 0;
+
         void setName(std::string& name);
         const std::string getName() const;
 
         void setPosition(sf::Vector2i pos);
         const sf::Vector2i getPosition() const;
+
 
     protected:
 
