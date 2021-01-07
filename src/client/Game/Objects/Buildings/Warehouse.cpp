@@ -7,14 +7,12 @@ namespace ire::client::objects
 
     }
 
-    void Warehouse::setupPlannedOverlay()
+    void Warehouse::updatePlannedOverlay(sf::Vector2i mousePosition)
     {
-
     }
 
-    void Warehouse::setupOrderedOverlay()
+    void Warehouse::setupOrderedOverlay(sf::Vector2i clickPosition)
     {
-
     }
 
     void Warehouse::setupInProductionOverlay()

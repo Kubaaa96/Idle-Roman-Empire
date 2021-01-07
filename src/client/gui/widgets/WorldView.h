@@ -2,6 +2,7 @@
 
 #include "core/gui/Events.h"
 #include "core/gui/widgets/ClickableWidget.h"
+#include "client/Game/Objects/ObjectMenager.h"
 
 #include "core/world/World.h"
 #include <optional>
@@ -23,9 +24,9 @@ namespace ire::client::gui
 
     public:
 
-        WorldView(ire::core::world::World& world);
+        WorldView(ire::core::world::World& world, objects::ObjectMenager& objectMenager);
 
-        static std::unique_ptr<WorldView> create(ire::core::world::World& world);
+        static std::unique_ptr<WorldView> create(core::world::World& world, objects::ObjectMenager& objectMenager);
 
         void draw(sf::RenderTarget& target);
 
@@ -49,6 +50,7 @@ namespace ire::client::gui
 
     private:
         ire::core::world::World* m_world;
+        objects::ObjectMenager* m_objectMenager;
         State m_state;
 
         void updateCamera();

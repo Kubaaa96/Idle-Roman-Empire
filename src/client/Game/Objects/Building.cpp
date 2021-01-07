@@ -7,14 +7,11 @@ namespace ire::client::objects
         initializeOverlay();
     }
 
-    void Building::draw(sf::RenderTarget& target)
+    void Building::setState(States state)
     {
-        switch (m_state)
+        if (m_state != state)
         {
-        case States::Planned:
-
-        default:
-            break;
+            m_state = state;
         }
     }
 
@@ -23,25 +20,14 @@ namespace ire::client::objects
         return m_state;
     }
 
-    core::world::TileOverlay Building::updateOverlay()
+    const core::world::TileOverlay Building::getPlannedOverlay() const
     {
-        switch (m_state)
-        {
-        case States::Planned:
-            setupPlannedOverlay();
-            return m_plannedOverlay;
-        case States::Ordered:
-            setupOrderedOverlay();
-            return m_orderedOverlay;
-        case States::InProduction:
-            setupInProductionOverlay();
-            return m_inProductionOverlay;
-        case States::Idle:
-            setupIdleOverlay();
-            return m_idleOverlay;
-        default:
-            break;
-        }
+        return m_plannedOverlay;
+    }
+
+    const core::world::TileOverlay Building::getOrderedOverlay() const
+    {
+        return m_orderedOverlay;
     }
 
 }

@@ -8,19 +8,23 @@ namespace ire::client::objects
 {
     struct ObjectMenager
     {
-        enum struct States
-        {
-            Null,
-            Planning,
-            Building
-        };
 
-        [[nodiscard]] const States getState() const;
+        ObjectMenager();
+
+        void appendBuildingsToVector(std::unique_ptr<Building> building);
+
+        std::vector<core::world::TileOverlay> getOverlayVector(sf::Vector2i mousePosition);
+
+        const bool isCollectionOfBuildingsEmpty() const;
+
+        const bool isPlanning() const;
 
     protected:
-        States m_state = States::Null;
+        bool m_isPlanning = false;
 
-        std::vector<Building> m_collectionOfBuildings;
+
+
+        std::vector<std::unique_ptr<Building>> m_collectionOfBuildings;
     };
 }
 

@@ -24,18 +24,20 @@ namespace ire::client::objects
 
         virtual void initializeOverlay() {};
 
-        void draw(sf::RenderTarget& target) override;
-
+        void setState(States state);
         [[nodiscard]] const States getState() const;
 
-        [[nodiscard]] core::world::TileOverlay updateOverlay();
-
+        virtual void updatePlannedOverlay(sf::Vector2i mousePosition) {};
+        const core::world::TileOverlay getPlannedOverlay() const;
+        virtual void setupOrderedOverlay(sf::Vector2i clickPosition) {};
+        const core::world::TileOverlay getOrderedOverlay() const;
     protected:
         // Needed Workers
         // Curent Workers
         States m_state = States::Null;
 
-        virtual void setupPlannedOverlay() {};
+        core::world::TileOverlay m_overlay;
+
         core::world::TileOverlay m_plannedOverlay;
 
         virtual void setupOrderedOverlay() {};
