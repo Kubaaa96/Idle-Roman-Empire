@@ -32,7 +32,9 @@ namespace ire::client::state
                 std::cout << "Road\n";
                 auto road = std::make_unique<client::objects::Road>();
                 road->setState(client::objects::Building::States::Planned);
+                m_objectMenager->m_currentSelectedBuilding = road.get();
                 m_objectMenager->appendBuildingsToVector(std::move(road));
+                m_objectMenager->setPlanning(true);
             }
         );
 
@@ -60,18 +62,15 @@ namespace ire::client::state
         worldView->addEventListener<ire::core::gui::MouseClickEvent>(
             [&](ire::core::gui::MouseClickEvent& ev)
             {
-                /*
-                core::world::TileOverlay overlay3;
-                auto& mainSurface = static_cast<ire::core::world::TiledTopDownSurface&>(m_world->getMainSurface());
-                auto pointedTilePos = mainSurface.mapClientToTilePosition(m_window.getRenderTarget(), *worldViewRef.getMousePos());
-                overlay3.position = sf::Vector2i(*pointedTilePos);
-                overlay3.border = core::world::TileOverlayBorder{};
-                overlay3.border->color = sf::Color::Blue;
-                overlay3.border->thickness = 0.1f;
-                overlay3.border->visible = { true, true, true, true };
-                static_cast<ire::core::world::TiledTopDownSurface&>(m_world->getMainSurface()).pushBackTileOverlay(overlay3);
-                std::cout << "Add Overlay\n";
-                */
+                if (m_objectMenager->isPlanning())
+                {
+                    m_objectMenager->m_currentSelectedBuilding->setState(objects::Building::States::Ordered);
+                    auto& mainSurface = static_cast<ire::core::world::TiledTopDownSurface&>(m_world->getMainSurface());
+                    auto pointedTilePos = mainSurface.mapClientToTilePosition(m_window.getRenderTarget(), *worldViewRef.getMousePos());
+                    m_objectMenager->m_currentSelectedBuilding->setupOrderedOverlay(*pointedTilePos);
+                    m_objectMenager->setPlanning(false);
+                    std::cout << "Add Overlay\n";
+                }
             }
         );
 

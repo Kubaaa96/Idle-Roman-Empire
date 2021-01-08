@@ -10,14 +10,13 @@ namespace ire::client::objects
     void Road::initializeOverlay()
     {
         m_plannedOverlay.border = core::world::TileOverlayBorder{};
-        //m_plannedOverlay.position = sf::Vector2i(255,256);
         m_plannedOverlay.border->color = sf::Color::Cyan;
         m_plannedOverlay.border->thickness = 0.1f;
         m_plannedOverlay.border->visible = { true, true, true, true };
 
         m_orderedOverlay.border = core::world::TileOverlayBorder{};
-        m_orderedOverlay.border->color = sf::Color::Cyan;
-        m_orderedOverlay.border->thickness = 1.f;
+        m_orderedOverlay.border->color = sf::Color::Blue;
+        m_orderedOverlay.border->thickness = 0.1f;
         m_orderedOverlay.border->visible = { true, true, true, true };
     }
 

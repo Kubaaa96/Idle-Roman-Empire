@@ -17,11 +17,13 @@ namespace ire::client::objects
 
         const bool isCollectionOfBuildingsEmpty() const;
 
+        void setPlanning(bool isPlanning);
         const bool isPlanning() const;
+
+        Building* m_currentSelectedBuilding = nullptr;
 
     protected:
         bool m_isPlanning = false;
-
 
 
         std::vector<std::unique_ptr<Building>> m_collectionOfBuildings;

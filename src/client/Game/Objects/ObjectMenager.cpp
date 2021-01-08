@@ -35,6 +35,14 @@ namespace ire::client::objects
         return m_collectionOfBuildings.empty();
     }
 
+    void ObjectMenager::setPlanning(bool isPlanning)
+    {
+        if (m_isPlanning != isPlanning)
+        {
+            m_isPlanning = isPlanning;
+        }
+    }
+
     const bool ObjectMenager::isPlanning() const
     {
         return m_isPlanning;
