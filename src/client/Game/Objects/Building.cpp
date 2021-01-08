@@ -20,14 +20,14 @@ namespace ire::client::objects
         return m_state;
     }
 
-    const core::world::TileOverlay Building::getPlannedOverlay() const
+    std::vector<core::world::TileOverlay> Building::getPlannedOverlay() const
     {
-        return m_plannedOverlay;
+        return m_plannedOverlays;
     }
 
-    const core::world::TileOverlay Building::getOrderedOverlay() const
+    std::vector<core::world::TileOverlay> Building::getOrderedOverlay() const
     {
-        return m_orderedOverlay;
+        return m_orderedOverlays;
     }
 
 }

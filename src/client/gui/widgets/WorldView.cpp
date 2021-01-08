@@ -45,14 +45,6 @@ namespace ire::client::gui
             auto pointedTilePos = mainSurface.mapClientToTilePosition(target, *m_mousePos);
             if (pointedTilePos.has_value())
             {
-                /*
-                core::world::TileOverlay overlay;
-                overlay.position = *pointedTilePos;
-                overlay.border = core::world::TileOverlayBorder{};
-                overlay.border->color = sf::Color::Cyan;
-                overlay.border->thickness = 0.1f;
-                overlay.border->visible = { true, true, true, true };
-                */
                 if (!m_objectMenager->isCollectionOfBuildingsEmpty())
                 {
                     mainSurface.setTileOverlays(m_objectMenager->getOverlayVector(*pointedTilePos));

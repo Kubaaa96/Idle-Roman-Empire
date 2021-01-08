@@ -20,6 +20,15 @@ namespace ire::client::objects
             Demaged
         };
 
+        enum struct Direction
+        {
+            South,
+            East,
+            North,
+            West
+        };
+        
+
         Building();
 
         virtual void initializeOverlay() {};
@@ -28,9 +37,9 @@ namespace ire::client::objects
         [[nodiscard]] const States getState() const;
 
         virtual void updatePlannedOverlay(sf::Vector2i mousePosition) {};
-        const core::world::TileOverlay getPlannedOverlay() const;
+        std::vector<core::world::TileOverlay> getPlannedOverlay() const;
         virtual void setupOrderedOverlay(sf::Vector2i clickPosition) {};
-        const core::world::TileOverlay getOrderedOverlay() const;
+        std::vector<core::world::TileOverlay> getOrderedOverlay() const;
     protected:
         // Needed Workers
         // Curent Workers
@@ -38,17 +47,21 @@ namespace ire::client::objects
 
         core::world::TileOverlay m_overlay;
 
-        core::world::TileOverlay m_plannedOverlay;
+        //core::world::TileOverlay m_plannedOverlay;
+        std::vector<core::world::TileOverlay> m_plannedOverlays;
 
         virtual void setupOrderedOverlay() {};
-        core::world::TileOverlay m_orderedOverlay;
+        //core::world::TileOverlay m_orderedOverlay;
+        std::vector<core::world::TileOverlay> m_orderedOverlays;
 
         virtual void setupInProductionOverlay() {};
         core::world::TileOverlay m_inProductionOverlay;
 
         virtual void setupIdleOverlay() {};
         core::world::TileOverlay m_idleOverlay;
+        // Direction
         // Size
+        sf::Vector2i m_size{ 4,4 };
         // Entrances
 
     };

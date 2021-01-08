@@ -15,6 +15,7 @@ namespace ire::client::objects
         void setupOrderedOverlay(sf::Vector2i clickPosition) override;
 
     protected:
+
         void setupInProductionOverlay() override;
         void setupIdleOverlay() override;
     };

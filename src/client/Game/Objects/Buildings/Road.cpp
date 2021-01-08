@@ -9,25 +9,31 @@ namespace ire::client::objects
 
     void Road::initializeOverlay()
     {
-        m_plannedOverlay.border = core::world::TileOverlayBorder{};
-        m_plannedOverlay.border->color = sf::Color::Cyan;
-        m_plannedOverlay.border->thickness = 0.1f;
-        m_plannedOverlay.border->visible = { true, true, true, true };
+        auto plannedOverlay = core::world::TileOverlay();
+        plannedOverlay.border = core::world::TileOverlayBorder{};
+        plannedOverlay.border->color = sf::Color::Cyan;
+        plannedOverlay.border->thickness = 0.1f;
+        plannedOverlay.border->visible = { true, true, true, true };
+        m_plannedOverlays.push_back(plannedOverlay);
 
-        m_orderedOverlay.border = core::world::TileOverlayBorder{};
-        m_orderedOverlay.border->color = sf::Color::Blue;
-        m_orderedOverlay.border->thickness = 0.1f;
-        m_orderedOverlay.border->visible = { true, true, true, true };
+        auto orderedOverlay = core::world::TileOverlay();
+        orderedOverlay.border = core::world::TileOverlayBorder{};
+        orderedOverlay.border->color = sf::Color::Blue;
+        orderedOverlay.border->thickness = 0.1f;
+        orderedOverlay.border->visible = { true, true, true, true };
+        m_orderedOverlays.push_back(orderedOverlay);
     }
 
     void Road::updatePlannedOverlay(sf::Vector2i mousePosition)
     {
-        m_plannedOverlay.position = mousePosition;
+        m_plannedOverlays.begin()->position = mousePosition;
+        m_currentPosition = mousePosition;
     }
 
     void Road::setupOrderedOverlay(sf::Vector2i clickPosition)
     {
-        m_orderedOverlay.position = clickPosition;
+        m_orderedOverlays.begin()->position = clickPosition;
+        m_currentPosition = clickPosition;
     }
 
     void Road::setupInProductionOverlay()

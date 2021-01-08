@@ -1,4 +1,5 @@
 #include "ObjectMenager.h"
+#include <algorithm>
 
 namespace ire::client::objects
 {
@@ -15,14 +16,19 @@ namespace ire::client::objects
         std::vector<core::world::TileOverlay> tileOverlays;
         for (auto& building : m_collectionOfBuildings)
         {
+            std::vector<core::world::TileOverlay> overlays;
             switch (building->getState())
             {
             case Building::States::Planned:
                 building->updatePlannedOverlay(mousePosition);
-                tileOverlays.push_back(building->getPlannedOverlay());
+                overlays = building->getPlannedOverlay();
+                std::move(overlays.begin(), overlays.end(),
+                    std::back_inserter(tileOverlays));      
                 break;
             case Building::States::Ordered:
-                tileOverlays.push_back(building->getOrderedOverlay());
+                overlays = building->getOrderedOverlay();
+                std::move(overlays.begin(), overlays.end(),
+                    std::back_inserter(tileOverlays));
             default:
                 break;
             }

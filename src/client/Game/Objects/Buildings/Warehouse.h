@@ -8,6 +8,8 @@ namespace ire::client::objects
 
     struct Warehouse : Building
     {
+
+        Warehouse();
         void initializeOverlay() override;
         void updatePlannedOverlay(sf::Vector2i mousePosition) override;
         void setupOrderedOverlay(sf::Vector2i clickPosition) override;
@@ -16,6 +18,9 @@ namespace ire::client::objects
 
         void setupInProductionOverlay() override;
         void setupIdleOverlay() override;
+        
+        void initializePlannedOverlay();
+        void initializeOrderedOverlay();
     };
 
 }

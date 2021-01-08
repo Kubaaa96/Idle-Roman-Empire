@@ -44,9 +44,15 @@ namespace ire::client::state
         auto& buildingApplyingButton3Ref = *buildingApplyingButton3;
 
         buildingApplyingButton3->addEventListener<ire::core::gui::MouseClickEvent>(
-            [](ire::core::gui::MouseClickEvent& ev)
+            [&](ire::core::gui::MouseClickEvent& ev)
             {
                 std::cout << "Warehouse\n";
+                auto warehouse = std::make_unique<client::objects::Warehouse>();
+                warehouse->setState(client::objects::Building::States::Planned);
+                m_objectMenager->m_currentSelectedBuilding = warehouse.get();
+                m_objectMenager->appendBuildingsToVector(std::move(warehouse));
+                m_objectMenager->setPlanning(true);
+
             }
         );
 
@@ -69,7 +75,6 @@ namespace ire::client::state
                     auto pointedTilePos = mainSurface.mapClientToTilePosition(m_window.getRenderTarget(), *worldViewRef.getMousePos());
                     m_objectMenager->m_currentSelectedBuilding->setupOrderedOverlay(*pointedTilePos);
                     m_objectMenager->setPlanning(false);
-                    std::cout << "Add Overlay\n";
                 }
             }
         );
@@ -85,9 +90,6 @@ namespace ire::client::state
                 {
                     m_window.setActiveWidget(buildingApplyingButton2Ref);
                 }    
-                /*
-             std::cout << pointedTilePos.value().x << ", " << pointedTilePos.value().y << "\n";
-                */
             }
         );
 
@@ -96,6 +98,5 @@ namespace ire::client::state
         m_group = ire::core::gui::Group::create(static_cast<sf::Vector2f>(m_window.getRenderTarget().getSize()));
         m_group->add(std::move(finalLayout), "FinalLayout");
         m_group->add(std::move(buildingControlingPanel), "ControlingPanel");
-        //m_group = std::move(finalLayout);
     }
 }
