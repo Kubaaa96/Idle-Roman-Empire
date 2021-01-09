@@ -60,7 +60,6 @@ namespace ire::client::objects
                 m_plannedOverlays.push_back(plannedOverlay);
             }
         }
-
     }
 
     void Warehouse::initializeOrderedOverlay()
@@ -71,11 +70,12 @@ namespace ire::client::objects
             {
                 auto orderedOverlay = core::world::TileOverlay();
                 orderedOverlay.border = core::world::TileOverlayBorder{};
-                orderedOverlay.border->color = sf::Color::Blue;
+                orderedOverlay.border->color = sf::Color::Red;
                 orderedOverlay.border->thickness = 0.1f;
                 orderedOverlay.border->visible = { true, true, true, true };
                 m_orderedOverlays.push_back(orderedOverlay);
             }
         }
+        m_orderedOverlays.at(14).border->color = sf::Color::Magenta;
     }
 }

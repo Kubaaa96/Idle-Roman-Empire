@@ -20,6 +20,10 @@ namespace ire::client::objects
             switch (building->getState())
             {
             case Building::States::Planned:
+                // Check every overlay if there is something interupting placement
+                // change it color to RED in future special sprite
+
+
                 building->updatePlannedOverlay(mousePosition);
                 overlays = building->getPlannedOverlay();
                 std::move(overlays.begin(), overlays.end(),

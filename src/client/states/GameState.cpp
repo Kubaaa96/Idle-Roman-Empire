@@ -29,7 +29,6 @@ namespace ire::client::state
         buildingApplyingButton2->addEventListener<ire::core::gui::MouseClickEvent>(
             [&](ire::core::gui::MouseClickEvent& ev)
             {
-                std::cout << "Road\n";
                 auto road = std::make_unique<client::objects::Road>();
                 road->setState(client::objects::Building::States::Planned);
                 m_objectMenager->m_currentSelectedBuilding = road.get();
@@ -46,7 +45,6 @@ namespace ire::client::state
         buildingApplyingButton3->addEventListener<ire::core::gui::MouseClickEvent>(
             [&](ire::core::gui::MouseClickEvent& ev)
             {
-                std::cout << "Warehouse\n";
                 auto warehouse = std::make_unique<client::objects::Warehouse>();
                 warehouse->setState(client::objects::Building::States::Planned);
                 m_objectMenager->m_currentSelectedBuilding = warehouse.get();
