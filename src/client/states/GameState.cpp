@@ -66,7 +66,7 @@ namespace ire::client::state
         worldView->addEventListener<ire::core::gui::MouseClickEvent>(
             [&](ire::core::gui::MouseClickEvent& ev)
             {
-                if (m_objectMenager->isPlanning())
+                if (m_objectMenager->isPlanning() && m_objectMenager->m_canBePlaced)
                 {
                     m_objectMenager->m_currentSelectedBuilding->setState(objects::Building::States::Ordered);
                     auto& mainSurface = static_cast<ire::core::world::TiledTopDownSurface&>(m_world->getMainSurface());

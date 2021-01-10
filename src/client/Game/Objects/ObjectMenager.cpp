@@ -23,11 +23,27 @@ namespace ire::client::objects
                 // Check every overlay if there is something interupting placement
                 // change it color to RED in future special sprite
 
+                
 
                 building->updatePlannedOverlay(mousePosition);
                 overlays = building->getPlannedOverlay();
+                m_canBePlaced = true;
+                for (const auto& overlay : overlays)
+                {
+                    for (int i = 0; i < tileOverlays.size(); ++i)
+                    {
+                        if (overlay.position == tileOverlays.at(i).position)
+                        {
+                            m_canBePlaced = false;
+                            tileOverlays.at(i).border->color = sf::Color::Red;
+                            tileOverlays.at(i).border->thickness = 0.5f;
+                        }
+                    }
+                    
+                }
                 std::move(overlays.begin(), overlays.end(),
-                    std::back_inserter(tileOverlays));      
+                    std::back_inserter(tileOverlays));
+                 
                 break;
             case Building::States::Ordered:
                 overlays = building->getOrderedOverlay();
@@ -37,6 +53,8 @@ namespace ire::client::objects
                 break;
             }
         }
+
+        m_tileOverlays = tileOverlays;
         return tileOverlays;
     }
 

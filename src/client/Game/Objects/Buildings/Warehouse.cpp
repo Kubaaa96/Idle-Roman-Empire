@@ -70,7 +70,7 @@ namespace ire::client::objects
             {
                 auto orderedOverlay = core::world::TileOverlay();
                 orderedOverlay.border = core::world::TileOverlayBorder{};
-                orderedOverlay.border->color = sf::Color::Red;
+                orderedOverlay.border->color = sf::Color::Magenta;
                 orderedOverlay.border->thickness = 0.1f;
                 orderedOverlay.border->visible = { true, true, true, true };
                 m_orderedOverlays.push_back(orderedOverlay);

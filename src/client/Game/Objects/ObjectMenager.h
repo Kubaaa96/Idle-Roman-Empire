@@ -21,10 +21,12 @@ namespace ire::client::objects
         const bool isPlanning() const;
 
         Building* m_currentSelectedBuilding = nullptr;
+        bool m_canBePlaced = true;
 
     protected:
         bool m_isPlanning = false;
 
+        std::vector<core::world::TileOverlay> m_tileOverlays;
 
         std::vector<std::unique_ptr<Building>> m_collectionOfBuildings;
     };
