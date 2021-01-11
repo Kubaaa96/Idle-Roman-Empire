@@ -30,4 +30,14 @@ namespace ire::client::objects
         return m_orderedOverlays;
     }
 
+    core::world::TileOverlay Building::initializeTile(sf::Color borderColor, float borderThickness, core::util::FourWay<bool> borderVisibility)
+    {
+        auto overlay = core::world::TileOverlay();
+        overlay.border = core::world::TileOverlayBorder{};
+        overlay.border->color = borderColor;
+        overlay.border->thickness = borderThickness;
+        overlay.border->visible = borderVisibility;
+        return overlay;
+    }
+
 }

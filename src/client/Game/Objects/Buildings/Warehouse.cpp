@@ -4,12 +4,23 @@ namespace ire::client::objects
 {
     Warehouse::Warehouse()
     {
+        m_size = {3,4 };
+        m_entrance = { 2,4 };
         initializeOverlay();
     }
+
     void Warehouse::initializeOverlay()
     {
-        initializePlannedOverlay();
-        initializeOrderedOverlay();
+        for (int i = 0; i < m_size.x; ++i)
+        {
+            for (int j = 0; j < m_size.y; ++j)
+            {
+                m_plannedOverlays.push_back(initializeTile(sf::Color::Cyan, 0.1f, { true, true, true, true }));
+                m_orderedOverlays.push_back(initializeTile(sf::Color::Green, 0.1f, { true, true, true, true }));
+            }
+        }
+        m_orderedOverlays.at((m_entrance.y - 1) * m_size.x + (m_entrance.x - 1)).border->color = sf::Color::Magenta;
+
     }
 
     void Warehouse::updatePlannedOverlay(sf::Vector2i mousePosition)
@@ -19,7 +30,7 @@ namespace ire::client::objects
         {
             for (int j = 0; j < m_size.y; ++j)
             {
-                m_plannedOverlays.at(j * m_size.y + i).position = mousePosition - (sf::Vector2i(2, 3) - sf::Vector2i(i, j));
+                m_plannedOverlays.at(j * m_size.x + i).position = mousePosition - (m_entrance - sf::Vector2i(i + 1, j + 1));
             }
         }
     }
@@ -31,7 +42,7 @@ namespace ire::client::objects
         {
             for (int j = 0; j < m_size.y; ++j)
             {
-                m_orderedOverlays.at(j * m_size.y + i).position = clickPosition - (sf::Vector2i(2,3) - sf::Vector2i(i,j));
+                m_orderedOverlays.at(j * m_size.x + i).position = clickPosition - (m_entrance - sf::Vector2i(i + 1, j + 1));
             }
         }
     }
@@ -46,36 +57,4 @@ namespace ire::client::objects
 
     }
 
-    void Warehouse::initializePlannedOverlay()
-    {
-        for (int i = 0; i < m_size.x; ++i)
-        {
-            for (int j = 0; j < m_size.y; ++j)
-            {
-                auto plannedOverlay = core::world::TileOverlay();
-                plannedOverlay.border = core::world::TileOverlayBorder{};
-                plannedOverlay.border->color = sf::Color::Cyan;
-                plannedOverlay.border->thickness = 0.1f;
-                plannedOverlay.border->visible = { true, true, true, true };
-                m_plannedOverlays.push_back(plannedOverlay);
-            }
-        }
-    }
-
-    void Warehouse::initializeOrderedOverlay()
-    {
-        for (int i = 0; i < m_size.x; ++i)
-        {
-            for (int j = 0; j < m_size.y; ++j)
-            {
-                auto orderedOverlay = core::world::TileOverlay();
-                orderedOverlay.border = core::world::TileOverlayBorder{};
-                orderedOverlay.border->color = sf::Color::Magenta;
-                orderedOverlay.border->thickness = 0.1f;
-                orderedOverlay.border->visible = { true, true, true, true };
-                m_orderedOverlays.push_back(orderedOverlay);
-            }
-        }
-        m_orderedOverlays.at(14).border->color = sf::Color::Magenta;
-    }
 }

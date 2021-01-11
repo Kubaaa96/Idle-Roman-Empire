@@ -45,13 +45,9 @@ namespace ire::client::objects
         // Curent Workers
         States m_state = States::Null;
 
-        core::world::TileOverlay m_overlay;
-
-        //core::world::TileOverlay m_plannedOverlay;
         std::vector<core::world::TileOverlay> m_plannedOverlays;
 
         virtual void setupOrderedOverlay() {};
-        //core::world::TileOverlay m_orderedOverlay;
         std::vector<core::world::TileOverlay> m_orderedOverlays;
 
         virtual void setupInProductionOverlay() {};
@@ -60,9 +56,11 @@ namespace ire::client::objects
         virtual void setupIdleOverlay() {};
         core::world::TileOverlay m_idleOverlay;
         // Direction
-        // Size
-        sf::Vector2i m_size{ 4,4 };
-        // Entrances
+        sf::Vector2i m_size;
+        sf::Vector2i m_entrance;
+
+        core::world::TileOverlay initializeTile(sf::Color borderColor, float borderThickness, 
+            core::util::FourWay<bool> borderVisibility);
 
     };
 }

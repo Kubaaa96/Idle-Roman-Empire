@@ -18,9 +18,6 @@ namespace ire::client::objects
 
         void setupInProductionOverlay() override;
         void setupIdleOverlay() override;
-        
-        void initializePlannedOverlay();
-        void initializeOrderedOverlay();
     };
 
 }

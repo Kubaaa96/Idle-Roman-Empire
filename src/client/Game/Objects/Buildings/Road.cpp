@@ -9,19 +9,8 @@ namespace ire::client::objects
 
     void Road::initializeOverlay()
     {
-        auto plannedOverlay = core::world::TileOverlay();
-        plannedOverlay.border = core::world::TileOverlayBorder{};
-        plannedOverlay.border->color = sf::Color::Cyan;
-        plannedOverlay.border->thickness = 0.1f;
-        plannedOverlay.border->visible = { true, true, true, true };
-        m_plannedOverlays.push_back(plannedOverlay);
-
-        auto orderedOverlay = core::world::TileOverlay();
-        orderedOverlay.border = core::world::TileOverlayBorder{};
-        orderedOverlay.border->color = sf::Color::Blue;
-        orderedOverlay.border->thickness = 0.1f;
-        orderedOverlay.border->visible = { true, true, true, true };
-        m_orderedOverlays.push_back(orderedOverlay);
+        m_plannedOverlays.push_back(initializeTile(sf::Color::Cyan, 0.1f, { true, true, true, true }));
+        m_orderedOverlays.push_back(initializeTile(sf::Color::Blue, 0.1f, { true, true, true, true }));
     }
 
     void Road::updatePlannedOverlay(sf::Vector2i mousePosition)

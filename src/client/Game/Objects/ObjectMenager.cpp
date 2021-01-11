@@ -20,41 +20,34 @@ namespace ire::client::objects
             switch (building->getState())
             {
             case Building::States::Planned:
-                // Check every overlay if there is something interupting placement
-                // change it color to RED in future special sprite
-
-                
-
                 building->updatePlannedOverlay(mousePosition);
                 overlays = building->getPlannedOverlay();
-                m_canBePlaced = true;
+                setCanBePlaced(true);
                 for (const auto& overlay : overlays)
                 {
                     for (int i = 0; i < tileOverlays.size(); ++i)
                     {
                         if (overlay.position == tileOverlays.at(i).position)
                         {
-                            m_canBePlaced = false;
+                            setCanBePlaced(false);
                             tileOverlays.at(i).border->color = sf::Color::Red;
                             tileOverlays.at(i).border->thickness = 0.5f;
                         }
-                    }
-                    
+                    }               
                 }
                 std::move(overlays.begin(), overlays.end(),
-                    std::back_inserter(tileOverlays));
-                 
+                    std::back_inserter(tileOverlays));               
                 break;
+
             case Building::States::Ordered:
                 overlays = building->getOrderedOverlay();
                 std::move(overlays.begin(), overlays.end(),
                     std::back_inserter(tileOverlays));
+                break;
             default:
                 break;
             }
         }
-
-        m_tileOverlays = tileOverlays;
         return tileOverlays;
     }
 
@@ -74,5 +67,13 @@ namespace ire::client::objects
     const bool ObjectMenager::isPlanning() const
     {
         return m_isPlanning;
+    }
+    void ObjectMenager::setCanBePlaced(bool canBePlaced)
+    {
+        m_canBePlaced = canBePlaced;
+    }
+    const bool ObjectMenager::canBePlaced() const
+    {
+        return m_canBePlaced;
     }
 }
