@@ -2,7 +2,7 @@
 
 #include "core/gui/Events.h"
 #include "core/gui/widgets/ClickableWidget.h"
-#include "client/Game/Objects/ObjectManager.h"
+#include "core/world/objects/ObjectManager.h"
 
 #include "core/world/World.h"
 #include <optional>
@@ -24,9 +24,9 @@ namespace ire::client::gui
 
     public:
 
-        WorldView(ire::core::world::World& world, objects::ObjectManager& objectMenager);
+        WorldView(ire::core::world::World& worldr);
 
-        static std::unique_ptr<WorldView> create(core::world::World& world, objects::ObjectManager& objectMenager);
+        static std::unique_ptr<WorldView> create(core::world::World& world);
 
         void draw(sf::RenderTarget& target);
 
@@ -38,7 +38,6 @@ namespace ire::client::gui
         void onEvent(core::gui::EventRoot& sender, core::gui::MouseButtonDownEvent& ev) override;
         void onEvent(core::gui::EventRoot& sender, core::gui::MouseButtonUpEvent& ev) override;
         void onEvent(core::gui::EventRoot& sender, core::gui::MouseMovedEvent& ev) override;
-        const std::optional<sf::Vector2f> getMousePos() const;
 
         void onStoppedBeingActive() override;
 
@@ -50,7 +49,6 @@ namespace ire::client::gui
 
     private:
         ire::core::world::World* m_world;
-        objects::ObjectManager* m_objectManager;
         State m_state;
 
         void updateCamera();

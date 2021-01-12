@@ -12,16 +12,15 @@ namespace ire::client::gui
 
     const WidgetType WorldView::m_type = WidgetType::create<WorldView>("WorldView");
 
-    WorldView::WorldView(ire::core::world::World& world, objects::ObjectManager& objectMenager) :
+    WorldView::WorldView(ire::core::world::World& world) :
         m_world(&world),
-        m_objectManager(&objectMenager),
         m_state(State::Inactive)
     {
     }
 
-    std::unique_ptr<WorldView> WorldView::create(ire::core::world::World& world, objects::ObjectManager& objectMenager)
+    std::unique_ptr<WorldView> WorldView::create(ire::core::world::World& world)
     {
-        auto widget = std::make_unique<WorldView>(world, objectMenager);
+        auto widget = std::make_unique<WorldView>(world);
         return widget;
     }
 
@@ -37,32 +36,14 @@ namespace ire::client::gui
         view.setViewport(getClientViewport(target));
         target.setView(view);
 
-        // TODO: Move this to some place where this actually should be managed from.
-        //       Right now it's here for demo purposes.
-        if (m_mousePos.has_value())
-        {
-            auto& mainSurface = static_cast<ire::core::world::TiledTopDownSurface&>(m_world->getMainSurface());
-            auto pointedTilePos = mainSurface.mapClientToTilePosition(target, *m_mousePos);
-            if (pointedTilePos.has_value())
-            {
-                if (!m_objectManager->isEmpty())
-                {
-                    mainSurface.setTileOverlays(m_objectManager->getOverlayVector(*pointedTilePos));
-                } 
-            }
-            else
-            {
-                mainSurface.resetTileOverlays();
-            }
-        }
-        //
-
         sf::RectangleShape s;
         s.setFillColor(sf::Color::White);
         s.setSize(sf::Vector2f(10000.0f, 10000.0f));
         target.draw(s);
 
-        m_world->getMainSurface().draw(target, states);
+        auto& mainSurface = static_cast<ire::core::world::TiledTopDownSurface&>(m_world->getMainSurface());
+        mainSurface.setMousePos(m_mousePos);
+        mainSurface.draw(target, states);
 
         target.setView(oldView);
     }
@@ -105,11 +86,6 @@ namespace ire::client::gui
         }
         emitEvent(ev);
         ev.handled = true;
-    }
-
-    const std::optional<sf::Vector2f> WorldView::getMousePos() const
-    {
-        return m_mousePos;
     }
 
     void WorldView::onStoppedBeingActive()

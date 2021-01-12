@@ -1,11 +1,11 @@
 #ifndef IRE_ROAD_H
 #define IRE_ROAD_H
 
-#include "client/Game/Objects/Building.h"
+#include "core/world/objects/Building.h"
 
 namespace ire::client::objects
 {
-    struct Road : Building
+    struct Road : core::world::objects::Building
     {
         Road();
 

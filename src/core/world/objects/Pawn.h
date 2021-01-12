@@ -3,7 +3,7 @@
 
 #include "Object.h"
 
-namespace ire::client::objects
+namespace ire::core::world::objects
 {
     struct Pawn : Object
     {

@@ -4,7 +4,7 @@
 #include <vector>
 #include "Building.h"
 
-namespace ire::client::objects
+namespace ire::core::world::objects
 {
     struct ObjectManager
     {
@@ -20,7 +20,8 @@ namespace ire::client::objects
         void setPlanning(bool isPlanning);
         const bool isPlanning() const;
 
-        Building* m_currentSelectedBuilding = nullptr;
+        void setSelectedBuilding(Building* selectedBuilding);
+        Building* getSelectedBuilding();
 
         void setCanBePlaced(bool canBePlaced);
         const bool canBePlaced() const;
@@ -28,6 +29,9 @@ namespace ire::client::objects
     protected:
         bool m_isPlanning = false;
         bool m_canBePlaced = true;
+
+        Building* m_selectedBuilding = nullptr;
+
         std::vector<std::unique_ptr<Building>> m_buildings;
     };
 }

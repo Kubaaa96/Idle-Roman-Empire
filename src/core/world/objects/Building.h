@@ -4,7 +4,7 @@
 #include "Object.h"
 #include "core/world/tiled_top_down/TileOverlay.h"
 
-namespace ire::client::objects
+namespace ire::core::world::objects
 {
     struct Building : Object
     {

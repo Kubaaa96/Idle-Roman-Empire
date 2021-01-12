@@ -15,7 +15,7 @@
 
 #include "core/world/World.h"
 
-#include "client/Game/Objects/ObjectManager.h"
+#include "core/world/objects/ObjectManager.h"
 #include "client/Game/Objects/Buildings/Road.h"
 #include "client/Game/Objects/Buildings/Warehouse.h"
 
@@ -40,7 +40,6 @@ namespace ire::client::state
 
     private:
         std::unique_ptr<core::world::World> m_world;
-        std::unique_ptr<objects::ObjectManager> m_objectManager;
     };
 }
 

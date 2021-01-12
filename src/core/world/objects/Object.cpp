@@ -1,6 +1,6 @@
 #include "Object.h"
 
-namespace ire::client::objects
+namespace ire::core::world::objects
 {
     void Object::setName(std::string& name)
     {

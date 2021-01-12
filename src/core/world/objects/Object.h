@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-namespace ire::client::objects
+namespace ire::core::world::objects
 {
     struct Object
     {

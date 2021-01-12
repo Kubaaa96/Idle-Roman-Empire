@@ -1,12 +1,12 @@
 #ifndef IRE_WAREHOUSE_H
 #define IRE_WAREHOUSE_H
 
-#include "client/Game/Objects/Building.h"
+#include "core/world/objects/Building.h"
 
 namespace ire::client::objects
 {
 
-    struct Warehouse : Building
+    struct Warehouse : core::world::objects::Building
     {
 
         Warehouse();

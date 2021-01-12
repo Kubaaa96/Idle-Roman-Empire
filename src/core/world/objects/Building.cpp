@@ -1,6 +1,6 @@
 #include "Building.h"
 
-namespace ire::client::objects
+namespace ire::core::world::objects
 {
     Building::Building()
     {

@@ -1,7 +1,7 @@
 #include "ObjectManager.h"
 #include <algorithm>
 
-namespace ire::client::objects
+namespace ire::core::world::objects
 {
     ObjectManager::ObjectManager()
     {
@@ -67,6 +67,17 @@ namespace ire::client::objects
     const bool ObjectManager::isPlanning() const
     {
         return m_isPlanning;
+    }
+    void ObjectManager::setSelectedBuilding(Building* selectedBuilding)
+    {
+        if (m_selectedBuilding != selectedBuilding)
+        {
+            m_selectedBuilding = selectedBuilding;
+        }
+    }
+    Building* ObjectManager::getSelectedBuilding()
+    {
+        return m_selectedBuilding;
     }
     void ObjectManager::setCanBePlaced(bool canBePlaced)
     {

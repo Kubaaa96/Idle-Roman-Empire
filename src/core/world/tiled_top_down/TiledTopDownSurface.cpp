@@ -14,12 +14,14 @@
 namespace ire::core::world
 {
 
-    TiledTopDownSurface::TiledTopDownSurface(int width, int height) :
+    TiledTopDownSurface::TiledTopDownSurface(int width, int height, 
+            std::unique_ptr<core::world::objects::ObjectManager> objectMenager) :
         m_width(width),
         m_height(height),
         m_tiles(width, height),
         m_gridPoints(width + 1, height + 1),
-        m_groundChunkCache((width + (chunkSize - 1)) / chunkSize, (height + (chunkSize - 1)) / chunkSize)
+        m_groundChunkCache((width + (chunkSize - 1)) / chunkSize, (height + (chunkSize - 1)) / chunkSize),
+        m_objectManager(std::move(objectMenager))
     {
         m_textureAtlas = ResourceManager::instance().get<gfx::TextureAtlas>("resource/gfx/tiles");
         m_tileSprite = m_textureAtlas->getTextureView(ResourcePath("grass.png"));
@@ -90,9 +92,9 @@ namespace ire::core::world
         return target.mapPixelToCoords(sf::Vector2i(clientPos), cameraView);
     }
 
-    [[nodiscard]] std::optional<sf::Vector2i> TiledTopDownSurface::mapClientToTilePosition(sf::RenderTarget& target, sf::Vector2f clientPos) const
+    [[nodiscard]] std::optional<sf::Vector2i> TiledTopDownSurface::mapClientToTilePosition(sf::RenderTarget& target) const
     {
-        auto worldPos = sf::Vector2i(mapClientToWorldPosition(target, clientPos));
+        auto worldPos = sf::Vector2i(mapClientToWorldPosition(target, *m_mousePos));
         if (
             worldPos.x < 0
             || worldPos.y < 0
@@ -115,6 +117,19 @@ namespace ire::core::world
         return m_zoom;
     }
 
+    void TiledTopDownSurface::setMousePos(std::optional<sf::Vector2f> mousePos)
+    {
+        if (m_mousePos != mousePos)
+        {
+            m_mousePos = mousePos;
+        }
+    }
+
+    objects::ObjectManager* TiledTopDownSurface::getObjectMenager()
+    {
+        return m_objectManager.get();
+    }
+
     void TiledTopDownSurface::draw(sf::RenderTarget& target, sf::RenderStates& states)
     {
         constexpr float cameraAngleDeg = 60.0f;
@@ -122,7 +137,23 @@ namespace ire::core::world
         auto oldView = target.getView();
         auto surfaceView = getCameraView(target);
         target.setView(surfaceView);
-
+        
+        if (m_mousePos.has_value())
+        {
+            auto pointedTilePos = mapClientToTilePosition(target);
+            if (pointedTilePos.has_value())
+            {
+                if (!m_objectManager->isEmpty())
+                {
+                    setTileOverlays(m_objectManager->getOverlayVector(*pointedTilePos));
+                }
+            }
+            else
+            {
+                resetTileOverlays();
+            }
+        }
+        
         drawGround(target, states);
         drawTileOverlays(target, states);
 

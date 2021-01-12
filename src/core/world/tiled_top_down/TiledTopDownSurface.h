@@ -17,15 +17,18 @@
 #include <SFML/Graphics/VertexArray.hpp>
 #include <SFML/Graphics/VertexBuffer.hpp>
 
+
+
 #include <cmath>
 #include <optional>
+#include <memory>
 
 namespace ire::core::world
 {
 
     struct TiledTopDownSurface : Surface
     {
-        TiledTopDownSurface(int width, int height);
+        TiledTopDownSurface(int width, int height, std::unique_ptr<core::world::objects::ObjectManager> objectMenager);
 
         void draw(sf::RenderTarget& target, sf::RenderStates& states) override;
 
@@ -43,9 +46,13 @@ namespace ire::core::world
         [[nodiscard]] std::vector<TileOverlay> getSpriteOverlays() const;
 
         [[nodiscard]] sf::Vector2f mapClientToWorldPosition(sf::RenderTarget& target, sf::Vector2f clientPos) const;
-        [[nodiscard]] std::optional<sf::Vector2i> mapClientToTilePosition(sf::RenderTarget& target, sf::Vector2f clientPos) const;
+        [[nodiscard]] std::optional<sf::Vector2i> mapClientToTilePosition(sf::RenderTarget& target) const;
 
         [[nodiscard]] float getZoom() const;
+
+        void setMousePos(std::optional<sf::Vector2f> mousePos);
+
+        objects::ObjectManager* getObjectMenager() override;
 
     private:
         struct GroundChunkCache
@@ -95,6 +102,8 @@ namespace ire::core::world
 
         util::Array2<GroundChunkCache> m_groundChunkCache;
 
+        std::optional<sf::Vector2f> m_mousePos;
+        std::unique_ptr<objects::ObjectManager> m_objectManager;
         std::vector<TileOverlay> m_tileOverlays;
 
         void appendGroundTileGeometry(std::vector<sf::Vertex>& va, int x, int y);
