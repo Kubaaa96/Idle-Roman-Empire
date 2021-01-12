@@ -17,14 +17,14 @@ namespace ire::client::objects
 
     void Object::setPosition(sf::Vector2i pos)
     {
-        if (m_currentPosition != pos)
+        if (m_position != pos)
         {
-            m_currentPosition = pos;
+            m_position = pos;
         }
     }
 
     const sf::Vector2i Object::getPosition() const
     {
-        return m_currentPosition;
+        return m_position;
     }
 }

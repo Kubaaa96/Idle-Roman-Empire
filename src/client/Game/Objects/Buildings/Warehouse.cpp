@@ -25,7 +25,7 @@ namespace ire::client::objects
 
     void Warehouse::updatePlannedOverlay(sf::Vector2i mousePosition)
     {
-        m_currentPosition = mousePosition;
+        m_position = mousePosition;
         for (int i = 0; i < m_size.x; ++i)
         {
             for (int j = 0; j < m_size.y; ++j)
@@ -37,7 +37,7 @@ namespace ire::client::objects
 
     void Warehouse::setupOrderedOverlay(sf::Vector2i clickPosition)
     {
-        m_currentPosition = clickPosition;
+        m_position = clickPosition;
         for (int i = 0; i < m_size.x; ++i)
         {
             for (int j = 0; j < m_size.y; ++j)

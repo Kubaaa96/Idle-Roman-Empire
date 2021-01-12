@@ -17,7 +17,7 @@ namespace ire::client::objects
             Idle,
             Working,
             Full,
-            Demaged
+            Damaged
         };
 
         enum struct Direction

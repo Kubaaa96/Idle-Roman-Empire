@@ -12,14 +12,14 @@ namespace ire::client::gui
 
     const WidgetType WorldView::m_type = WidgetType::create<WorldView>("WorldView");
 
-    WorldView::WorldView(ire::core::world::World& world, objects::ObjectMenager& objectMenager) :
+    WorldView::WorldView(ire::core::world::World& world, objects::ObjectManager& objectMenager) :
         m_world(&world),
-        m_objectMenager(&objectMenager),
+        m_objectManager(&objectMenager),
         m_state(State::Inactive)
     {
     }
 
-    std::unique_ptr<WorldView> WorldView::create(ire::core::world::World& world, objects::ObjectMenager& objectMenager)
+    std::unique_ptr<WorldView> WorldView::create(ire::core::world::World& world, objects::ObjectManager& objectMenager)
     {
         auto widget = std::make_unique<WorldView>(world, objectMenager);
         return widget;
@@ -45,9 +45,9 @@ namespace ire::client::gui
             auto pointedTilePos = mainSurface.mapClientToTilePosition(target, *m_mousePos);
             if (pointedTilePos.has_value())
             {
-                if (!m_objectMenager->isCollectionOfBuildingsEmpty())
+                if (!m_objectManager->isEmpty())
                 {
-                    mainSurface.setTileOverlays(m_objectMenager->getOverlayVector(*pointedTilePos));
+                    mainSurface.setTileOverlays(m_objectManager->getOverlayVector(*pointedTilePos));
                 } 
             }
             else

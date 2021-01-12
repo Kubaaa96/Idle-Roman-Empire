@@ -77,11 +77,6 @@ namespace ire::core::world
         m_tileOverlays = std::move(overlays);
     }
 
-    void TiledTopDownSurface::pushBackTileOverlay(TileOverlay& overlay)
-    {
-        m_tileOverlays.push_back(overlay);
-    }
-
     void TiledTopDownSurface::resetTileOverlays()
     {
         m_tileOverlays.clear();

@@ -12,7 +12,7 @@ namespace ire::client::state
         : State{ stateMachine, window, replace },
         m_world(std::make_unique<core::world::World>(
             std::make_unique<core::world::TiledTopDownSurface>(512, 512))),
-        m_objectMenager(std::make_unique<objects::ObjectMenager>())
+        m_objectManager(std::make_unique<objects::ObjectManager>())
     {
         initializeGUI();
         m_window.setRootGroup(*m_group.get());
@@ -31,9 +31,9 @@ namespace ire::client::state
             {
                 auto road = std::make_unique<client::objects::Road>();
                 road->setState(client::objects::Building::States::Planned);
-                m_objectMenager->m_currentSelectedBuilding = road.get();
-                m_objectMenager->appendBuildingsToVector(std::move(road));
-                m_objectMenager->setPlanning(true);
+                m_objectManager->m_currentSelectedBuilding = road.get();
+                m_objectManager->appendBuildingsToVector(std::move(road));
+                m_objectManager->setPlanning(true);
             }
         );
 
@@ -47,9 +47,9 @@ namespace ire::client::state
             {
                 auto warehouse = std::make_unique<client::objects::Warehouse>();
                 warehouse->setState(client::objects::Building::States::Planned);
-                m_objectMenager->m_currentSelectedBuilding = warehouse.get();
-                m_objectMenager->appendBuildingsToVector(std::move(warehouse));
-                m_objectMenager->setPlanning(true);
+                m_objectManager->m_currentSelectedBuilding = warehouse.get();
+                m_objectManager->appendBuildingsToVector(std::move(warehouse));
+                m_objectManager->setPlanning(true);
 
             }
         );
@@ -60,19 +60,19 @@ namespace ire::client::state
 
         auto buildingControlingPanel = ire::core::gui::Panel::create({ 200, 600 }, std::move(buildingControlingVerticalLayout), "BuildingControlingVerticalLayout");
 
-        auto worldView = gui::WorldView::create(*m_world, *m_objectMenager);
+        auto worldView = gui::WorldView::create(*m_world, *m_objectManager);
         auto& worldViewRef = *worldView;
 
         worldView->addEventListener<ire::core::gui::MouseClickEvent>(
             [&](ire::core::gui::MouseClickEvent& ev)
             {
-                if (m_objectMenager->isPlanning() && m_objectMenager->canBePlaced())
+                if (m_objectManager->isPlanning() && m_objectManager->canBePlaced())
                 {
-                    m_objectMenager->m_currentSelectedBuilding->setState(objects::Building::States::Ordered);
+                    m_objectManager->m_currentSelectedBuilding->setState(objects::Building::States::Ordered);
                     auto& mainSurface = static_cast<ire::core::world::TiledTopDownSurface&>(m_world->getMainSurface());
                     auto pointedTilePos = mainSurface.mapClientToTilePosition(m_window.getRenderTarget(), *worldViewRef.getMousePos());
-                    m_objectMenager->m_currentSelectedBuilding->setupOrderedOverlay(*pointedTilePos);
-                    m_objectMenager->setPlanning(false);
+                    m_objectManager->m_currentSelectedBuilding->setupOrderedOverlay(*pointedTilePos);
+                    m_objectManager->setPlanning(false);
                 }
             }
         );

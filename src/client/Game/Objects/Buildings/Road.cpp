@@ -16,13 +16,13 @@ namespace ire::client::objects
     void Road::updatePlannedOverlay(sf::Vector2i mousePosition)
     {
         m_plannedOverlays.begin()->position = mousePosition;
-        m_currentPosition = mousePosition;
+        m_position = mousePosition;
     }
 
     void Road::setupOrderedOverlay(sf::Vector2i clickPosition)
     {
         m_orderedOverlays.begin()->position = clickPosition;
-        m_currentPosition = clickPosition;
+        m_position = clickPosition;
     }
 
     void Road::setupInProductionOverlay()

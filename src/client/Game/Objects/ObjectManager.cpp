@@ -1,20 +1,20 @@
-#include "ObjectMenager.h"
+#include "ObjectManager.h"
 #include <algorithm>
 
 namespace ire::client::objects
 {
-    ObjectMenager::ObjectMenager()
+    ObjectManager::ObjectManager()
     {
     }
 
-    void ObjectMenager::appendBuildingsToVector(std::unique_ptr<Building> building)
+    void ObjectManager::appendBuildingsToVector(std::unique_ptr<Building> building)
     {
-        m_collectionOfBuildings.push_back(std::move(building));
+        m_buildings.push_back(std::move(building));
     }
-    std::vector<core::world::TileOverlay> ObjectMenager::getOverlayVector(sf::Vector2i mousePosition)
+    std::vector<core::world::TileOverlay> ObjectManager::getOverlayVector(sf::Vector2i mousePosition)
     {
         std::vector<core::world::TileOverlay> tileOverlays;
-        for (auto& building : m_collectionOfBuildings)
+        for (auto& building : m_buildings)
         {
             std::vector<core::world::TileOverlay> overlays;
             switch (building->getState())
@@ -51,12 +51,12 @@ namespace ire::client::objects
         return tileOverlays;
     }
 
-    const bool ObjectMenager::isCollectionOfBuildingsEmpty() const
+    const bool ObjectManager::isEmpty() const
     {
-        return m_collectionOfBuildings.empty();
+        return m_buildings.empty();
     }
 
-    void ObjectMenager::setPlanning(bool isPlanning)
+    void ObjectManager::setPlanning(bool isPlanning)
     {
         if (m_isPlanning != isPlanning)
         {
@@ -64,15 +64,15 @@ namespace ire::client::objects
         }
     }
 
-    const bool ObjectMenager::isPlanning() const
+    const bool ObjectManager::isPlanning() const
     {
         return m_isPlanning;
     }
-    void ObjectMenager::setCanBePlaced(bool canBePlaced)
+    void ObjectManager::setCanBePlaced(bool canBePlaced)
     {
         m_canBePlaced = canBePlaced;
     }
-    const bool ObjectMenager::canBePlaced() const
+    const bool ObjectManager::canBePlaced() const
     {
         return m_canBePlaced;
     }

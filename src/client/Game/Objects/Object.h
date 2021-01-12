@@ -8,6 +8,8 @@ namespace ire::client::objects
 {
     struct Object
     {
+        using ObjectId = std::uint64_t;
+
         void setName(std::string& name);
         const std::string getName() const;
 
@@ -17,7 +19,7 @@ namespace ire::client::objects
 
     protected:
 
-        std::uint64_t m_Id;
+        ObjectId m_id;
         // Faction
         // Ownder
         // Family
@@ -27,7 +29,7 @@ namespace ire::client::objects
         // Type
         // Age
         // Health
-        sf::Vector2i m_currentPosition;
+        sf::Vector2i m_position;
     };
 }
 
