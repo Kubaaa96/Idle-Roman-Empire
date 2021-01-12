@@ -36,35 +36,14 @@ namespace ire::client::gui
         view.setViewport(getClientViewport(target));
         target.setView(view);
 
-        // TODO: Move this to some place where this actually should be managed from.
-        //       Right now it's here for demo purposes.
-        if (m_mousePos.has_value())
-        {
-            auto& mainSurface = static_cast<ire::core::world::TiledTopDownSurface&>(m_world->getMainSurface());
-            auto pointedTilePos = mainSurface.mapClientToTilePosition(target, *m_mousePos);
-            if (pointedTilePos.has_value())
-            {
-                core::world::TileOverlay overlay;
-                overlay.position = *pointedTilePos;
-                overlay.border = core::world::TileOverlayBorder{};
-                overlay.border->color = sf::Color::Cyan;
-                overlay.border->thickness = 0.1f;
-                overlay.border->visible = { true, true, true, true };
-                mainSurface.setTileOverlays({ overlay });
-            }
-            else
-            {
-                mainSurface.resetTileOverlays();
-            }
-        }
-        //
-
         sf::RectangleShape s;
         s.setFillColor(sf::Color::White);
         s.setSize(sf::Vector2f(10000.0f, 10000.0f));
         target.draw(s);
 
-        m_world->getMainSurface().draw(target, states);
+        auto& mainSurface = static_cast<ire::core::world::TiledTopDownSurface&>(m_world->getMainSurface());
+        mainSurface.setMousePos(m_mousePos);
+        mainSurface.draw(target, states);
 
         target.setView(oldView);
     }
@@ -79,8 +58,19 @@ namespace ire::client::gui
 
     void WorldView::onEvent(core::gui::EventRoot& sender, core::gui::MouseButtonDownEvent& ev)
     {
+
         m_state = State::Active;
         sender.setActiveWidget(*this);
+        
+        ev.handled = true;
+    }
+
+    void WorldView::onEvent(core::gui::EventRoot& sender, core::gui::MouseButtonUpEvent& ev)
+    {
+        if (m_state == State::Active && getClientBounds().contains(ev.position))
+        {
+            onClick(ev);
+        }
         ev.handled = true;
     }
 
@@ -94,11 +84,22 @@ namespace ire::client::gui
         {
             m_mousePos.reset();
         }
+        emitEvent(ev);
+        ev.handled = true;
     }
 
     void WorldView::onStoppedBeingActive()
     {
         m_state = State::Inactive;
+    }
+
+    void WorldView::onClick(core::gui::MouseButtonUpEvent& ev)
+    {
+        core::gui::MouseClickEvent clickEv{};
+        clickEv.timestamp = ev.timestamp;
+        clickEv.button = ev.button;
+        clickEv.position = ev.position;
+        emitEvent<core::gui::MouseClickEvent>(clickEv);
     }
 
     void WorldView::updateCamera()

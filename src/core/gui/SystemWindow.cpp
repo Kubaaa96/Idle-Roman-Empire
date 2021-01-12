@@ -145,6 +145,11 @@ namespace ire::core::gui {
         m_activeWidget = &widget;
     }
 
+    const Widget* SystemWindow::getActiveWidget() const
+    {
+        return m_activeWidget;
+    }
+
     void SystemWindow::resetActiveWidget(Widget& widget)
     {
         if (m_activeWidget == &widget)

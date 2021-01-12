@@ -15,6 +15,10 @@
 
 #include "core/world/World.h"
 
+#include "core/world/objects/ObjectManager.h"
+#include "client/Game/Objects/Buildings/Road.h"
+#include "client/Game/Objects/Buildings/Warehouse.h"
+
 namespace ire::core::gui
 {
     struct SystemWindow;
